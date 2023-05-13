@@ -8,6 +8,8 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.UUID;
 
+// TODO это больше не нужно после перехода на использование OPAQUE токенов
+@Deprecated
 public class JwkUtils {
 
     public static RSAKey generateRsa() {
