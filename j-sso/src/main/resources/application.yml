@@ -4,10 +4,8 @@ server:
 logging:
   level:
     root: DEBUG
-    org.apache.tomcat.util.net.NioEndpoint: ERROR
-    sun.rmi: ERROR
-    java.io: ERROR
     javax.management: ERROR
+    org.springframework.security.web.FilterChainProxy: DEBUG
 
 spring:
   application:
@@ -17,3 +15,12 @@ spring:
       authorizationserver:
         issuer-url: http://localhost:7777
         introspection-endpoint: /oauth2/token-info
+      client:
+        registration:
+          github:
+            clientId: 919d245f5e79b445a2d8
+            clientSecret: ddaebb9c21ac24cd1ac3d51e5814a1716425b6fb
+#
+#          google:
+#            clientId: 608360869000-bvqc2b8ok52v010l3ps7cqnt8rj7thdv.apps.googleusercontent.com
+#            clientSecret: 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

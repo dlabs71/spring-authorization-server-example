@@ -62,14 +62,6 @@ public class AuthorizationServerConfig {
         );
     }
 
-    // TODO это больше не нужно после перехода на использование OPAQUE токенов
-//    @Bean
-//    public JWKSource<SecurityContext> jwkSource() {
-//        RSAKey rsaKey = JwkUtils.generateRsa();
-//        JWKSet jwkSet = new JWKSet(rsaKey);
-//        return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
-//    }
-
     @Bean
     public AuthorizationServerSettings authorizationServerSettings() {
         return AuthorizationServerSettings.builder()
