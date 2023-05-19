@@ -1,14 +1,16 @@
 package ru.dlabs.sas.example.jsso.dao.repository;
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Repository;
 import ru.dlabs.sas.example.jsso.dao.entity.UserEntity;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 @Repository
-public class UserRepository {
+public class UserRepository implements InitializingBean {
 
     private final Map<UUID, UserEntity> store = new HashMap<>();
 
@@ -29,5 +31,18 @@ public class UserRepository {
                 .filter(item -> item.getEmail().equals(email))
                 .findFirst()
                 .orElse(null);
+    }
+
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        this.save(UserEntity.builder()
+                .email("admin@example.com")
+                .passwordHash("{noop}admin@example.com")
+                .active(true)
+                .firstName("Admin")
+                .secondName("Admin")
+                .birthday(LocalDate.of(1998, 7, 14))
+                .build());
     }
 }

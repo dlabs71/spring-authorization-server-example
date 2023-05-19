@@ -11,7 +11,7 @@ import ru.dlabs.sas.example.jsso.mapper.AuthorizedUserMapper;
 
 @Service
 @RequiredArgsConstructor
-public class DefaultUserDetailService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 

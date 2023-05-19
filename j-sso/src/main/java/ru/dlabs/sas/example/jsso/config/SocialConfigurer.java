@@ -33,5 +33,4 @@ public class SocialConfigurer extends AbstractHttpConfigurer<SocialConfigurer, H
             }
         });
     }
-
 }
