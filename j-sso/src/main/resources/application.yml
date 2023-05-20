@@ -18,9 +18,26 @@ spring:
       client:
         registration:
           github:
-            clientId: <your_github_client_id>
-            clientSecret: <your_github_client_secret>
+            clientId: 919d245f5e79b445a2d8
+            clientSecret: ddaebb9c21ac24cd1ac3d51e5814a1716425b6fb
           
           google:
             clientId: <your_google_client_id>
             clientSecret: <your_google_client_secret>
+          
+          yandex:
+            provider: yandex
+            clientId: 4fd0d77863aa46c28b7b71b3ffef106a
+            clientSecret: 2fd165ff1438459b8d55c02dcf64cd8b
+            redirect-uri: http://localhost:7777/login/oauth2/code/yandex
+            authorizationGrantType: authorization_code
+            clientName: Yandex
+        
+        provider:
+          yandex:
+            authorization-uri: https://oauth.yandex.ru/authorize
+            token-uri: https://oauth.yandex.ru/token
+            user-name-attribute: default_email
+            userInfoUri: https://login.yandex.ru/info
+
+yandex-avatar-url: https://avatars.yandex.net/get-yapic/{avatarId}/islands-retina-50
