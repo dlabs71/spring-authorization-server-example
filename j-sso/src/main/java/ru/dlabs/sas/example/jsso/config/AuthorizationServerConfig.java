@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.OAuth2TokenIntrospection;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2TokenIntrospectionAuthenticationToken;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
@@ -95,20 +96,35 @@ public class AuthorizationServerConfig {
 
     private void introspectionResponse(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         OAuth2TokenIntrospectionAuthenticationToken introspectionAuthenticationToken = (OAuth2TokenIntrospectionAuthenticationToken) authentication;
-        TokenInfoDto tokenInfoDto = TokenInfoDto.builder().active(false).build();
-        if (introspectionAuthenticationToken.getTokenClaims().isActive()) {
-            String token = introspectionAuthenticationToken.getToken();
-            OAuth2Authorization tokenAuth = oAuth2AuthorizationService.findByToken(token, OAuth2TokenType.ACCESS_TOKEN);
-            Authentication attributeAuth = tokenAuth.getAttribute(principalAttributeKey);
+        TokenInfoDto.TokenInfoDtoBuilder tokenInfoDtoBuilder = TokenInfoDto.builder().active(false);                        // создаём билдер объекта ответа
+        if (introspectionAuthenticationToken.getTokenClaims().isActive()) {                                                 // если токен активен, то заполняем все параметры информации о токене и далее пытаемся получить информацию о пользователе
+            OAuth2TokenIntrospection claims = introspectionAuthenticationToken.getTokenClaims();
+            tokenInfoDtoBuilder.active(true)
+                    .sub(claims.getSubject())
+                    .aud(claims.getAudience())
+                    .nbf(claims.getNotBefore())
+                    .scopes(claims.getScopes())
+                    .iss(claims.getIssuer())
+                    .exp(claims.getExpiresAt())
+                    .iat(claims.getIssuedAt())
+                    .jti(claims.getId())
+                    .clientId(claims.getClientId())
+                    .tokenType(claims.getTokenType());
 
-            tokenInfoDto = TokenInfoDto.builder()
-                    .active(true)
-                    .principal(attributeAuth.getPrincipal())
-                    .authorities(authentication.getAuthorities())
-                    .build();
+
+            String token = introspectionAuthenticationToken.getToken();                                                     // получаем значение токена, который проверяется
+            OAuth2Authorization tokenAuth = oAuth2AuthorizationService.findByToken(token, OAuth2TokenType.ACCESS_TOKEN);    // предполагая что это ACCESS TOKEN, пытаемся получить объект OAuth2Authorization из OAuth2AuthorizationService
+            if (tokenAuth != null) {
+                Authentication attributeAuth = tokenAuth.getAttribute(principalAttributeKey);                               // Если найден этот объект OAuth2Authorization, то получаем из него объект Authentication следующим образом
+                if (attributeAuth != null) {
+                    tokenInfoDtoBuilder                                                                                     // Если полученный объект Authentication не пуст, то заполняем данные в TokenInfoDto
+                            .principal(attributeAuth.getPrincipal())
+                            .authorities(authentication.getAuthorities());
+                }
+            }
         }
 
         ServletServerHttpResponse httpResponse = new ServletServerHttpResponse(response);
-        mappingJackson2HttpMessageConverter.write(tokenInfoDto, null, httpResponse);
+        mappingJackson2HttpMessageConverter.write(tokenInfoDtoBuilder.build(), null, httpResponse);              // Предращаем наш TokenInfoDto в json строку и отправляем её через ServletServerHttpResponse
     }
 }
