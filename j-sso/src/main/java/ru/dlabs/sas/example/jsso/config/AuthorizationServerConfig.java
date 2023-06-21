@@ -125,6 +125,6 @@ public class AuthorizationServerConfig {
         }
 
         ServletServerHttpResponse httpResponse = new ServletServerHttpResponse(response);
-        mappingJackson2HttpMessageConverter.write(tokenInfoDtoBuilder.build(), null, httpResponse);              // Предращаем наш TokenInfoDto в json строку и отправляем её через ServletServerHttpResponse
+        mappingJackson2HttpMessageConverter.write(tokenInfoDtoBuilder.build(), null, httpResponse);              // Превращаем наш TokenInfoDto в json строку и отправляем её через ServletServerHttpResponse
     }
 }

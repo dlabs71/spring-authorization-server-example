@@ -18,6 +18,7 @@
         
         <lombok.version>1.18.26</lombok.version>
         <security-oauth2-server.version>1.0.2</security-oauth2-server.version>
+        <security-oauth2-resource-server.version>3.0.6</security-oauth2-resource-server.version>
     </properties>
     
     <parent>
@@ -29,6 +30,7 @@
     
     <modules>
         <module>j-sso</module>
+        <module>j-service</module>
     </modules>
     
     <dependencyManagement>
@@ -37,6 +39,11 @@
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-oauth2-authorization-server</artifactId>
                 <version>${security-oauth2-server.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+                <version>${security-oauth2-resource-server.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
