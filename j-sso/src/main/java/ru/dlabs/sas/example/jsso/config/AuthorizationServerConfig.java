@@ -28,6 +28,8 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
+import ru.dlabs.sas.example.jsso.dto.IntrospectionPrincipal;
 import ru.dlabs.sas.example.jsso.dto.TokenInfoDto;
 
 import java.io.IOException;
@@ -112,14 +114,16 @@ public class AuthorizationServerConfig {
                     .tokenType(claims.getTokenType());
 
 
-            String token = introspectionAuthenticationToken.getToken();                                                     // получаем значение токена, который проверяется
-            OAuth2Authorization tokenAuth = oAuth2AuthorizationService.findByToken(token, OAuth2TokenType.ACCESS_TOKEN);    // предполагая что это ACCESS TOKEN, пытаемся получить объект OAuth2Authorization из OAuth2AuthorizationService
+            String token = introspectionAuthenticationToken.getToken();                                                      // получаем значение токена, который проверяется
+            OAuth2Authorization tokenAuth = oAuth2AuthorizationService.findByToken(token, OAuth2TokenType.ACCESS_TOKEN);     // предполагая что это ACCESS TOKEN, пытаемся получить объект OAuth2Authorization из OAuth2AuthorizationService
             if (tokenAuth != null) {
-                Authentication attributeAuth = tokenAuth.getAttribute(principalAttributeKey);                               // Если найден этот объект OAuth2Authorization, то получаем из него объект Authentication следующим образом
+                Authentication attributeAuth = tokenAuth.getAttribute(principalAttributeKey);                                // Если найден этот объект OAuth2Authorization, то получаем из него объект Authentication следующим образом
                 if (attributeAuth != null) {
-                    tokenInfoDtoBuilder                                                                                     // Если полученный объект Authentication не пуст, то заполняем данные в TokenInfoDto
-                            .principal(attributeAuth.getPrincipal())
-                            .authorities(authentication.getAuthorities());
+                    if (attributeAuth.getPrincipal() instanceof AuthorizedUser authorizedUser) {                             // Если полученный объект Authentication не пуст, то проверяем является ли его principal экземпляром класса AuthorizedUser
+                        tokenInfoDtoBuilder.principal(IntrospectionPrincipal.build(authorizedUser));                         // Создаём IntrospectionPrincipal на его основе
+                    } else {                                                                                                 // Иначе выбрасываем исключение, что другие типы principal мы не поддерживаем
+                        throw new RuntimeException("Principal class = " + attributeAuth.getPrincipal().getClass().getSimpleName() + " is not supported");
+                    }
                 }
             }
         }

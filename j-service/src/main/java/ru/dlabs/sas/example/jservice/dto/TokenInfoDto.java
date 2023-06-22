@@ -1,7 +1,7 @@
-package ru.dlabs.sas.example.jsso.dto;
+package ru.dlabs.sas.example.jservice.dto;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.net.URL;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
+@NoArgsConstructor
 public class TokenInfoDto {
 
     private Boolean active;
