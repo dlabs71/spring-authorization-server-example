@@ -27,6 +27,9 @@ public class AuthorizedUser implements OAuth2User {
     private Collection<? extends GrantedAuthority> authorities;
 
     public static AuthorizedUser build(IntrospectionPrincipal principal) {
+        if (principal == null) {
+            return null;
+        }
         return AuthorizedUser.builder()
                 .id(principal.getId())
                 .firstName(principal.getFirstName())

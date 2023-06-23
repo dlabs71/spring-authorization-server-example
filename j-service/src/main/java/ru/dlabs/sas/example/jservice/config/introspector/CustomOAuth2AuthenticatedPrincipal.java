@@ -16,6 +16,7 @@ public class CustomOAuth2AuthenticatedPrincipal extends TokenInfoOAuth2ClaimAcce
     private final TokenInfoDto tokenInfo;
 
     public CustomOAuth2AuthenticatedPrincipal(TokenInfoDto tokenInfo) {
+        // tokenInfo.getPrincipal() - может быть пустым, например, когда access токен получен путем grant_type=client_credentials
         this.delegate = AuthorizedUser.build(tokenInfo.getPrincipal());
         this.tokenInfo = tokenInfo;
     }
@@ -25,10 +26,19 @@ public class CustomOAuth2AuthenticatedPrincipal extends TokenInfoOAuth2ClaimAcce
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this.delegate == null) {
+            return Collections.emptyList();
+        }
         return this.delegate.getAuthorities();
     }
 
+    /**
+     * Если пришедший токен вне контекста пользователя (Client Credential Grant Type), то возвращаем client_id
+     */
     public String getName() {
+        if (this.delegate == null) {
+            return this.tokenInfo.getClientId();
+        }
         return this.delegate.getName();
     }
 
