@@ -1,4 +1,4 @@
-package ru.dlabs.sas.example.jsso.config;
+package ru.dlabs.sas.example.jsso.config.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,20 +11,13 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenIntrospection;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2TokenIntrospectionAuthenticationToken;
-import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
-import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
-import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -33,8 +26,6 @@ import ru.dlabs.sas.example.jsso.dto.IntrospectionPrincipal;
 import ru.dlabs.sas.example.jsso.dto.TokenInfoDto;
 
 import java.io.IOException;
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
@@ -61,31 +52,6 @@ public class AuthorizationServerConfig {
                 .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login")))
                 .apply(authorizationServerConfigurer);
         return http.build();
-    }
-
-    @Bean
-    public RegisteredClientRepository registeredClientRepository() {
-        return new InMemoryRegisteredClientRepository(
-                RegisteredClient.withId("test-client-id")
-                        .clientName("Test Client")
-                        .clientId("test-client")
-                        .clientSecret("{noop}test-client")
-                        .redirectUri("http://localhost:8080/code")
-                        .scope("read.scope")
-                        .scope("write.scope")
-                        .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                        .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                        .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                        .tokenSettings(TokenSettings.builder()
-                                .accessTokenFormat(OAuth2TokenFormat.REFERENCE)
-                                .accessTokenTimeToLive(Duration.of(30, ChronoUnit.MINUTES))
-                                .refreshTokenTimeToLive(Duration.of(120, ChronoUnit.MINUTES))
-                                .reuseRefreshTokens(false)
-                                .authorizationCodeTimeToLive(Duration.of(30, ChronoUnit.SECONDS))
-                                .build())
-                        .build()
-        );
     }
 
     @Bean
