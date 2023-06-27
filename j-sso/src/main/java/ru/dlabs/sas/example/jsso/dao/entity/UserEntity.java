@@ -6,6 +6,7 @@ import lombok.Setter;
 import ru.dlabs.sas.example.jsso.dao.entity.common.VersionedBusinessEntity;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -34,6 +35,13 @@ public class UserEntity extends VersionedBusinessEntity<UUID> {
     private String avatarUrl;
     @Column(name = "active", nullable = false)
     private Boolean active;
+
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(schema = "sso", name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_code")
+    )
+    public List<RoleEntity> roles;
 
     @Override
     public UUID getId() {
