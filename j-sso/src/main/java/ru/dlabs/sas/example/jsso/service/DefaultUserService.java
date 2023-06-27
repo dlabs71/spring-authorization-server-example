@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.dlabs.sas.example.jsso.dao.entity.UserEntity;
 import ru.dlabs.sas.example.jsso.dao.repository.UserRepository;
 import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
@@ -28,6 +29,7 @@ public class DefaultUserService implements UserService {
      * Создание или обновление пользователя
      */
     @Override
+    @Transactional
     public UserEntity save(OAuth2User userDto, AuthProvider provider) {
         return switch (provider) {
             case GITHUB -> this.saveUserFromGithab(userDto);
