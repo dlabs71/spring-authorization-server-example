@@ -18,7 +18,7 @@ public class IntrospectionPrincipal {
 
     private UUID id;
     private String firstName;
-    private String secondName;
+    private String lastName;
     private String middleName;
     private LocalDate birthday;
     private String avatarUrl;

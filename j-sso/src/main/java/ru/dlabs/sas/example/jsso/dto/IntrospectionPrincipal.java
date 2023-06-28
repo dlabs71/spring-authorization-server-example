@@ -16,7 +16,7 @@ public class IntrospectionPrincipal {
 
     private UUID id;
     private String firstName;
-    private String secondName;
+    private String lastName;
     private String middleName;
     private LocalDate birthday;
     private String avatarUrl;
@@ -28,7 +28,7 @@ public class IntrospectionPrincipal {
         return IntrospectionPrincipal.builder()
                 .id(authorizedUser.getId())
                 .firstName(authorizedUser.getFirstName())
-                .secondName(authorizedUser.getSecondName())
+                .lastName(authorizedUser.getLastName())
                 .middleName(authorizedUser.getMiddleName())
                 .birthday(authorizedUser.getBirthday())
                 .avatarUrl(authorizedUser.getAvatarUrl())

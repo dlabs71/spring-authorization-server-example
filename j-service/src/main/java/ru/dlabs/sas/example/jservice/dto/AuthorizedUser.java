@@ -18,7 +18,7 @@ public class AuthorizedUser implements OAuth2User {
 
     private UUID id;
     private String firstName;
-    private String secondName;
+    private String lastName;
     private String middleName;
     private LocalDate birthday;
     private String avatarUrl;
@@ -33,7 +33,7 @@ public class AuthorizedUser implements OAuth2User {
         return AuthorizedUser.builder()
                 .id(principal.getId())
                 .firstName(principal.getFirstName())
-                .secondName(principal.getSecondName())
+                .lastName(principal.getLastName())
                 .middleName(principal.getMiddleName())
                 .birthday(principal.getBirthday())
                 .avatarUrl(principal.getAvatarUrl())
@@ -51,7 +51,7 @@ public class AuthorizedUser implements OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.authorities;
     }
 
     @Override
