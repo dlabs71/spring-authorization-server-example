@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS sso.users
     email                 VARCHAR(100)                NOT NULL,
     password_hash         VARCHAR(500),
     first_name            varchar(100)                NOT NULL,
-    second_name           varchar(100)                NOT NULL,
+    last_name           varchar(100)                NOT NULL,
     middle_name           varchar(100),
     birthday              date,
     avatar_url            varchar(255),
@@ -26,7 +26,7 @@ COMMENT ON COLUMN sso.users.user_id IS 'УИ пользователя';
 COMMENT ON COLUMN sso.users.email IS 'Логин пользователя';
 COMMENT ON COLUMN sso.users.password_hash IS 'Хэш пароля';
 COMMENT ON COLUMN sso.users.first_name IS 'Начало действия учетной записи';
-COMMENT ON COLUMN sso.users.second_name IS 'Окончание действия учетной записи';
+COMMENT ON COLUMN sso.users.last_name IS 'Окончание действия учетной записи';
 COMMENT ON COLUMN sso.users.middle_name IS 'Статус пользователя, активен или неактивен';
 COMMENT ON COLUMN sso.users.birthday IS 'Пользователь, создавший текущую запись';
 COMMENT ON COLUMN sso.users.avatar_url IS 'Ссылка на аватар';

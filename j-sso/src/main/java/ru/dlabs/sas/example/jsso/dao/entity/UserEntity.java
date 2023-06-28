@@ -24,8 +24,8 @@ public class UserEntity extends VersionedBusinessEntity<UUID> {
     private String passwordHash;
     @Column(name = "first_name", nullable = false)
     private String firstName;
-    @Column(name = "second_name", nullable = false)
-    private String secondName;
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
     @Column(name = "middle_name")
     private String middleName;
     @Column(name = "birthday")

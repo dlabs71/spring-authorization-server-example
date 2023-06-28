@@ -67,14 +67,14 @@ public class DefaultUserService implements UserService {
             String[] splitted = ((String) userDto.getAttribute("name")).split(" ");
             user.setFirstName(splitted[0]);
             if (splitted.length > 1) {
-                user.setSecondName(splitted[1]);
+                user.setLastName(splitted[1]);
             }
             if (splitted.length > 2) {
                 user.setMiddleName(splitted[2]);
             }
         } else {                                                      // иначе устанавливаем в эти поля значение email
             user.setFirstName(userDto.getAttribute("login"));   // конечно в реальных проектах так делать не надо, здесь это сделано для упрощения логики
-            user.setSecondName(userDto.getAttribute("login"));
+            user.setLastName(userDto.getAttribute("login"));
         }
 
         if (userDto.getAttribute("avatar_url") != null) {       // если есть аватар, то устанавливаем значение в поле avatarUrl
@@ -103,7 +103,7 @@ public class DefaultUserService implements UserService {
         }
 
         if (userDto.getAttribute("family_name") != null) {
-            user.setSecondName(userDto.getAttribute("family_name"));
+            user.setLastName(userDto.getAttribute("family_name"));
         }
 
         if (userDto.getAttribute("picture") != null) {
@@ -133,7 +133,7 @@ public class DefaultUserService implements UserService {
         }
 
         if (userDto.getAttribute("last_name") != null) {
-            user.setSecondName(userDto.getAttribute("last_name"));
+            user.setLastName(userDto.getAttribute("last_name"));
         }
 
         if (userDto.getAttribute("default_avatar_id") != null) {
