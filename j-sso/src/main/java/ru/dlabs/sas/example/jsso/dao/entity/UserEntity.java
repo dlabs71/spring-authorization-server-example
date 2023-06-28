@@ -39,7 +39,7 @@ public class UserEntity extends VersionedBusinessEntity<UUID> {
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(schema = "sso", name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_code")
+            inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     public List<RoleEntity> roles;
 

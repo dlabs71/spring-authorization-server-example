@@ -1,12 +1,11 @@
 package ru.dlabs.sas.example.jsso.dao.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import ru.dlabs.sas.example.jsso.dao.entity.common.VersionedBusinessEntity;
+
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,6 +14,10 @@ import ru.dlabs.sas.example.jsso.dao.entity.common.VersionedBusinessEntity;
 public class AuthorityEntity extends VersionedBusinessEntity<String> {
 
     @Id
+    @Column(name = "authority_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
     @Column(name = "authority_code", nullable = false)
     private String code;
 

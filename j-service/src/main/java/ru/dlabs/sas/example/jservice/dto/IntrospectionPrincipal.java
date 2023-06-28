@@ -4,10 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -24,5 +23,5 @@ public class IntrospectionPrincipal {
     private String avatarUrl;
     private String username;
     private String email;
-    private Collection<? extends GrantedAuthority> authorities;
+    private List<String> authorities;
 }

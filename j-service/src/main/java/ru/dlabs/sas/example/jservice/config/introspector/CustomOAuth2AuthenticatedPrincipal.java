@@ -46,5 +46,7 @@ public class CustomOAuth2AuthenticatedPrincipal extends TokenInfoOAuth2ClaimAcce
     TokenInfoDto getTokenInfo() {
         return this.tokenInfo;
     }
+
+
 }
 
