@@ -12,6 +12,22 @@ logging:
 spring:
   application:
     name: j-sso
+  session:
+    store-type: redis
+    redis:
+      flush-mode: immediate
+      namespace: j-sso:session
+  data:
+    redis:
+      client-type: lettuce
+      database: 0
+      host: localhost
+      port: 6379
+      password: qwerty12345678
+      lettuce:
+        pool:
+          max-active: 16
+          max-idle: 8
   liquibase:
     enabled: false  # Указать true, если необходимо сделать накат скриптов БД при запуске приложения
     change-log: classpath:database/db.changelog.yaml
