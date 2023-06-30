@@ -50,11 +50,7 @@ public class AuthorizationServerConfig {
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 // ендпоинты swagger вынесем из под security
-                                .requestMatchers(
-                                        "/v3/api-docs",
-                                        "/swagger-ui/**",
-                                        "/v3/api-docs/swagger-config"
-                                ).permitAll()
+                                .requestMatchers("/v3/api-docs").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))

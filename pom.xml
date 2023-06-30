@@ -32,6 +32,7 @@
     <modules>
         <module>j-sso</module>
         <module>j-service</module>
+        <module>j-swagger-ui</module>
     </modules>
     
     <dependencyManagement>

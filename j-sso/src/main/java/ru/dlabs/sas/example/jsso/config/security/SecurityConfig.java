@@ -40,11 +40,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authorize ->
                 authorize
                         // ендпоинты swagger вынесем из под security
-                        .requestMatchers(
-                                "/v3/api-docs",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/swagger-config"
-                        ).permitAll()
+                        .requestMatchers("/v3/api-docs").permitAll()
                         .anyRequest().authenticated()
         );
         return http.formLogin(withDefaults()).build();

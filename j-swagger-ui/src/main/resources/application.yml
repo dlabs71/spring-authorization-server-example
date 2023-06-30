@@ -1,0 +1,29 @@
+server:
+  port: 7778
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security.web.FilterChainProxy: ERROR
+    logging.level.org.hibernate.SQL: INFO
+    com.zaxxer.hikari: ERROR
+    org.postgresql: ERROR
+
+spring:
+  application:
+    name: j-swagger-ui
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    use-root-path: true
+    doc-expansion: none
+    disable-swagger-default-url: true
+    operationsSorter: method
+    tagsSorter: alpha
+    try-it-out-enabled: true
+    urls:
+      - name: SSO Server
+        url: http://localhost:7777/v3/api-docs
+  api-docs:
+    enabled: true
