@@ -9,6 +9,22 @@ logging:
     com.zaxxer.hikari: ERROR
     org.postgresql: ERROR
 
+springdoc:
+  swagger-ui:
+    enabled: true
+    use-root-path: true
+    path: /swagger-ui
+    doc-expansion: none
+    config-url: /v3/api-docs/swagger-config
+    disable-swagger-default-url: true
+    operationsSorter: method
+    tagsSorter: alpha
+    url: /v3/api-docs
+    try-it-out-enabled: true
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+
 spring:
   application:
     name: j-sso

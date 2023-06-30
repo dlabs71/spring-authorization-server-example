@@ -88,6 +88,7 @@ public class SystemOauth2Client {
             return Collections.emptySet();
         }
         return Arrays.stream(this.redirectUris.split(","))
+                .map(String::trim)
                 .collect(Collectors.toSet());
     }
 
@@ -97,6 +98,7 @@ public class SystemOauth2Client {
             return Collections.emptySet();
         }
         return Arrays.stream(this.scopes.split(","))
+                .map(String::trim)
                 .collect(Collectors.toSet());
     }
 }

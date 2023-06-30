@@ -14,7 +14,7 @@ import ru.dlabs.sas.example.jsso.service.CustomUserDetailsService;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @EnableMethodSecurity
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
@@ -38,7 +38,14 @@ public class SecurityConfig {
                 .passwordEncoder(passwordEncoder);
 
         http.authorizeHttpRequests(authorize ->
-                authorize.anyRequest().authenticated()
+                authorize
+                        // ендпоинты swagger вынесем из под security
+                        .requestMatchers(
+                                "/v3/api-docs",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/swagger-config"
+                        ).permitAll()
+                        .anyRequest().authenticated()
         );
         return http.formLogin(withDefaults()).build();
     }
