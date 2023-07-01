@@ -19,6 +19,21 @@ springdoc:
 spring:
   application:
     name: j-sso
+  mvc:
+    cors:
+      configs:
+        - pattern: /v3/api-docs
+          allowed-origins: "http://localhost:7778"
+          allowed-header: "*"
+          exposed-headers: "*"
+          allowed-methods: "*"
+          allow-credentials: true
+        - pattern: /**
+          allowed-origins: "http://127.0.0.1:8080,http://localhost:8080"
+          allowed-header: "*"
+          exposed-headers: "*"
+          allowed-methods: "*"
+          allow-credentials: true
   session:
     store-type: redis
     redis:

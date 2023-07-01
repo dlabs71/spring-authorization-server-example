@@ -2,6 +2,7 @@ package ru.dlabs.sas.example.jsso.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -14,23 +15,26 @@ import org.springframework.web.filter.CorsFilter;
 
 @Slf4j
 @Configuration
+@RequiredArgsConstructor
 @EnableJpaRepositories(basePackages = "ru.dlabs.sas.example.jsso.dao.repository")
 public class RootAppConfig {
+
+    private final AppProperties.CorsProperties corsProperties;
 
     @Bean
     public FilterRegistrationBean<CorsFilter> corsFilter() {
         log.debug("CREATE CORS FILTER");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-
-        config.setAllowCredentials(true);
-
-        config.addAllowedOrigin("http://127.0.0.1:8080,http://localhost:8080,http://localhost:7778");
-        config.addAllowedHeader(CorsConfiguration.ALL);
-        config.addExposedHeader(CorsConfiguration.ALL);
-        config.addAllowedMethod(CorsConfiguration.ALL);
-
-        source.registerCorsConfiguration("/**", config);
+        corsProperties.getConfigs().forEach(configProps -> {
+            CorsConfiguration config = new CorsConfiguration();
+            config.setAllowCredentials(configProps.allowCredentials());
+            config.addAllowedOrigin(configProps.allowedOrigins());
+            config.addAllowedOriginPattern(configProps.allowedOriginPatterns());
+            config.addAllowedHeader(configProps.allowedHeaders());
+            config.addExposedHeader(configProps.exposedHeaders());
+            config.addAllowedMethod(configProps.allowedMethods());
+            source.registerCorsConfiguration(configProps.pattern(), config);
+        });
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;

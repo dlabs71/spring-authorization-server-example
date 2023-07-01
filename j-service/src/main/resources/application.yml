@@ -14,6 +14,17 @@ springdoc:
     path: /v3/api-docs
 
 spring:
+  application:
+    name: j-service
+  mvc:
+    cors:
+      configs:
+        - pattern: /v3/api-docs
+          allowed-origins: "http://localhost:7778"
+          allowed-header: "*"
+          exposed-headers: "*"
+          allowed-methods: "*"
+          allow-credentials: true
   security:
     oauth2:
       resourceserver:
