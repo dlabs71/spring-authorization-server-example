@@ -25,5 +25,7 @@ springdoc:
     urls:
       - name: SSO Server
         url: http://localhost:7777/v3/api-docs
+      - name: J Service
+        url: http://localhost:9001/v3/api-docs
   api-docs:
     enabled: true

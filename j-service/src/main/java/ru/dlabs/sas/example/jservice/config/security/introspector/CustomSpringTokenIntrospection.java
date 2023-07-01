@@ -1,4 +1,4 @@
-package ru.dlabs.sas.example.jservice.config.introspector;
+package ru.dlabs.sas.example.jservice.config.security.introspector;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;

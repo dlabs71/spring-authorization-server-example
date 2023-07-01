@@ -1,4 +1,4 @@
-package ru.dlabs.sas.example.jservice.config;
+package ru.dlabs.sas.example.jservice.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.dlabs.sas.example.jservice.config.introspector.CustomSpringTokenIntrospection;
+import ru.dlabs.sas.example.jservice.config.security.introspector.CustomSpringTokenIntrospection;
 
 @Configuration
 @EnableMethodSecurity
@@ -25,7 +25,10 @@ public class ResourceServerConfig {
         // выключаем поддержку сессий
         http.sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(customizer -> {
-                    customizer.anyRequest().authenticated();
+                    customizer
+                            // ендпоинты swagger вынесем из под security
+                            .requestMatchers("/v3/api-docs").permitAll()
+                            .anyRequest().authenticated();
                 });
 
         // подключаем поддержку OAuth2 Resource Server с Opaque Token.

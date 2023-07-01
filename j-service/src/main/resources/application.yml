@@ -6,6 +6,13 @@ logging:
     javax.management: ERROR
     org.springframework.security.web.FilterChainProxy: DEBUG
 
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+
 spring:
   security:
     oauth2:
