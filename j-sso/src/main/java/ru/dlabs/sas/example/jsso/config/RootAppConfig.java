@@ -4,6 +4,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ import org.springframework.web.filter.CorsFilter;
 public class RootAppConfig {
 
     private final AppProperties.CorsProperties corsProperties;
+    private final BuildProperties buildProperties;
 
     @Bean
     public FilterRegistrationBean<CorsFilter> corsFilter() {
@@ -42,11 +44,14 @@ public class RootAppConfig {
 
     @Bean
     public OpenAPI openAPI() {
+        String buildDate = buildProperties.get("build-date");
+        String buildInfo = "<h4>Build date: " + buildDate + "</h4>"
+                + "<br>" + buildProperties.get("description");
         return new OpenAPI()
                 .info(new Info()
-                        .title("Наш прекрасный SSO")
-                        .description("Некое описание этого SSO")
-                        .version("0.0.1")
+                        .title(buildProperties.getName())
+                        .description(buildInfo)
+                        .version(buildProperties.getVersion())
                 );
     }
 }
