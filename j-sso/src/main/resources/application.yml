@@ -10,6 +10,8 @@ logging:
     org.postgresql: ERROR
 
 springdoc:
+  auth:
+    auth-header-enabled: true
   swagger-ui:
     enabled: false
   api-docs:
@@ -22,15 +24,9 @@ spring:
   mvc:
     cors:
       configs:
-        - pattern: /v3/api-docs
-          allowed-origins: "http://localhost:7778"
-          allowed-header: "*"
-          exposed-headers: "*"
-          allowed-methods: "*"
-          allow-credentials: true
         - pattern: /**
-          allowed-origins: "http://127.0.0.1:8080,http://localhost:8080"
-          allowed-header: "*"
+          allowed-origins: "http://127.0.0.1:8080,http://localhost:8080,http://localhost:7778"
+          allowed-headers: "*"
           exposed-headers: "*"
           allowed-methods: "*"
           allow-credentials: true
