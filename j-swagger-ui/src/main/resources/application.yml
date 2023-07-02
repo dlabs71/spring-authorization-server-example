@@ -27,5 +27,9 @@ springdoc:
         url: http://localhost:7777/v3/api-docs
       - name: J Service
         url: http://localhost:9001/v3/api-docs
+    oauth2-redirect-url:
+    oauth:
+      client-id: swagger-client
+      client-secret: swagger-client
   api-docs:
     enabled: true

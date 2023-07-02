@@ -4,14 +4,21 @@ server:
 logging:
   level:
     root: DEBUG
-    org.springframework.security.web.FilterChainProxy: ERROR
+    org.springframework.security.web.FilterChainProxy: TRACE
+    org.springframework.security: TRACE
     logging.level.org.hibernate.SQL: INFO
     com.zaxxer.hikari: ERROR
     org.postgresql: ERROR
 
 springdoc:
-  auth:
+  auth-types:
     auth-header-enabled: true
+    client-credentials-enabled: true
+    authorization-code-enabled: true
+  auth-oauth:
+    token-url: http://localhost:7777/oauth2/token
+    authorization_url: http://localhost:7777/oauth2/authorize
+    refresh-url: http://localhost:7777/oauth2/token
   swagger-ui:
     enabled: false
   api-docs:

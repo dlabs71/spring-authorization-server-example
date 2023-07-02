@@ -7,8 +7,14 @@ logging:
     org.springframework.security.web.FilterChainProxy: DEBUG
 
 springdoc:
-  auth:
+  auth-types:
     auth-header-enabled: true
+    client-credentials-enabled: true
+    authorization-code-enabled: true
+  auth-oauth:
+    token-url: http://localhost:7777/oauth2/token
+    authorization_url: http://localhost:7777/oauth2/authorize
+    refresh-url: http://localhost:7777/oauth2/token
   swagger-ui:
     enabled: false
   api-docs:
