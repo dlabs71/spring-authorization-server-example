@@ -29,6 +29,7 @@ spring:
   application:
     name: j-sso
   mvc:
+    static-path-pattern: /static/**
     cors:
       configs:
         - pattern: /**
@@ -37,6 +38,9 @@ spring:
           exposed-headers: "*"
           allowed-methods: "*"
           allow-credentials: true
+  web:
+    resources:
+      static-locations: classpath:static
   session:
     store-type: redis
     redis:

@@ -27,6 +27,8 @@ import ru.dlabs.sas.example.jsso.dto.TokenInfoDto;
 
 import java.io.IOException;
 
+import static ru.dlabs.sas.example.jsso.config.security.SecurityConfig.PERMIT_ALL_PATTERNS;
+
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
 public class AuthorizationServerConfig {
@@ -49,8 +51,8 @@ public class AuthorizationServerConfig {
         http.securityMatcher(endpointsMatcher)
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                // ендпоинты swagger вынесем из под security
-                                .requestMatchers("/v3/api-docs").permitAll()
+                                // ендпоинты которые вынесем из под security
+                                .requestMatchers(PERMIT_ALL_PATTERNS).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))

@@ -20,10 +20,17 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration(proxyBeanMethods = false)
 public class SecurityConfig {
 
+    public static final String[] PERMIT_ALL_PATTERNS = {
+            "/v3/api-docs",
+            "/ui-test",
+            "/favicon.ico",
+            "/js/**",
+            "/css/**",
+            "/static/**"
+    };
+
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomUserDetailsService userDetailService;
-
-    // inject-им наш password encoder бин
     private final PasswordEncoder passwordEncoder;
 
     @Bean
@@ -34,13 +41,12 @@ public class SecurityConfig {
 
         http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(userDetailService)
-                // указываем
                 .passwordEncoder(passwordEncoder);
 
         http.authorizeHttpRequests(authorize ->
                 authorize
-                        // ендпоинты swagger вынесем из под security
-                        .requestMatchers("/v3/api-docs").permitAll()
+                        // ендпоинты которые вынесем из под security
+                        .requestMatchers(PERMIT_ALL_PATTERNS).permitAll()
                         .anyRequest().authenticated()
         );
         return http.formLogin(withDefaults()).build();
