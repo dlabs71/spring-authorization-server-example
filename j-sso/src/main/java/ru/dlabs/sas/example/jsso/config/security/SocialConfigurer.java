@@ -18,6 +18,7 @@ public class SocialConfigurer extends AbstractHttpConfigurer<SocialConfigurer, H
     private OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService;
     private AuthenticationFailureHandler failureHandler;
     private AuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
+    private String formLogin = "/login";
 
     @Override
     public void init(HttpSecurity http) throws Exception {
@@ -31,6 +32,7 @@ public class SocialConfigurer extends AbstractHttpConfigurer<SocialConfigurer, H
             if (this.failureHandler != null) {
                 oauth2Login.failureHandler(this.failureHandler);
             }
+            oauth2Login.loginPage(formLogin);
         });
     }
 }

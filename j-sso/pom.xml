@@ -21,7 +21,7 @@
         
         <build-client.phrase>disabled</build-client.phrase>
         <copy-client-build.phrase>disabled</copy-client-build.phrase>
-        <client-build-command.param>build</client-build-command.param>
+        <client-build-command.param>build-dev-java</client-build-command.param>
     </properties>
     
     <profiles>
@@ -48,7 +48,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <client-build-command.param>build</client-build-command.param>
+                <client-build-command.param>build-dev-java</client-build-command.param>
             </properties>
         </profile>
         <!-- Стандартный профиль сборки для test среды-->
@@ -140,6 +140,10 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
         </dependency>
     </dependencies>
     

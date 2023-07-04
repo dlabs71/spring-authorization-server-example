@@ -6,7 +6,8 @@
         "serve": "vue-cli-service serve --mode=development",
         "build": "vue-cli-service build --mode=development",
         "build-prod": "vue-cli-service build --mode=production",
-        "build-test": "vue-cli-service build --mode=test"
+        "build-test": "vue-cli-service build --mode=testing",
+        "build-dev-java": "vue-cli-service build --mode=dev-java"
     },
     "dependencies": {
         "core-js": "^3.8.3",
