@@ -18,7 +18,54 @@
         <maven.compiler.target>17</maven.compiler.target>
         <build-date>${maven.build.timestamp}</build-date>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+        
+        <build-client.phrase>disabled</build-client.phrase>
+        <copy-client-build.phrase>disabled</copy-client-build.phrase>
+        <client-build-command.param>build</client-build-command.param>
     </properties>
+    
+    <profiles>
+        <!-- Профиль для сборки и копирования фронтенд приложения-->
+        <profile>
+            <id>client-build-and-copy</id>
+            <properties>
+                <build-client.phrase>generate-resources</build-client.phrase>
+                <copy-client-build.phrase>generate-resources</copy-client-build.phrase>
+            </properties>
+        </profile>
+        <!-- Профиль для только копирования фронтенд приложения-->
+        <profile>
+            <id>client-only-copy</id>
+            <properties>
+                <build-client.phrase>non</build-client.phrase>
+                <copy-client-build.phrase>generate-resources</copy-client-build.phrase>
+            </properties>
+        </profile>
+        <!-- Стандартный профиль сборки для dev среды, по умолчанию активен-->
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <client-build-command.param>build</client-build-command.param>
+            </properties>
+        </profile>
+        <!-- Стандартный профиль сборки для test среды-->
+        <profile>
+            <id>test</id>
+            <properties>
+                <client-build-command.param>build-test</client-build-command.param>
+            </properties>
+        </profile>
+        <!-- Стандартный профиль сборки для production среды-->
+        <profile>
+            <id>prod</id>
+            <properties>
+                <client-build-command.param>build-prod</client-build-command.param>
+            </properties>
+        </profile>
+    </profiles>
     
     <dependencies>
         <!--        Web-->
@@ -136,6 +183,97 @@
                 <!--          </goals>-->
                 <!--      </execution>-->
                 <!--  </executions>-->
+            </plugin>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <executions>
+                    <!-- Установка Node и NPM для сборки фронта-->
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <phase>${build-client.phrase}</phase>
+                    </execution>
+                    <!-- Выполнение задачи установки зависимостей для фронта-->
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>${build-client.phrase}</phase>
+                        <configuration>
+                            <workingDirectory>client</workingDirectory>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+                    <!-- Сборка фронта-->
+                    <execution>
+                        <id>npm build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>${build-client.phrase}</phase>
+                        <configuration>
+                            <workingDirectory>client</workingDirectory>
+                            <arguments>run ${client-build-command.param}</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <nodeVersion>v16.20.1</nodeVersion>
+                    <npmVersion>9.7.2</npmVersion>
+                    <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
+                    <npmDownloadRoot>https://registry.npmjs.org/npm/-/</npmDownloadRoot>
+                    <installDirectory>.node</installDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <!-- Копирование index.html файла из client/dist в target/classes/templates-->
+                    <execution>
+                        <id>copy-templates</id>
+                        <phase>${copy-client-build.phrase}</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/classes/templates</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/client/dist</directory>
+                                    <includes>
+                                        <include>index.html</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <!-- Копирование js, css, images и т.д. из client/dist в target/classes/static-->
+                    <execution>
+                        <id>copy-static</id>
+                        <phase>${copy-client-build.phrase}</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/classes/static</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/client/dist</directory>
+                                    <includes>
+                                        <include>favicon.ico</include>
+                                        <include>js/**</include>
+                                        <include>css/**</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
         
