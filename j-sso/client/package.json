@@ -3,9 +3,11 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build --mode=production",
-        "lint": "vue-cli-service lint"
+        "serve": "vue-cli-service serve --mode=development",
+        "build": "vue-cli-service build --mode=development",
+        "build-prod": "vue-cli-service build --mode=production",
+        "build-test": "vue-cli-service build --mode=testing",
+        "build-dev-java": "vue-cli-service build --mode=dev-java"
     },
     "dependencies": {
         "@kyvg/vue3-notification": "^2.9.1",

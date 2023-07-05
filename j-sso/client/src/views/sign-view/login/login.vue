@@ -54,6 +54,7 @@ import LoginAPI from './service/login-service';
 import {Form} from 'vee-validate';
 import FormWrapper from "@/views/sign-view/components/form-wrapper";
 import {useRouter} from "vue-router";
+import {showENotify} from "@/global/functions/notification-funcs";
 
 export default {
     name: "login-form",
@@ -69,7 +70,12 @@ export default {
         };
 
         let login = () => {
-            LoginAPI.login(username.value, password.value);
+            LoginAPI.login(username.value, password.value).catch((response) => {
+                if (response.status === 401) {
+                    showENotify("Не верный логин или пароль");
+                }
+                showENotify("Произошла ошибка");
+            });
         }
 
         let loginWith = (providerName) => {
