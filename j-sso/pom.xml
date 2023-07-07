@@ -17,6 +17,7 @@
     </properties>
     
     <dependencies>
+        <!--        Web-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -35,6 +36,8 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        
+        <!--        Security-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -48,6 +51,21 @@
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
         
+        <!--        Data-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
+        
+        <!--        Utils-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -66,6 +84,34 @@
                     <finalName>${project.name}</finalName>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <configuration>
+                    <propertyFile>database/liquibase.properties</propertyFile>
+                    <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+                </configuration>
+                <!--  Раскомментировать, если необходимо накат схемы БД запускать при сборке проекта    -->
+                <!--  <executions>-->
+                <!--      <execution>-->
+                <!--          <id>liquibase-update</id>-->
+                <!--          <phase>process-resources</phase>-->
+                <!--          <goals>-->
+                <!--              <goal>update</goal>-->
+                <!--          </goals>-->
+                <!--      </execution>-->
+                <!--  </executions>-->
+            </plugin>
         </plugins>
+        
+        <resources>
+            <resource>
+                <directory>${project.basedir}/database</directory>
+                <targetPath>${project.build.directory}/classes/database</targetPath>
+            </resource>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+            </resource>
+        </resources>
     </build>
 </project>

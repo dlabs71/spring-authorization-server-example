@@ -1,0 +1,56 @@
+databaseChangeLog:
+  #  Objects
+  - include:
+      file: object/users.sql
+      relativeToChangelogFile: true
+      contextFilter: prod
+  - include:
+      file: object/system-oauth2-clients.sql
+      relativeToChangelogFile: true
+      contextFilter: prod
+  - include:
+      file: object/authorities.sql
+      relativeToChangelogFile: true
+      contextFilter: prod
+  - include:
+      file: object/roles.sql
+      relativeToChangelogFile: true
+      contextFilter: prod
+  - include:
+      file: object/role-authorities.sql
+      relativeToChangelogFile: true
+      contextFilter: prod
+  - include:
+      file: object/user-roles.sql
+      relativeToChangelogFile: true
+      contextFilter: prod
+  
+  #  Data
+  - include:
+      file: data/system-oauth2-clients-data.sql
+      relativeToChangelogFile: true
+      contextFilter: prod
+  - include:
+      file: data/authorities-data.sql
+      relativeToChangelogFile: true
+      contextFilter: prod
+  - include:
+      file: data/roles-data.sql
+      relativeToChangelogFile: true
+      contextFilter: prod
+  - include:
+      file: data/role-authorities-data.sql
+      relativeToChangelogFile: true
+      contextFilter: prod
+  
+  # Data dev
+  - include:
+      file: data/dev/users-data.sql
+      relativeToChangelogFile: true
+      contextFilter: dev
+  
+  #  Data continue
+  - include:
+      file: data/user-roles-data.sql
+      relativeToChangelogFile: true
+      contextFilter: prod
