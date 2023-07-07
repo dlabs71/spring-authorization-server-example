@@ -1,0 +1,23 @@
+version: '3.3'
+services:
+  j-postgres:
+    image: postgres:15.2
+    container_name: j-postgres
+    ports:
+      - '5435:5432'
+    environment:
+      POSTGRES_PASSWORD: "user"
+      POSTGRES_USER: "user"
+      POSTGRES_DB: "j-sso"
+    restart: always
+    volumes:
+      - ./docker/postgres/data:/var/lib/postgresql/data
+    networks:
+      - j-network
+
+networks:
+  j-network:
+    ipam:
+      driver: default
+      config:
+        - subnet: "14.205.210.0/24"

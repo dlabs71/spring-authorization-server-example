@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.dlabs.sas.example.jsso.dao.entity.UserEntity;
+import ru.dlabs.sas.example.jsso.dao.repository.RoleRepository;
 import ru.dlabs.sas.example.jsso.dao.repository.UserRepository;
 import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
 import ru.dlabs.sas.example.jsso.exception.AuthException;
@@ -14,6 +16,7 @@ import ru.dlabs.sas.example.jsso.type.AuthProvider;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 
 @Service
@@ -23,11 +26,13 @@ public class DefaultUserService implements UserService {
     @Value("${yandex-avatar-url}")
     private String yandexAvatarUrl;
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     /**
      * Создание или обновление пользователя
      */
     @Override
+    @Transactional
     public UserEntity save(OAuth2User userDto, AuthProvider provider) {
         return switch (provider) {
             case GITHUB -> this.saveUserFromGithab(userDto);
@@ -51,28 +56,20 @@ public class DefaultUserService implements UserService {
      */
     private UserEntity saveUserFromGithab(OAuth2User userDto) {
         String email = userDto.getAttribute("email");           // пытаемся получить атрибут email
-        if (email == null) {                                          // если данного атрибута нет или он пустой, то генерируем исключение с указанием того, что нет email
-            throw new AuthException(AuthErrorCode.EMAIL_IS_EMPTY);
-        }
-        UserEntity user = this.userRepository.findByEmail(email);     // пытаемся найти пользователя в нашем хранилище по email
-        if (user == null) {                                           // если пользователя не существует у нас, то создаём новую сущность UserEntity
-            user = new UserEntity();
-            user.setEmail(email);
-            user.setActive(true);                                     // пока пусть все созданные пользователи будут активными
-        }
+        UserEntity user = this.getEntityByEmail(email);
 
         if (userDto.getAttribute("name") != null) {             // получаем firstName, lastName и middleName
             String[] splitted = ((String) userDto.getAttribute("name")).split(" ");
             user.setFirstName(splitted[0]);
             if (splitted.length > 1) {
-                user.setSecondName(splitted[1]);
+                user.setLastName(splitted[1]);
             }
             if (splitted.length > 2) {
                 user.setMiddleName(splitted[2]);
             }
         } else {                                                      // иначе устанавливаем в эти поля значение email
             user.setFirstName(userDto.getAttribute("login"));   // конечно в реальных проектах так делать не надо, здесь это сделано для упрощения логики
-            user.setSecondName(userDto.getAttribute("login"));
+            user.setLastName(userDto.getAttribute("login"));
         }
 
         if (userDto.getAttribute("avatar_url") != null) {       // если есть аватар, то устанавливаем значение в поле avatarUrl
@@ -86,22 +83,14 @@ public class DefaultUserService implements UserService {
      */
     private UserEntity saveUserFromGoogle(OAuth2User userDto) {
         String email = userDto.getAttribute("email");
-        if (email == null) {
-            throw new AuthException(AuthErrorCode.EMAIL_IS_EMPTY);
-        }
-        UserEntity user = this.userRepository.findByEmail(email);
-        if (user == null) {
-            user = new UserEntity();
-            user.setEmail(email);
-            user.setActive(true);
-        }
+        UserEntity user = this.getEntityByEmail(email);
 
         if (userDto.getAttribute("given_name") != null) {
             user.setFirstName(userDto.getAttribute("given_name"));
         }
 
         if (userDto.getAttribute("family_name") != null) {
-            user.setSecondName(userDto.getAttribute("family_name"));
+            user.setLastName(userDto.getAttribute("family_name"));
         }
 
         if (userDto.getAttribute("picture") != null) {
@@ -116,22 +105,14 @@ public class DefaultUserService implements UserService {
      */
     private UserEntity saveUserFromYandex(OAuth2User userDto) {
         String email = userDto.getAttribute("default_email");
-        if (email == null) {
-            throw new AuthException(AuthErrorCode.EMAIL_IS_EMPTY);
-        }
-        UserEntity user = this.userRepository.findByEmail(email);
-        if (user == null) {
-            user = new UserEntity();
-            user.setEmail(email);
-            user.setActive(true);
-        }
+        UserEntity user = this.getEntityByEmail(email);
 
         if (userDto.getAttribute("first_name") != null) {
             user.setFirstName(userDto.getAttribute("first_name"));
         }
 
         if (userDto.getAttribute("last_name") != null) {
-            user.setSecondName(userDto.getAttribute("last_name"));
+            user.setLastName(userDto.getAttribute("last_name"));
         }
 
         if (userDto.getAttribute("default_avatar_id") != null) {
@@ -146,5 +127,24 @@ public class DefaultUserService implements UserService {
 
     private String createYandexAvatarUrl(String avatarId) {
         return yandexAvatarUrl.replace("{avatarId}", avatarId);
+    }
+
+    /**
+     * Метод получения сущности UserEntity по email
+     * Если пользователь с данным email не найден в БД, то создаём новую сущность
+     */
+    private UserEntity getEntityByEmail(String email) {
+        if (email == null) {
+            throw new AuthException(AuthErrorCode.EMAIL_IS_EMPTY);
+        }
+        UserEntity user = this.userRepository.findByEmail(email);
+        if (user == null) {
+            user = new UserEntity();
+            user.setEmail(email);
+            user.setActive(true);
+            // добавляем роль по умолчанию
+            user.setRoles(List.of(roleRepository.getDefaultRole()));
+        }
+        return user;
     }
 }

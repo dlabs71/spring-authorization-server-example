@@ -4,12 +4,36 @@ server:
 logging:
   level:
     root: DEBUG
-    javax.management: ERROR
-    org.springframework.security.web.FilterChainProxy: DEBUG
+    org.springframework.security.web.FilterChainProxy: ERROR
+    logging.level.org.hibernate.SQL: INFO
+    com.zaxxer.hikari: ERROR
+    org.postgresql: ERROR
 
 spring:
   application:
     name: j-sso
+  liquibase:
+    enabled: false  # Указать true, если необходимо сделать накат скриптов БД при запуске приложения
+    change-log: classpath:database/db.changelog.yaml
+    contexts: prod, dev
+  datasource:
+    url: "jdbc:postgresql://localhost:5435/j-sso"
+    username: "user"
+    password: "user"
+    driver-class-name: "org.postgresql.Driver"
+    hikari:
+      connection-timeout: 30000
+      connection-test-query: select 1
+      maximum-pool-size: 10
+      minimum-idle: 10
+      initialization-fail-timeout: 1
+      leak-detection-threshold: 0
+      pool-name: "HikariPool-j-sso"
+      register-mbeans: true
+  jpa:
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
   security:
     oauth2:
       authorizationserver:
@@ -22,13 +46,13 @@ spring:
             clientSecret: <your_github_client_secret>
           
           google:
-            clientId: <your_google_client_id>
-            clientSecret: <your_google_client_secret>
+            clientId: 608360869000-bvqc2b8ok52v010l3ps7cqnt8rj7thdv.apps.googleusercontent.com
+            clientSecret: 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
           
           yandex:
             provider: yandex
-            clientId: <your_yandex_client_id>
-            clientSecret: <your_yandex_client_secret>
+            clientId: 4dad31d6d7fd4fe9b7c69b0fd5a83037
+            clientSecret: 5555a5a414944cc5b4b9dfaefa2968a7
             redirect-uri: http://localhost:7777/login/oauth2/code/yandex
             authorizationGrantType: authorization_code
             clientName: Yandex
@@ -41,3 +65,19 @@ spring:
             userInfoUri: https://login.yandex.ru/info
 
 yandex-avatar-url: https://avatars.yandex.net/get-yapic/{avatarId}/islands-retina-50
+
+---
+spring:
+  config:
+    activate:
+      on-profile: production
+  liquibase:
+    contexts: prod
+
+---
+spring:
+  config:
+    activate:
+      on-profile: development
+  liquibase:
+    contexts: prod, dev

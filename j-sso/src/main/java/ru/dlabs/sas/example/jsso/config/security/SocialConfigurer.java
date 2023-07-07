@@ -1,4 +1,4 @@
-package ru.dlabs.sas.example.jsso.config;
+package ru.dlabs.sas.example.jsso.config.security;
 
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -23,7 +23,9 @@ public class SocialConfigurer extends AbstractHttpConfigurer<SocialConfigurer, H
     public void init(HttpSecurity http) throws Exception {
         http.oauth2Login(oauth2Login -> {
             if (this.oAuth2UserService != null) {
-                oauth2Login.userInfoEndpoint().userService(this.oAuth2UserService);
+                oauth2Login.userInfoEndpoint(customizer -> {
+                    customizer.userService(this.oAuth2UserService);
+                });
             }
             if (this.successHandler != null) {
                 oauth2Login.successHandler(this.successHandler);

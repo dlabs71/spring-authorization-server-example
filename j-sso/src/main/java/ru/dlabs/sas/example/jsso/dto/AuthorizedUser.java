@@ -17,7 +17,7 @@ public class AuthorizedUser extends User implements OAuth2User {
 
     private UUID id;
     private String firstName;
-    private String secondName;
+    private String lastName;
     private String middleName;
     private LocalDate birthday;
     private String avatarUrl;
@@ -103,8 +103,8 @@ public class AuthorizedUser extends User implements OAuth2User {
             return this;
         }
 
-        public AuthorizedUserBuilder secondName(String secondName) {
-            this.entity.setSecondName(secondName);
+        public AuthorizedUserBuilder lastName(String lastName) {
+            this.entity.setLastName(lastName);
             return this;
         }
 

@@ -1,0 +1,16 @@
+server:
+  port: 9001
+logging:
+  level:
+    root: DEBUG
+    javax.management: ERROR
+    org.springframework.security.web.FilterChainProxy: DEBUG
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        opaquetoken:
+          client-id: test-client
+          client-secret: test-client
+          introspection-uri: http://localhost:7777/oauth2/token-info
