@@ -42,21 +42,22 @@ spring:
     resources:
       static-locations: classpath:static
   session:
-    store-type: redis
+    timeout: 1800                 # Время жизни сессии (в секундах)
     redis:
-      flush-mode: immediate
-      namespace: j-sso:session
+      flush-mode: on_save         # Указываем, когда изменения сеанса записываются в хранилище (immediate или on_save)
+      namespace: j-sso:session    # Пространство имен для ключей, используемых для хранения сессий.
+      save-mode: on_set_attribute # Определяет в какой момент происходит сохранение изменений сессии (on_set_attribute, on_get_attribute, always)
   data:
-    redis:
-      client-type: lettuce
-      database: 0
-      host: localhost
-      port: 6379
-      password: qwerty12345678
-      lettuce:
+    redis: # Настраиваем подключение к Redis
+      client-type: lettuce        # Указываем тип клиента Redis (jedis или lettuce)
+      database: 0                 # Указываем номер БД Redis
+      host: localhost             # Хост подключения
+      port: 6379                  # Порт подключения
+      password: qwerty12345678    # Пароль подключения
+      lettuce: # Настраиваем пул подключений клиента lettuce
         pool:
-          max-active: 16
-          max-idle: 8
+          max-active: 16          # Максимальное количество подключений в пуле
+          max-idle: 8             # Минимальное количество "idle" подключений в пуле
   liquibase:
     enabled: false  # Указать true, если необходимо сделать накат скриптов БД при запуске приложения
     change-log: classpath:database/db.changelog.yaml
