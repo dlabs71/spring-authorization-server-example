@@ -272,6 +272,7 @@
                                         <include>favicon.ico</include>
                                         <include>js/**</include>
                                         <include>css/**</include>
+                                        <include>img/**</include>
                                     </includes>
                                 </resource>
                             </resources>
