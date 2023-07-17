@@ -11,4 +11,6 @@
 собственного SSO. А также я поставил себе ряд интересных требований, с которыми я постараюсь справиться и рассказать о
 своём опыте.
 
-### [Статья на Хабр](https://habr.com/ru/articles/737548/)
+### Часть 1: [Строим свой SSO сервер используя Spring Authorization Server](https://habr.com/ru/articles/737548/)
+### Часть 2: [Строим свой SSO. PostgreSQL и ролевая модель](https://habr.com/ru/articles/746698/)
+### Часть 3: [Строим свой SSO. Часть 3: Redis, Swagger, Vue.js](https://habr.com/ru/articles/748584/)
