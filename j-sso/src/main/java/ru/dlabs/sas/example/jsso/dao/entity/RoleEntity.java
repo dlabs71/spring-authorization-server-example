@@ -18,13 +18,10 @@ public class RoleEntity extends VersionedBusinessEntity<String> {
     @Column(name = "role_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
     @Column(name = "role_code", nullable = false)
     private String code;
-
     @Column(name = "role_description", nullable = false)
     private String description;
-
     @Column(name = "active")
     private Boolean active;
 

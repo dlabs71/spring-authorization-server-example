@@ -4,14 +4,60 @@ server:
 logging:
   level:
     root: DEBUG
-    org.springframework.security.web.FilterChainProxy: ERROR
+    org.springframework.security.web.FilterChainProxy: TRACE
+    org.springframework.security: TRACE
     logging.level.org.hibernate.SQL: INFO
     com.zaxxer.hikari: ERROR
     org.postgresql: ERROR
 
+springdoc:
+  auth-types:
+    auth-header-enabled: true
+    client-credentials-enabled: true
+    authorization-code-enabled: true
+  auth-oauth:
+    token-url: http://localhost:7777/oauth2/token
+    authorization_url: http://localhost:7777/oauth2/authorize
+    refresh-url: http://localhost:7777/oauth2/token
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+
 spring:
   application:
     name: j-sso
+  mvc:
+    static-path-pattern: /static/**
+    cors:
+      configs:
+        - pattern: /**
+          allowed-origins: "http://127.0.0.1:8080,http://localhost:8080,http://localhost:7778"
+          allowed-headers: "*"
+          exposed-headers: "*"
+          allowed-methods: "*"
+          allow-credentials: true
+  web:
+    resources:
+      static-locations: classpath:static
+  session:
+    timeout: 1800                 # Время жизни сессии (в секундах)
+    redis:
+      flush-mode: on_save         # Указываем, когда изменения сеанса записываются в хранилище (immediate или on_save)
+      namespace: j-sso:session    # Пространство имен для ключей, используемых для хранения сессий.
+      save-mode: on_set_attribute # Определяет в какой момент происходит сохранение изменений сессии (on_set_attribute, on_get_attribute, always)
+  data:
+    redis: # Настраиваем подключение к Redis
+      client-type: lettuce        # Указываем тип клиента Redis (jedis или lettuce)
+      database: 0                 # Указываем номер БД Redis
+      host: localhost             # Хост подключения
+      port: 6379                  # Порт подключения
+      password: qwerty12345678    # Пароль подключения
+      lettuce: # Настраиваем пул подключений клиента lettuce
+        pool:
+          max-active: 16          # Максимальное количество подключений в пуле
+          max-idle: 8             # Минимальное количество "idle" подключений в пуле
   liquibase:
     enabled: false  # Указать true, если необходимо сделать накат скриптов БД при запуске приложения
     change-log: classpath:database/db.changelog.yaml
@@ -39,6 +85,8 @@ spring:
       authorizationserver:
         issuer-url: http://localhost:7777
         introspection-endpoint: /oauth2/token-info
+        authentication-success-url: http://localhost:7777/
+        custom-handler-header-name: J-Sso-Next-Location
       client:
         registration:
           github:

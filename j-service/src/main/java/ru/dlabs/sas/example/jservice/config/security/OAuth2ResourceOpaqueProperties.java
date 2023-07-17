@@ -1,4 +1,4 @@
-package ru.dlabs.sas.example.jservice.config;
+package ru.dlabs.sas.example.jservice.config.security;
 
 import lombok.Getter;
 import lombok.Setter;

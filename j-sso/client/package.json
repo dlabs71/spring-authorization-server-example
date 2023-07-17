@@ -1,0 +1,51 @@
+{
+    "name": "client",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "serve": "vue-cli-service serve --mode=development",
+        "build": "vue-cli-service build --mode=development",
+        "build-prod": "vue-cli-service build --mode=production",
+        "build-test": "vue-cli-service build --mode=testing",
+        "build-dev-java": "vue-cli-service build --mode=dev-java"
+    },
+    "dependencies": {
+        "@kyvg/vue3-notification": "^2.9.1",
+        "@mdi/font": "^7.2.96",
+        "@vee-validate/i18n": "^4.9.5",
+        "@vee-validate/rules": "^4.9.5",
+        "@vuepic/vue-datepicker": "^5.1.2",
+        "axios": "^1.4.0",
+        "core-js": "^3.30.2",
+        "moment": "^2.29.4",
+        "roboto-fontface": "*",
+        "uuid": "^9.0.0",
+        "vee-validate": "^4.9.5",
+        "vue": "^3.3.4",
+        "vue-router": "^4.2.2",
+        "vuetify": "^3.3.1",
+        "vuex": "^4.1.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.22.1",
+        "@babel/preset-env": "^7.22.2",
+        "@vue/cli-plugin-babel": "~5.0.8",
+        "@vue/cli-plugin-router": "~5.0.8",
+        "@vue/cli-plugin-vuex": "~5.0.8",
+        "@vue/cli-service": "~5.0.8",
+        "sass": "^1.62.1",
+        "sass-loader": "^13.3.1",
+        "vue-cli-plugin-vuetify": "~2.5.8",
+        "webpack-plugin-vuetify": "^2.0.1"
+    },
+    "engines": {
+        "npm": ">=8.0.0",
+        "node": ">=16.0.0"
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead",
+        "not ie 11"
+    ]
+}

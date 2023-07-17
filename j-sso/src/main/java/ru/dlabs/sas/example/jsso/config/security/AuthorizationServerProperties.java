@@ -13,4 +13,6 @@ public class AuthorizationServerProperties {
 
     private String issuerUrl;
     private String introspectionEndpoint;
+    private String authenticationSuccessUrl;
+    private String customHandlerHeaderName;
 }

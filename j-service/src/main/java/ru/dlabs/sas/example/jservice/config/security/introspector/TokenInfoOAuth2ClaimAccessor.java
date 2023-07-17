@@ -1,4 +1,4 @@
-package ru.dlabs.sas.example.jservice.config.introspector;
+package ru.dlabs.sas.example.jservice.config.security.introspector;
 
 import org.springframework.security.oauth2.core.OAuth2TokenIntrospectionClaimAccessor;
 import ru.dlabs.sas.example.jservice.dto.TokenInfoDto;

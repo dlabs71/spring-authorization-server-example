@@ -6,7 +6,33 @@ logging:
     javax.management: ERROR
     org.springframework.security.web.FilterChainProxy: DEBUG
 
+springdoc:
+  auth-types:
+    auth-header-enabled: true
+    client-credentials-enabled: true
+    authorization-code-enabled: true
+  auth-oauth:
+    token-url: http://localhost:7777/oauth2/token
+    authorization_url: http://localhost:7777/oauth2/authorize
+    refresh-url: http://localhost:7777/oauth2/token
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+
 spring:
+  application:
+    name: j-service
+  mvc:
+    cors:
+      configs:
+        - pattern: /**
+          allowed-origins: "http://localhost:7778"
+          allowed-headers: "*"
+          exposed-headers: "*"
+          allowed-methods: "*"
+          allow-credentials: true
   security:
     oauth2:
       resourceserver:

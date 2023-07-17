@@ -19,6 +19,10 @@
         <lombok.version>1.18.26</lombok.version>
         <security-oauth2-server.version>1.1.1</security-oauth2-server.version>
         <security-oauth2-resource-server.version>3.1.1</security-oauth2-resource-server.version>
+        <springdoc.version>2.1.0</springdoc.version>
+        <google.guava.version>31.1-jre</google.guava.version>
+        
+        <frontend-maven-plugin.version>1.13.4</frontend-maven-plugin.version>
     </properties>
     
     <parent>
@@ -31,6 +35,7 @@
     <modules>
         <module>j-sso</module>
         <module>j-service</module>
+        <module>j-swagger-ui</module>
     </modules>
     
     <dependencyManagement>
@@ -45,6 +50,33 @@
                 <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
                 <version>${security-oauth2-resource-server.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${google.guava.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+    
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.github.eirslett</groupId>
+                    <artifactId>frontend-maven-plugin</artifactId>
+                    <version>${frontend-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

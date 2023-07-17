@@ -27,6 +27,8 @@ import ru.dlabs.sas.example.jsso.dto.TokenInfoDto;
 
 import java.io.IOException;
 
+import static ru.dlabs.sas.example.jsso.config.security.SecurityConfig.PERMIT_ALL_PATTERNS;
+
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
 public class AuthorizationServerConfig {
@@ -47,7 +49,12 @@ public class AuthorizationServerConfig {
 
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
         http.securityMatcher(endpointsMatcher)
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
+                .authorizeHttpRequests(authorize ->
+                        authorize
+                                // ендпоинты которые вынесем из под security
+                                .requestMatchers(PERMIT_ALL_PATTERNS).permitAll()
+                                .anyRequest().authenticated()
+                )
                 .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
                 .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login")))
                 .apply(authorizationServerConfigurer);
