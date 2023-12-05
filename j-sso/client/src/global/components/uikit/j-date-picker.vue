@@ -39,7 +39,7 @@
     import {useField} from 'vee-validate';
     import VueDatePicker from '@vuepic/vue-datepicker';
     import '@vuepic/vue-datepicker/dist/main.css'
-    import {beautyFormatDate, formatDate, formatDateFromStr} from "@/global/functions/date-funcs";
+    import {beautyFormatDate} from "@/global/functions/date-helper-funcs";
 
     const props = defineProps({
         name: {
