@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import SignView from '../views/sign-view/sign-view';
 import LoginForm from '../views/sign-view/login/login';
+import HomeView from '../views/home/home.vue';
 
 const routes = [
     {
@@ -13,6 +14,10 @@ const routes = [
                 component: LoginForm,
             }
         ]
+    },
+    {
+        path: '/home',
+        component: HomeView
     }
 ];
 

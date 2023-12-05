@@ -1,6 +1,7 @@
 <template>
     <v-app>
         <v-main>
+            <j-exception/>
             <notifications group="main"/>
             <router-view/>
         </v-main>

@@ -1,5 +1,15 @@
 import {createStore} from 'vuex';
-import settings from './modules/settings';
+import VuexPersistence from 'vuex-persist'
+import security from './modules/security';
+
+const vuexLocal = new VuexPersistence({
+    storage: window.localStorage,
+    reducer: state => ({
+        security: {
+            ...state.security
+        }
+    })
+});
 
 export default createStore({
     state: {},
@@ -7,7 +17,7 @@ export default createStore({
     mutations: {},
     actions: {},
     modules: {
-        settings
+        security: security,
     },
-    plugins: []
+    plugins: [vuexLocal.plugin]
 });

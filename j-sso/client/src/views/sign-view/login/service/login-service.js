@@ -1,8 +1,8 @@
 import axios from 'axios';
+import store from '@/store/index.js';
 
 export class LoginAPI {
     __LOGIN_URL = "/login";
-    __OAUTH_AUTHORIZATION_URL = "/oauth2/authorization/";
     __LOCATION_HEADER = process.env.VUE_APP_SSO_LOCATION_HEADER;
 
     /**
@@ -17,26 +17,26 @@ export class LoginAPI {
         formData.append("username", username);
         formData.append("password", password);
 
-        return axios.post(this.__LOGIN_URL, formData).then(result => {
-            // проверяем есть ли спец. заголовок
-            if (result.headers.has(this.__LOCATION_HEADER)) {
-
-                // переходим на указанный в заголовке адрес
-                window.location = result.headers.get(this.__LOCATION_HEADER);
-            }
-        });
+        return axios.post(this.__LOGIN_URL, formData)
+            .then(result => {
+                if (result.headers.has(this.__LOCATION_HEADER)) {
+                    this.getCurrentUser().then(() => {
+                        window.location = result.headers.get(this.__LOCATION_HEADER);
+                    });
+                }
+            });
     }
 
     /**
-     * Метод запуска процесса авторизации через Yandex, Github или Google
-     * @param providerName - одно из следующих значений: google, github, yandex
+     * Получаем данные об авторизованном пользователе
+     * @returns {Promise<axios.AxiosResponse<any>>} данные ответа сервера
      */
-    loginWith(providerName) {
-        window.location = this.__getOAuthAuthorizationUrl(providerName);
-    }
-
-    __getOAuthAuthorizationUrl(providerName) {
-        return this.__OAUTH_AUTHORIZATION_URL + providerName;
+    getCurrentUser() {
+        return axios.get('/security-session/user').then(result => {
+            console.log(result.data);
+            store.dispatch('setAuthUser', result.data);
+            return result.data;
+        });
     }
 }
 
