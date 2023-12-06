@@ -114,6 +114,12 @@ spring:
 
 yandex-avatar-url: https://avatars.yandex.net/get-yapic/{avatarId}/islands-retina-50
 
+d-email:
+  email: ${J_SMTP_EMAIL}
+  password: ${J_SMTP_EMAIL_PASSWORD}
+  host: smtp.jino.ru
+  port: 587
+
 ---
 spring:
   config:

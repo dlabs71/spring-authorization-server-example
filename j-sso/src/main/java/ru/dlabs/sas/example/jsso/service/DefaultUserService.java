@@ -1,7 +1,10 @@
 package ru.dlabs.sas.example.jsso.service;
 
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,7 +12,9 @@ import ru.dlabs.sas.example.jsso.dao.entity.UserEntity;
 import ru.dlabs.sas.example.jsso.dao.repository.RoleRepository;
 import ru.dlabs.sas.example.jsso.dao.repository.UserRepository;
 import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
+import ru.dlabs.sas.example.jsso.dto.RegistrationDto;
 import ru.dlabs.sas.example.jsso.exception.AuthException;
+import ru.dlabs.sas.example.jsso.exception.RegistrationException;
 import ru.dlabs.sas.example.jsso.mapper.AuthorizedUserMapper;
 import ru.dlabs.sas.example.jsso.type.AuthErrorCode;
 import ru.dlabs.sas.example.jsso.type.AuthProvider;
@@ -27,6 +32,7 @@ public class DefaultUserService implements UserService {
     private String yandexAvatarUrl;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Создание или обновление пользователя
@@ -143,6 +149,96 @@ public class DefaultUserService implements UserService {
             user.setEmail(email);
             user.setActive(true);
             // добавляем роль по умолчанию
+            user.setRoles(List.of(roleRepository.getDefaultRole()));
+        }
+        return user;
+    }
+
+    @Override
+    @Transactional
+    public UserEntity saveUser(RegistrationDto userDto) {
+        this.validateRegistrationDto(userDto);
+        UserEntity user = new UserEntity();
+        user.setEmail(userDto.getEmail());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getSecondName());
+        user.setMiddleName(userDto.getMiddleName());
+        user.setBirthday(userDto.getBirthday());
+        user.setActive(false);
+        user.getRoles().add(roleRepository.getDefaultRole());
+        return userRepository.save(user);
+    }
+
+    private void validateRegistrationDto(RegistrationDto dto) {
+        if (dto.getEmail() == null) {
+            throw new RegistrationException("$validation.email");
+        }
+        if (dto.getFirstName() == null) {
+            throw new RegistrationException("$validation.firstname");
+        }
+        if (dto.getSecondName() == null) {
+            throw new RegistrationException("$validation.lastname");
+        }
+        if (dto.getPassword() == null) {
+            throw new RegistrationException("$validation.password");
+        }
+
+        UserEntity user = this.userRepository.findByEmail(dto.getEmail());
+        if (user != null) {
+            throw new RegistrationException("$account.already.exist");
+        }
+    }
+
+    @Override
+    @Transactional
+    public UserEntity firstActivation(UUID userId, String password) {
+        Optional<UserEntity> userEntityOptional = this.userRepository.findById(userId);
+        if (userEntityOptional.isEmpty()) {
+            throw new RegistrationException("$user.not.found");
+        }
+        UserEntity userEntity = userEntityOptional.get();
+        userEntity.setPasswordHash(passwordEncoder.encode(password));
+        userEntity.setActive(true);
+        return userRepository.save(userEntity);
+    }
+
+    @Override
+    @Transactional
+    public UserEntity saveAndActivateUser(RegistrationDto userDto) {
+        UserEntity user = this.saveUser(userDto);
+        user = this.firstActivation(user.getId(), userDto.getPassword());
+        return user;
+    }
+
+    @Override
+    public void changePassword(String email, String passwordHash) {
+        UserEntity user = this.userRepository.findByEmail(email);
+        if (user == null) {
+            throw new RegistrationException("$user.not.found");
+        }
+        user.setPasswordHash(passwordEncoder.encode(passwordHash));
+        userRepository.save(user);
+    }
+
+    @Override
+    public boolean existByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public UserEntity findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    private UserEntity getEntity(String email) {
+        if (email == null) {
+            throw new AuthException(AuthErrorCode.EMAIL_IS_EMPTY);
+        }
+        UserEntity user = this.userRepository.findByEmail(email);
+        if (user == null) {
+            user = new UserEntity();
+            user.setEmail(email);
+            user.setActive(true);
             user.setRoles(List.of(roleRepository.getDefaultRole()));
         }
         return user;
