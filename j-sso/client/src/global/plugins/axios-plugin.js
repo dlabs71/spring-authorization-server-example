@@ -20,6 +20,16 @@ function applyAxiosInterceptor(store, router) {
                 return Promise.reject(response);
             }
 
+            let exception = response.data;
+            if (exception.informative) {
+                let payload = {
+                    level: exception.level,
+                    message: exception.message,
+                }
+                store.dispatch('setNotification', payload);
+                return Promise.reject(response);
+            }
+
             if (response.status === 401) {
                 router.replace({name: "login"});
                 return Promise.reject(response);
@@ -33,13 +43,15 @@ function applyAxiosInterceptor(store, router) {
                 return Promise.reject(response);
             }
 
-            let exception = response.data;
-            if (!!exception) {
+            if (!!exception.message || !!exception.stacktrace) {
                 let payload = {
                     level: "ERROR",
                     description: "Внутренняя ошибка сервиса",
                     stacktrace: []
                 };
+                if (!!exception.level) {
+                    payload.level = exception.level;
+                }
                 if (!!exception.message) {
                     payload.description = exception.message;
                 }

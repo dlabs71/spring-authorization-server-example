@@ -1,5 +1,8 @@
 package ru.dlabs.sas.example.jsso.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +22,6 @@ import ru.dlabs.sas.example.jsso.mapper.AuthorizedUserMapper;
 import ru.dlabs.sas.example.jsso.type.AuthErrorCode;
 import ru.dlabs.sas.example.jsso.type.AuthProvider;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +37,6 @@ public class DefaultUserService implements UserService {
      * Создание или обновление пользователя
      */
     @Override
-    @Transactional
     public UserEntity save(OAuth2User userDto, AuthProvider provider) {
         return switch (provider) {
             case GITHUB -> this.saveUserFromGithab(userDto);
@@ -78,7 +76,8 @@ public class DefaultUserService implements UserService {
             user.setLastName(userDto.getAttribute("login"));
         }
 
-        if (userDto.getAttribute("avatar_url") != null) {       // если есть аватар, то устанавливаем значение в поле avatarUrl
+        if (userDto.getAttribute("avatar_url") !=
+            null) {       // если есть аватар, то устанавливаем значение в поле avatarUrl
             user.setAvatarUrl(userDto.getAttribute("avatar_url"));
         }
         return userRepository.save(user);                             // сохраняем сущность UserEntity
@@ -228,19 +227,5 @@ public class DefaultUserService implements UserService {
     @Override
     public UserEntity findByEmail(String email) {
         return userRepository.findByEmail(email);
-    }
-
-    private UserEntity getEntity(String email) {
-        if (email == null) {
-            throw new AuthException(AuthErrorCode.EMAIL_IS_EMPTY);
-        }
-        UserEntity user = this.userRepository.findByEmail(email);
-        if (user == null) {
-            user = new UserEntity();
-            user.setEmail(email);
-            user.setActive(true);
-            user.setRoles(List.of(roleRepository.getDefaultRole()));
-        }
-        return user;
     }
 }

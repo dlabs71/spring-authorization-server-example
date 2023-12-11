@@ -1,5 +1,7 @@
 server:
   port: 7777
+  error:
+    include-stacktrace: always
 
 logging:
   level:
@@ -90,21 +92,21 @@ spring:
       client:
         registration:
           github:
-            clientId: <your_github_client_id>
-            clientSecret: <your_github_client_secret>
-          
+            clientId: ${JSSO_GITHUB_CLIENT_ID}
+            clientSecret: ${JSSO_GITHUB_CLIENT_SECRET}
+
           google:
-            clientId: 608360869000-bvqc2b8ok52v010l3ps7cqnt8rj7thdv.apps.googleusercontent.com
-            clientSecret: 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
-          
+            clientId: ${JSSO_GOOGLE_CLIENT_ID}
+            clientSecret: ${JSSO_GOOGLE_CLIENT_SECRET}
+
           yandex:
             provider: yandex
-            clientId: 4dad31d6d7fd4fe9b7c69b0fd5a83037
-            clientSecret: 5555a5a414944cc5b4b9dfaefa2968a7
+            clientId: ${JSSO_YANDEX_CLIENT_ID}
+            clientSecret: ${JSSO_YANDEX_CLIENT_SECRET}
             redirect-uri: http://localhost:7777/login/oauth2/code/yandex
             authorizationGrantType: authorization_code
             clientName: Yandex
-        
+
         provider:
           yandex:
             authorization-uri: https://oauth.yandex.ru/authorize
@@ -115,8 +117,8 @@ spring:
 yandex-avatar-url: https://avatars.yandex.net/get-yapic/{avatarId}/islands-retina-50
 
 d-email:
-  email: ${J_SMTP_EMAIL}
-  password: ${J_SMTP_EMAIL_PASSWORD}
+  email: ${JSSO_SMTP_EMAIL}
+  password: ${JSSO_SMTP_EMAIL_PASSWORD}
   host: smtp.jino.ru
   port: 587
 

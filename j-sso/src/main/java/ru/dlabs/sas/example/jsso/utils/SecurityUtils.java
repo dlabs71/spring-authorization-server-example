@@ -15,7 +15,7 @@ public class SecurityUtils {
         if (authentication instanceof UsernamePasswordAuthenticationToken authenticationImpl) {
             return authenticationImpl;
         }
-        throw new ServiceException("Authentication type not supported");
+        throw ServiceException.builder("Authentication type not supported").build();
     }
 
     public AuthorizedUser getAuthUser() {

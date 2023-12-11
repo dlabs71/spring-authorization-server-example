@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.dlabs.sas.example.jsso.components.OTPStore;
 import ru.dlabs.sas.example.jsso.components.RegistrationStore;
 import ru.dlabs.sas.example.jsso.dto.RegistrationDto;
+import ru.dlabs.sas.example.jsso.exception.InformationException;
 import ru.dlabs.sas.example.jsso.exception.RegistrationException;
 import ru.dlabs.sas.example.jsso.exception.ServiceException;
 import ru.dlabs71.library.email.DEmailSender;
@@ -26,14 +27,14 @@ public class DefaultRegistrationService implements RegistrationService {
     @Override
     public void register(RegistrationDto registrationDto, HttpServletResponse response) {
         if (userService.existByEmail(registrationDto.getEmail())) {
-            throw new ServiceException(messageService.getMessage("account.already.exist"));
+            throw InformationException.builder("$account.already.exist").build();
         }
 
         OTPStore.GenerationResult generationResult = otpStore.generate(response);
         try {
             registrationStore.save(registrationDto, generationResult.sessionId());
         } catch (Exception e) {
-            throw new ServiceException(messageService.getMessage("happened.unexpected.error"));
+            throw InformationException.builder("$happened.unexpected.error").build();
         }
 
         emailSender.sendHtmlTemplated(
@@ -59,7 +60,7 @@ public class DefaultRegistrationService implements RegistrationService {
         try {
             registrationDto = registrationStore.take(sessionId);
         } catch (Exception e) {
-            throw new ServiceException("$happened.unexpected.error");
+            throw InformationException.builder("$happened.unexpected.error").build();
         }
         userService.saveAndActivateUser(registrationDto);
     }

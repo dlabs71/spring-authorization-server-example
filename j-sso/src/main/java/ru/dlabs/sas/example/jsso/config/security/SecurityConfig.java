@@ -29,8 +29,9 @@ public class SecurityConfig {
     public static final String LOGIN_PROCESSING_URL = "/login";
     public static final String[] PERMIT_ALL_PATTERNS = {
             LOGIN_PAGE,
+            "/error**",
             "/static/**",
-            "/client/auth/**",
+            "/client/**",
             "/registration/**"
     };
 

@@ -16,7 +16,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final UserService userService;
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);                            // Загружаем пользователя, как это было до
         String clientRegId = userRequest.getClientRegistration().getRegistrationId();   // Получаем наименование провайдера (google, github и т.д.)
