@@ -11,7 +11,6 @@ import ru.dlabs.sas.example.jsso.components.RegistrationStore;
 import ru.dlabs.sas.example.jsso.dto.RegistrationDto;
 import ru.dlabs.sas.example.jsso.exception.InformationException;
 import ru.dlabs.sas.example.jsso.exception.RegistrationException;
-import ru.dlabs.sas.example.jsso.exception.ServiceException;
 import ru.dlabs71.library.email.DEmailSender;
 
 @Service

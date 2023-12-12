@@ -10,39 +10,55 @@ function applyAxiosInterceptor(store, router) {
         },
         (data) => {
             let response = data.response;
+
+            // если нет вообще сети
             if ("ERR_NETWORK" === data.code) {
                 let payload = {
                     level: "ERROR",
                     description: "Сервис не доступен. Проверьте подключение к сети Интернет или повторите действие позднее",
                     stacktrace: []
                 };
+
+                // отображим через j-exception
                 store.dispatch('setException', payload);
                 return Promise.reject(response);
             }
 
             let exception = response.data;
+
+            // если указано что ошибка для отображения через уведомления
             if (exception.informative) {
                 let payload = {
                     level: exception.level,
                     message: exception.message,
                 }
+
+                // отобразим через всплывающие уведомления
                 store.dispatch('setNotification', payload);
                 return Promise.reject(response);
             }
 
+            // если мы не авторизованы
             if (response.status === 401) {
+
+                // просто перейдём на страницу входа
                 router.replace({name: "login"});
                 return Promise.reject(response);
             }
+
+            // если у нас нет прав доступа
             if (response.status === 403) {
                 let payload = {
                     level: "ERROR",
                     message: "Отказано в доступе",
                 }
+
+                // отобразим через всплывающие уведомления
                 store.dispatch('setNotification', payload);
                 return Promise.reject(response);
             }
 
+            // если просто возникла 500-ая ошибка на сервере
             if (!!exception.message || !!exception.stacktrace) {
                 let payload = {
                     level: "ERROR",
@@ -59,6 +75,7 @@ function applyAxiosInterceptor(store, router) {
                     payload.stacktrace = exception.stacktrace;
                 }
 
+                // отобразим через j-exception
                 store.dispatch('setException', payload);
             }
             return Promise.reject(response);

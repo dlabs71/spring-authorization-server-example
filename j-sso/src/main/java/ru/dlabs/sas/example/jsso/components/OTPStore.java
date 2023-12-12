@@ -9,10 +9,19 @@ public interface OTPStore {
     String domain = "localhost";
     Integer maxAge = 180;
 
+    /**
+     * Генерация OTP
+     */
     GenerationResult generate(HttpServletResponse response);
 
+    /**
+     * Валидация OTP
+     */
     boolean validate(String otp, HttpServletRequest request);
 
+    /**
+     * Получение session Id из HttpServletRequest
+     */
     String getSessionId(HttpServletRequest request);
 
     record GenerationResult(String sessionId, String otp) {

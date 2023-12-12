@@ -127,6 +127,9 @@ public class RootAppConfig {
 //        };
 //    }
 
+    /**
+     * Бин необходимый для работы с сообщениями хранимыми в .properties файлах.
+     */
     @Bean
     public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();

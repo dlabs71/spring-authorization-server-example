@@ -1,4 +1,4 @@
-package ru.dlabs.sas.example.jsso.config.security;
+package ru.dlabs.sas.example.jsso.controller;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.NoResultException;
@@ -27,6 +27,13 @@ public class GlobalExceptionHandler {
     private final ErrorResponseBuilder errorResponseBuilder;
     private final boolean enableStacktrace;
 
+    /**
+     * Конструктор класса
+     *
+     * @param includeStacktrace включить или исключить отображение stacktrace в ответе.
+     *                          always - включить, never выключить.
+     * @param messageService    бин MessageService
+     */
     public GlobalExceptionHandler(
         @Value("${server.error.include-stacktrace}") String includeStacktrace,
         @Autowired MessageService messageService
