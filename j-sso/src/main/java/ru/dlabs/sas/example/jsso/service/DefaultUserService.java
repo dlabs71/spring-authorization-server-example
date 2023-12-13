@@ -34,7 +34,7 @@ public class DefaultUserService implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     /**
-     * Создание или обновление пользователя
+     * Создание или обновление пользователя используя сервис-провайдер
      */
     @Override
     public UserEntity save(OAuth2User userDto, AuthProvider provider) {
@@ -153,6 +153,11 @@ public class DefaultUserService implements UserService {
         return user;
     }
 
+    /**
+     * Создание пользователя на основе регистрационных данных. Пользователь будет не активирован.
+     *
+     * @param userDto данные указанные при регистрации
+     */
     @Override
     @Transactional
     public UserEntity saveUser(RegistrationDto userDto) {
@@ -168,6 +173,9 @@ public class DefaultUserService implements UserService {
         return userRepository.save(user);
     }
 
+    /**
+     * Валидация регистрационных данных
+     */
     private void validateRegistrationDto(RegistrationDto dto) {
         if (dto.getEmail() == null) {
             throw new RegistrationException("$validation.email");
@@ -188,6 +196,12 @@ public class DefaultUserService implements UserService {
         }
     }
 
+    /**
+     * Активация пользователя
+     *
+     * @param userId   уникальный идентификатор пользователя
+     * @param password пароль пользователя
+     */
     @Override
     @Transactional
     public UserEntity firstActivation(UUID userId, String password) {
@@ -201,6 +215,9 @@ public class DefaultUserService implements UserService {
         return userRepository.save(userEntity);
     }
 
+    /**
+     * Создать пользователя и сразу активировать
+     */
     @Override
     @Transactional
     public UserEntity saveAndActivateUser(RegistrationDto userDto) {
@@ -209,23 +226,11 @@ public class DefaultUserService implements UserService {
         return user;
     }
 
-    @Override
-    public void changePassword(String email, String passwordHash) {
-        UserEntity user = this.userRepository.findByEmail(email);
-        if (user == null) {
-            throw new RegistrationException("$user.not.found");
-        }
-        user.setPasswordHash(passwordEncoder.encode(passwordHash));
-        userRepository.save(user);
-    }
-
+    /**
+     * Проверить существует ли пользователь с указанным email
+     */
     @Override
     public boolean existByEmail(String email) {
         return userRepository.existsByEmail(email);
-    }
-
-    @Override
-    public UserEntity findByEmail(String email) {
-        return userRepository.findByEmail(email);
     }
 }

@@ -22,17 +22,27 @@ public class BeanConfig {
     }
 
     @Bean
+    @ConfigurationProperties(prefix = "otp-store")
+    public OTPStore.Config otpStoreConfig() {
+        return new OTPStore.Config(null, null, 0);
+    }
+
+    @Bean
     public DEmailSender emailSender(SmtpProperties smtpProperties) {
         return DEmailSender.of(smtpProperties);
     }
 
     @Bean
-    public OTPStore otpStore(StringRedisTemplate redisTemplate) {
-        return new RedisOTPStore(redisTemplate);
+    public OTPStore otpStore(OTPStore.Config otpStoreConfig, StringRedisTemplate redisTemplate) {
+        return new RedisOTPStore(otpStoreConfig, redisTemplate);
     }
 
     @Bean
-    public RegistrationStore registrationStore(StringRedisTemplate redisTemplate, ObjectMapper objectMapper) {
-        return new RedisRegistrationStore(redisTemplate, objectMapper);
+    public RegistrationStore registrationStore(
+        OTPStore.Config otpStoreConfig,
+        StringRedisTemplate redisTemplate,
+        ObjectMapper objectMapper
+    ) {
+        return new RedisRegistrationStore(otpStoreConfig.cookieMaxAge(), redisTemplate, objectMapper);
     }
 }

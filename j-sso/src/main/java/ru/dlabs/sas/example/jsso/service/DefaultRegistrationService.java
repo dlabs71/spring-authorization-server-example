@@ -25,17 +25,22 @@ public class DefaultRegistrationService implements RegistrationService {
 
     @Override
     public void register(RegistrationDto registrationDto, HttpServletResponse response) {
+        // проверяем что пользователь с таким email ещё не существует
         if (userService.existByEmail(registrationDto.getEmail())) {
             throw InformationException.builder("$account.already.exist").build();
         }
 
+        // Создаём OTP
         OTPStore.GenerationResult generationResult = otpStore.generate(response);
+
+        // Сохраняем данные во временное хранилище
         try {
             registrationStore.save(registrationDto, generationResult.sessionId());
         } catch (Exception e) {
             throw InformationException.builder("$happened.unexpected.error").build();
         }
 
+        // отправляем OTP по email
         emailSender.sendHtmlTemplated(
             registrationDto.getEmail(),
             messageService.getMessage("email.subject.confirm.registration"),

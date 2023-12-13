@@ -23,24 +23,36 @@ public class RedisOTPStore implements OTPStore {
     private final StringRedisTemplate redisTemplate;
     private final ValueOperations<String, String> store;
 
-    public RedisOTPStore(StringRedisTemplate redisTemplate) {
+    private final Config config;
+
+    public RedisOTPStore(Config config, StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
         this.store = redisTemplate.opsForValue();
+        this.config = new Config(config.cookieName(), config.cookieDomain(), config.cookieMaxAge());
     }
 
     @Override
     public GenerationResult generate(HttpServletResponse response) {
+
+        // генерируем одноразовый пароль
         String otp = RandomStringUtils.randomNumeric(6);
+
+        // генерируем идентификатор сессии
         String sessionId = this.generateSessionId();
         log.info("Generate OTP = " + otp + ". Generate sessionId = " + sessionId);
 
-        store.set(SESSION_ID_TO_OTP + sessionId, otp, maxAge, TimeUnit.SECONDS);
+        // сохраняем пароль в Redis
+        store.set(SESSION_ID_TO_OTP + sessionId, otp, config.cookieMaxAge(), TimeUnit.SECONDS);
 
-        Cookie cookie = new Cookie(cookieName, sessionId);
-        cookie.setMaxAge(maxAge);
-        cookie.setDomain(domain);
+        // создаём Cookie
+        Cookie cookie = new Cookie(config.cookieName(), sessionId);
+        cookie.setMaxAge(config.cookieMaxAge());
+        cookie.setDomain(config.cookieDomain());
         cookie.setHttpOnly(true);
+
+        // указываем новые Cookie в Servlet Response
         response.addCookie(cookie);
+
         log.info("Add cookie to response = " + cookie);
         return new GenerationResult(sessionId, otp);
     }
@@ -65,13 +77,18 @@ public class RedisOTPStore implements OTPStore {
     @Override
     public String getSessionId(HttpServletRequest request) {
         Cookie sessionCookie = Arrays.stream(request.getCookies())
-            .filter(item -> cookieName.equals(item.getName()))
+            .filter(item -> config.cookieName().equals(item.getName()))
             .findFirst()
             .orElse(null);
         if (sessionCookie != null) {
             return sessionCookie.getValue();
         }
         return null;
+    }
+
+    @Override
+    public Config getConfig() {
+        return this.config;
     }
 
     private String generateSessionId() {

@@ -5,10 +5,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface OTPStore {
 
-    String cookieName = "dl-sso-temporary-session";
-    String domain = "localhost";
-    Integer maxAge = 180;
-
     /**
      * Генерация OTP
      */
@@ -24,7 +20,22 @@ public interface OTPStore {
      */
     String getSessionId(HttpServletRequest request);
 
-    record GenerationResult(String sessionId, String otp) {
+    /**
+     * Возвращает актуальную конфигурацию
+     */
+    Config getConfig();
 
-    }
+    /**
+     * Результат генерации OTP. Содержит созданную ID сессии и сам OTP.
+     */
+    record GenerationResult(String sessionId, String otp) { }
+
+    /**
+     * Конфигурация стора
+     *
+     * @param cookieName   наименование cookie
+     * @param cookieDomain домен cookie
+     * @param cookieMaxAge время жизни куки cookie и самого OTP
+     */
+    record Config(String cookieName, String cookieDomain, int cookieMaxAge) { }
 }
