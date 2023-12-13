@@ -82,17 +82,21 @@
             };
 
             let goToRegistration = () => {
-                router.push("registration")
+                router.push("registration");
             };
 
             let goToResetPassword = () => {
-                console.log("click to reset password");
+                router.push("reset-password");
             };
 
             onMounted(() => {
                 // reset state for registration process
                 store.dispatch('setRegistrationData', null);
                 store.dispatch('setRegistrationStep', 0);
+
+                // reset state for forgot password process
+                store.dispatch('setResetData', null);
+                store.dispatch('setResetStep', 0);
             });
 
             return {

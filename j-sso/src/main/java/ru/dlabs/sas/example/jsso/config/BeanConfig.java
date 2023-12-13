@@ -7,8 +7,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import ru.dlabs.sas.example.jsso.components.OTPStore;
 import ru.dlabs.sas.example.jsso.components.RegistrationStore;
+import ru.dlabs.sas.example.jsso.components.ResetPasswordStore;
 import ru.dlabs.sas.example.jsso.components.impl.RedisOTPStore;
 import ru.dlabs.sas.example.jsso.components.impl.RedisRegistrationStore;
+import ru.dlabs.sas.example.jsso.components.impl.RedisResetPasswordStore;
 import ru.dlabs71.library.email.DEmailSender;
 import ru.dlabs71.library.email.property.SmtpProperties;
 
@@ -44,5 +46,14 @@ public class BeanConfig {
         ObjectMapper objectMapper
     ) {
         return new RedisRegistrationStore(otpStoreConfig.cookieMaxAge(), redisTemplate, objectMapper);
+    }
+
+    @Bean
+    public ResetPasswordStore resetPasswordStore(
+        OTPStore.Config otpStoreConfig,
+        StringRedisTemplate redisTemplate,
+        ObjectMapper objectMapper
+    ) {
+        return new RedisResetPasswordStore(otpStoreConfig.cookieMaxAge(), redisTemplate, objectMapper);
     }
 }

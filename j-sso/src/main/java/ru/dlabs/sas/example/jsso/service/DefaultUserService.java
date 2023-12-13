@@ -233,4 +233,25 @@ public class DefaultUserService implements UserService {
     public boolean existByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
+
+    /**
+     * Найти entity пользователя по email
+     */
+    @Override
+    public UserEntity findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    /**
+     * Сменить пароль у пользователя с указанным email
+     */
+    @Override
+    public void changePassword(String email, String passwordHash) {
+        UserEntity user = this.userRepository.findByEmail(email);
+        if (user == null) {
+            throw new RegistrationException("$user.not.found");
+        }
+        user.setPasswordHash(passwordEncoder.encode(passwordHash));
+        userRepository.save(user);
+    }
 }

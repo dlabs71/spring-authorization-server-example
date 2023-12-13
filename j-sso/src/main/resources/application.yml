@@ -89,6 +89,7 @@ spring:
         introspection-endpoint: /oauth2/token-info
         authentication-success-url: http://localhost:7777/
         custom-handler-header-name: J-Sso-Next-Location
+        reset-password-endpoint: /auth/reset-password
       client:
         registration:
           github:

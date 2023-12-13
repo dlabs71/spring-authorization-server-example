@@ -2,7 +2,8 @@ import {createRouter, createWebHistory} from 'vue-router';
 import SignView from '../views/sign-view/sign-view';
 import LoginForm from '../views/sign-view/login/login';
 import HomeView from '../views/home/home.vue';
-import RegistrationForm from '../views/sign-view/registration/registration.vue'
+import RegistrationForm from '../views/sign-view/registration/registration.vue';
+import ForgetPasswordForm from '../views/sign-view/forget-password/forget-password.vue';
 import store from "@/store";
 
 const routes = [
@@ -23,6 +24,11 @@ const routes = [
                 name: 'registration',
                 component: RegistrationForm,
             },
+            {
+                path: 'reset-password',
+                name: 'reset-password',
+                component: ForgetPasswordForm,
+            }
         ]
     },
     {

@@ -43,4 +43,14 @@ public interface UserService {
      * Проверить существует ли пользователь с указанным email
      */
     boolean existByEmail(String email);
+
+    /**
+     * Найти entity пользователя по email
+     */
+    UserEntity findByEmail(String email);
+
+    /**
+     * Сменить пароль у пользователя с указанным email
+     */
+    void changePassword(String email, String passwordHash);
 }

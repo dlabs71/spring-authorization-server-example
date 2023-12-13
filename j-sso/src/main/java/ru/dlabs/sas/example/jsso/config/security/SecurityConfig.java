@@ -32,7 +32,8 @@ public class SecurityConfig {
             "/error**",
             "/static/**",
             "/client/**",
-            "/registration/**"
+            "/registration/**",
+            "/reset-password/**"
     };
 
     private final CustomOAuth2UserService customOAuth2UserService;
