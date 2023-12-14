@@ -246,12 +246,12 @@ public class DefaultUserService implements UserService {
      * Сменить пароль у пользователя с указанным email
      */
     @Override
-    public void changePassword(String email, String passwordHash) {
+    public void changePassword(String email, String password) {
         UserEntity user = this.userRepository.findByEmail(email);
         if (user == null) {
             throw new RegistrationException("$user.not.found");
         }
-        user.setPasswordHash(passwordEncoder.encode(passwordHash));
+        user.setPasswordHash(passwordEncoder.encode(password));
         userRepository.save(user);
     }
 }

@@ -52,5 +52,5 @@ public interface UserService {
     /**
      * Сменить пароль у пользователя с указанным email
      */
-    void changePassword(String email, String passwordHash);
+    void changePassword(String email, String password);
 }
