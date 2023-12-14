@@ -65,7 +65,7 @@
             let login = () => {
                 LoginAPI.login(username.value, password.value)
                     .catch(result => {
-                        if (result.data.status === 401) {
+                        if (result.status === 401) {
                             showENotify("Не верный логин или пароль");
                             return;
                         }
