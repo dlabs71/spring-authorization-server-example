@@ -62,7 +62,6 @@
         if (!data.lastName && !data.firstName) {
             return "";
         }
-        console.log(data);
         return `${data.lastName.charAt(0)}${data.firstName.charAt(0)}`;
     })
     let email = computed(() => {

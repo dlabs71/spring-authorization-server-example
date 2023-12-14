@@ -2,6 +2,8 @@ package ru.dlabs.sas.example.jsso.components;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Getter;
+import lombok.Setter;
 
 public interface OTPStore {
 
