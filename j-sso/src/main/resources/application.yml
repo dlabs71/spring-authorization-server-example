@@ -81,6 +81,8 @@ spring:
       authorizationserver:
         issuer-url: http://localhost:7777
         introspection-endpoint: /oauth2/token-info
+        authorization-ttl: 720000
+        authorization-consent-ttl: 720000
       client:
         registration:
           github:
@@ -88,8 +90,13 @@ spring:
             clientSecret: <your_github_client_secret>
           
           google:
-            clientId: 608360869000-bvqc2b8ok52v010l3ps7cqnt8rj7thdv.apps.googleusercontent.com
-            clientSecret: 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
+            clientId: 608360869000-uldbg7l09a14ilafb9ufllhtkrql8t7q.apps.googleusercontent.com
+            clientSecret: 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
+            # Добавил эти scopes чтобы использовать именно OAuth2.
+            # Иначе по умолчанию добавляется scope = openid и тогда взаимодействие идёт по протоколу OpenID Connect
+            scope:
+              - email
+              - profile
           
           yandex:
             provider: yandex
