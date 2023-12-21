@@ -89,6 +89,8 @@ spring:
         introspection-endpoint: /oauth2/token-info
         authentication-success-url: http://localhost:7777/home # было http://localhost:7777/
         custom-handler-header-name: J-Sso-Next-Location
+        authorization-ttl: 720000
+        authorization-consent-ttl: 720000
       client:
         registration:
           github:
@@ -98,6 +100,11 @@ spring:
           google:
             clientId: ${JSSO_GOOGLE_CLIENT_ID}
             clientSecret: ${JSSO_GOOGLE_CLIENT_SECRET}
+            # Добавил эти scopes чтобы использовать именно OAuth2.
+            # Иначе по умолчанию добавляется scope = openid и тогда взаимодействие идёт по протоколу OpenID Connect
+            scope:
+              - email
+              - profile
 
           yandex:
             provider: yandex
