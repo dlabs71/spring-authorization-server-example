@@ -1,6 +1,7 @@
 package ru.dlabs.sas.example.jsso.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,9 +23,12 @@ public class BeanConfig {
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "otp-store")
-    public OTPStore.Config otpStoreConfig() {
-        return new OTPStore.Config(null, null, 0);
+    public OTPStore.Config otpStoreConfig(
+        @Value("${otp-store.cookie-name:default-name}") String cookieName,
+        @Value("${otp-store.cookie-domain:localhost}") String cookieDomain,
+        @Value("${otp-store.cookie-max-age:180}") int cookieMaxAge
+    ) {
+        return new OTPStore.Config(cookieName, cookieDomain, cookieMaxAge);
     }
 
     @Bean
