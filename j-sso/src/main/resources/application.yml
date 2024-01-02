@@ -87,7 +87,7 @@ spring:
       authorizationserver:
         issuer-url: http://localhost:7777
         introspection-endpoint: /oauth2/token-info
-        authentication-success-url: http://localhost:7777/home # было http://localhost:7777/
+        authentication-success-url: http://localhost:7777/client/home # было http://localhost:7777/home
         custom-handler-header-name: J-Sso-Next-Location
         reset-password-endpoint: /auth/reset-password
         authorization-ttl: 720000

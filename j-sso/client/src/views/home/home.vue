@@ -12,7 +12,7 @@
                         <v-avatar color="red" class="mr-3">
                             <v-img
                                 v-if="!!avatar"
-                                src="avatar"
+                                :src="avatar"
                                 :alt="fullUserName"
                             ></v-img>
                             <span v-else>{{ initialsUser }}</span>
@@ -55,7 +55,7 @@
 
     let fullUserName = computed(() => {
         let data = userData.value;
-        return `${data.lastName} ${data.firstName} ${data.middleName}`.trim();
+        return `${data.lastName} ${data.firstName} ${data.middleName || ""}`.trim();
     });
     let initialsUser = computed(() => {
         let data = userData.value;
