@@ -86,7 +86,6 @@
             };
 
             let goToResetPassword = () => {
-                console.log("asdasdasd");
                 router.push("reset-password");
             };
 

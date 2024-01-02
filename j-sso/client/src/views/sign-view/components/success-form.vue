@@ -8,7 +8,7 @@
             check_circle
         </v-icon>
         <h2>{{ title }}</h2>
-        <div>
+        <div class="content">
             <slot name="default"/>
         </div>
         <v-btn v-if="showLoginBtn" class="submit-btn mt-5" @click="goToLogin">
@@ -82,6 +82,10 @@
     h3 {
         margin-bottom: 30px;
         margin-top: 30px;
+    }
+
+    .content {
+        text-align: center;
     }
 
     .submit-btn {

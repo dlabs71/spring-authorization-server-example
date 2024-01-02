@@ -54,9 +54,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     if (to.name && to.path) {
 
-        // если пользователь не авторизован и мы переходим на любую страницу кроме "login" и "registration",
+        // если пользователь не авторизован и мы переходим на любую страницу кроме "login", "registration" и "reset-password",
         // то перенаправлять нас на страницу "login"
-        if (!store.getters.isAuth && !["login", "registration"].includes(to.name)) {
+        if (!store.getters.isAuth && !["login", "registration", "reset-password"].includes(to.name)) {
             router.replace({name: 'login'});
             return;
         }

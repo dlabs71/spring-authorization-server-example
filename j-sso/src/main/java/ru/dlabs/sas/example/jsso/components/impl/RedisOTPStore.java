@@ -76,6 +76,9 @@ public class RedisOTPStore implements OTPStore {
 
     @Override
     public String getSessionId(HttpServletRequest request) {
+        if (request.getCookies() == null) {
+            return null;
+        }
         Cookie sessionCookie = Arrays.stream(request.getCookies())
             .filter(item -> config.cookieName().equals(item.getName()))
             .findFirst()
