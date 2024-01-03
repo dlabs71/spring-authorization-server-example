@@ -1,7 +1,13 @@
 package ru.dlabs.sas.example.jsso.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,14 +15,12 @@ import ru.dlabs.sas.example.jsso.dao.entity.UserEntity;
 import ru.dlabs.sas.example.jsso.dao.repository.RoleRepository;
 import ru.dlabs.sas.example.jsso.dao.repository.UserRepository;
 import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
+import ru.dlabs.sas.example.jsso.dto.RegistrationDto;
 import ru.dlabs.sas.example.jsso.exception.AuthException;
+import ru.dlabs.sas.example.jsso.exception.RegistrationException;
 import ru.dlabs.sas.example.jsso.mapper.AuthorizedUserMapper;
 import ru.dlabs.sas.example.jsso.type.AuthErrorCode;
 import ru.dlabs.sas.example.jsso.type.AuthProvider;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 
 @Service
@@ -27,12 +31,12 @@ public class DefaultUserService implements UserService {
     private String yandexAvatarUrl;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
-     * Создание или обновление пользователя
+     * Создание или обновление пользователя используя сервис-провайдер
      */
     @Override
-    @Transactional
     public UserEntity save(OAuth2User userDto, AuthProvider provider) {
         return switch (provider) {
             case GITHUB -> this.saveUserFromGithab(userDto);
@@ -72,7 +76,8 @@ public class DefaultUserService implements UserService {
             user.setLastName(userDto.getAttribute("login"));
         }
 
-        if (userDto.getAttribute("avatar_url") != null) {       // если есть аватар, то устанавливаем значение в поле avatarUrl
+        if (userDto.getAttribute("avatar_url") !=
+            null) {       // если есть аватар, то устанавливаем значение в поле avatarUrl
             user.setAvatarUrl(userDto.getAttribute("avatar_url"));
         }
         return userRepository.save(user);                             // сохраняем сущность UserEntity
@@ -146,5 +151,107 @@ public class DefaultUserService implements UserService {
             user.setRoles(List.of(roleRepository.getDefaultRole()));
         }
         return user;
+    }
+
+    /**
+     * Создание пользователя на основе регистрационных данных. Пользователь будет не активирован.
+     *
+     * @param userDto данные указанные при регистрации
+     */
+    @Override
+    @Transactional
+    public UserEntity saveUser(RegistrationDto userDto) {
+        this.validateRegistrationDto(userDto);
+        UserEntity user = new UserEntity();
+        user.setEmail(userDto.getEmail());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getSecondName());
+        user.setMiddleName(userDto.getMiddleName());
+        user.setBirthday(userDto.getBirthday());
+        user.setActive(false);
+        user.getRoles().add(roleRepository.getDefaultRole());
+        return userRepository.save(user);
+    }
+
+    /**
+     * Валидация регистрационных данных
+     */
+    private void validateRegistrationDto(RegistrationDto dto) {
+        if (dto.getEmail() == null) {
+            throw new RegistrationException("$validation.email");
+        }
+        if (dto.getFirstName() == null) {
+            throw new RegistrationException("$validation.firstname");
+        }
+        if (dto.getSecondName() == null) {
+            throw new RegistrationException("$validation.lastname");
+        }
+        if (dto.getPassword() == null) {
+            throw new RegistrationException("$validation.password");
+        }
+
+        UserEntity user = this.userRepository.findByEmail(dto.getEmail());
+        if (user != null) {
+            throw new RegistrationException("$account.already.exist");
+        }
+    }
+
+    /**
+     * Активация пользователя
+     *
+     * @param userId   уникальный идентификатор пользователя
+     * @param password пароль пользователя
+     */
+    @Override
+    @Transactional
+    public UserEntity firstActivation(UUID userId, String password) {
+        Optional<UserEntity> userEntityOptional = this.userRepository.findById(userId);
+        if (userEntityOptional.isEmpty()) {
+            throw new RegistrationException("$user.not.found");
+        }
+        UserEntity userEntity = userEntityOptional.get();
+        userEntity.setPasswordHash(passwordEncoder.encode(password));
+        userEntity.setActive(true);
+        return userRepository.save(userEntity);
+    }
+
+    /**
+     * Создать пользователя и сразу активировать
+     */
+    @Override
+    @Transactional
+    public UserEntity saveAndActivateUser(RegistrationDto userDto) {
+        UserEntity user = this.saveUser(userDto);
+        user = this.firstActivation(user.getId(), userDto.getPassword());
+        return user;
+    }
+
+    /**
+     * Проверить существует ли пользователь с указанным email
+     */
+    @Override
+    public boolean existByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    /**
+     * Найти entity пользователя по email
+     */
+    @Override
+    public UserEntity findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    /**
+     * Сменить пароль у пользователя с указанным email
+     */
+    @Override
+    public void changePassword(String email, String password) {
+        UserEntity user = this.userRepository.findByEmail(email);
+        if (user == null) {
+            throw new RegistrationException("$user.not.found");
+        }
+        user.setPasswordHash(passwordEncoder.encode(password));
+        userRepository.save(user);
     }
 }

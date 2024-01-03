@@ -145,6 +145,10 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ru.dlabs71.library</groupId>
+            <artifactId>d-email</artifactId>
+        </dependency>
     </dependencies>
     
     <build>

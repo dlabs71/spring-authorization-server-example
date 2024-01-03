@@ -25,10 +25,15 @@ import ru.dlabs.sas.example.jsso.service.CustomUserDetailsService;
 @Configuration(proxyBeanMethods = false)
 public class SecurityConfig {
 
-    public static final String LOGIN_PAGE = "/login";
+    public static final String LOGIN_PAGE = "/client/auth/login";
+    public static final String LOGIN_PROCESSING_URL = "/login";
     public static final String[] PERMIT_ALL_PATTERNS = {
             LOGIN_PAGE,
-            "/static/**"
+            "/error**",
+            "/static/**",
+            "/client/**",
+            "/registration/**",
+            "/reset-password/**"
     };
 
     private final CustomOAuth2UserService customOAuth2UserService;
@@ -62,7 +67,7 @@ public class SecurityConfig {
         );
         return http.formLogin(configurer -> {
             configurer.loginPage(LOGIN_PAGE)
-                    .loginProcessingUrl(LOGIN_PAGE)
+                    .loginProcessingUrl(LOGIN_PROCESSING_URL)
                     .successHandler(loginRequestSuccessHandler)
                     .failureHandler(failureHandler);
         }).build();

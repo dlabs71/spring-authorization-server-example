@@ -3,22 +3,22 @@
         <h2>Добро пожаловать</h2>
         <Form :validation-schema="schema" as="form" @submit="login">
             <div class="manual-enter">
-                <d-text-field
-                        append-inner-icon="mail"
-                        label="E-mail"
-                        name="email"
-                        type="email"
-                        class="mb-3"
-                        v-model="username"
+                <j-text-field
+                    v-model="username"
+                    append-inner-icon="mail"
+                    class="mb-3"
+                    label="E-mail"
+                    name="email"
+                    type="email"
                 />
-                <d-text-field
-                        :append-inner-icon="cPasswordIcon"
-                        :type="passwordType"
-                        label="Пароль"
-                        name="password"
-                        @click:appendInner="togglePasswordVisible"
-                        class="mb-3"
-                        v-model="password"
+                <j-text-field
+                    v-model="password"
+                    :append-inner-icon="cPasswordIcon"
+                    :type="passwordType"
+                    class="mb-3"
+                    label="Пароль"
+                    name="password"
+                    @click:appendInner="togglePasswordVisible"
                 />
                 <v-btn class="login-btn" type="submit">
                     Войти
@@ -26,157 +26,157 @@
                 </v-btn>
             </div>
         </Form>
-        
-        <div class="divider">
-            <span class="divider-line"></span>
-            <span class="text">или</span>
-            <span class="divider-line"></span>
-        </div>
-        
-        <div class="btn-container">
-            <v-btn class="enter-btn" icon variant="text" @click="()=>loginWith('yandex')">
-                <img :src="yandexIcon"/>
-            </v-btn>
-            <v-btn class="enter-btn" icon variant="text" @click="()=>loginWith('google')">
-                <img :src="googleIcon"/>
-            </v-btn>
-            <v-btn class="enter-btn" icon variant="text" @click="()=>loginWith('github')">
-                <img :src="githubIcon"/>
-            </v-btn>
+
+        <j-section-divider/>
+        <client-oauth2-form/>
+
+        <div class="bottom-container">
+            <div class="link" @click="goToRegistration">Зарегистрироваться</div>
+            <div class="link" @click="goToResetPassword">Забыли пароль?</div>
         </div>
     </form-wrapper>
 </template>
 
 <script>
 
-import {computed, ref} from "vue";
-import LoginAPI from './service/login-service';
-import {Form} from 'vee-validate';
-import FormWrapper from "@/views/sign-view/components/form-wrapper";
-import {useRouter} from "vue-router";
-import {showENotify} from "@/global/functions/notification-funcs";
+    import {computed, onMounted, ref} from "vue";
+    import LoginAPI from './service/login-service';
+    import {Form} from 'vee-validate';
+    import FormWrapper from "@/views/sign-view/components/form-wrapper";
+    import {useRouter} from "vue-router";
+    import {useStore} from "vuex";
+    import ClientOauth2Form from "../components/client-oauth2-form/client-oauth2-form.vue";
+    import {showENotify} from "@/global/functions/notification-funcs";
 
-export default {
-    name: "login-form",
-    components: {FormWrapper, Form},
-    setup() {
-        const router = useRouter()
-        let username = ref(null);
-        let password = ref(null);
-        let passwordType = ref("password");
-        const schema = {
-            email: 'required|email',
-            password: "required"
-        };
+    export default {
+        name: "login-form",
+        components: {ClientOauth2Form, FormWrapper, Form},
+        setup() {
+            const store = useStore();
+            const router = useRouter()
+            let username = ref(null);
+            let password = ref(null);
+            let passwordType = ref("password");
+            const schema = {
+                email: 'required|email',
+                password: "required"
+            };
 
-        let login = () => {
-            LoginAPI.login(username.value, password.value).catch((response) => {
-                if (response.status === 401) {
-                    showENotify("Не верный логин или пароль");
-                }
-                showENotify("Произошла ошибка");
-            });
-        }
-
-        let loginWith = (providerName) => {
-            LoginAPI.loginWith(providerName);
-        }
-
-        let togglePasswordVisible = () => {
-            if (passwordType.value === "password") {
-                passwordType.value = "text";
-            } else {
-                passwordType.value = "password";
+            let login = () => {
+                LoginAPI.login(username.value, password.value)
+                    .catch(result => {
+                        if (result.status === 401) {
+                            showENotify("Не верный логин или пароль");
+                            return;
+                        }
+                        return result;
+                    });
             }
-        };
 
-        return {
-            // data
-            googleIcon: require("@/assets/img/google.svg"),
-            githubIcon: require("@/assets/img/github.svg"),
-            yandexIcon: require("@/assets/img/yandex.svg"),
-            username,
-            password,
-            passwordType,
-            schema,
-            // methods
-            login,
-            loginWith,
-            togglePasswordVisible,
-            // computed
-            cPasswordIcon: computed(() => passwordType.value === 'password' ? "visibility" : "visibility_off")
+            let togglePasswordVisible = () => {
+                if (passwordType.value === "password") {
+                    passwordType.value = "text";
+                } else {
+                    passwordType.value = "password";
+                }
+            };
+
+            let goToRegistration = () => {
+                router.push("registration");
+            };
+
+            let goToResetPassword = () => {
+                router.push("reset-password");
+            };
+
+            onMounted(() => {
+                // reset state for registration process
+                store.dispatch('setRegistrationData', null);
+                store.dispatch('setRegistrationStep', 0);
+
+                // reset state for forgot password process
+                store.dispatch('setResetData', null);
+                store.dispatch('setResetStep', 0);
+            });
+
+            return {
+                // data
+                username,
+                password,
+                passwordType,
+                schema,
+                // methods
+                login,
+                togglePasswordVisible,
+                goToRegistration,
+                goToResetPassword,
+                // computed
+                cPasswordIcon: computed(() => passwordType.value === 'password' ? "visibility" : "visibility_off")
+            }
         }
     }
-}
 </script>
 
 <style lang="scss" scoped>
-    form {
+form {
+    width: 100%;
+}
+
+.manual-enter {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .v-text-field {
         width: 100%;
     }
-    
-    .divider {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        justify-content: center;
-        margin: 20px 0;
-        
-        span {
-            font-style: italic;
-            color: #525252;
+
+
+    @keyframes blink {
+        0% {
+            background-position: 0% 50%
         }
-        
-        .text {
-            margin: 0 10px;
+        50% {
+            background-position: 100% 50%
         }
-        
-        .divider-line {
-            height: 1px;
-            width: 30%;
-            background-color: #525252;
+        100% {
+            background-position: 0% 50%
         }
     }
-    
-    .manual-enter {
-        margin-top: 30px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        
-        .v-text-field {
-            width: 100%;
-        }
-        
-        .login-btn {
-            width: 260px;
-            color: white;
-            font-weight: bold;
-            
-            background: linear-gradient(-45deg, #f91b4c, #fa8844);
-            background-size: 400% 400%;
-            
-            .v-btn__content {
-                margin-left: 18px;
-            }
+
+    .login-btn {
+        width: 260px;
+        color: white;
+        font-weight: bold;
+
+        background: linear-gradient(-45deg, #f91b4c, #fa8844);
+        background-size: 400% 400%;
+        animation: blink 3s ease infinite;
+
+        .v-btn__content {
+            margin-left: 18px;
         }
     }
-    
-    .btn-container {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        
-        .enter-btn {
-            margin: 5px;
-            text-transform: none !important;
-            border-radius: 10px;
-            
-            img {
-                width: 25px;
-                height: 25px;
-            }
+}
+
+.bottom-container {
+    position: absolute;
+    bottom: 20px;
+
+    .link {
+        align-self: center;
+        margin: 5px auto 15px auto;
+        cursor: pointer;
+        font-size: 12px;
+        opacity: 0.5;
+        transition: opacity .3s ease-out;
+        width: fit-content;
+        font-style: italic;
+
+        &:hover {
+            opacity: 1;
         }
     }
+}
 </style>

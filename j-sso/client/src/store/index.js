@@ -1,5 +1,23 @@
 import {createStore} from 'vuex';
-import settings from './modules/settings';
+import VuexPersistence from 'vuex-persist'
+import security from './modules/security';
+import registration from '../views/sign-view/registration/store/registration';
+import resetPassword from '@/views/sign-view/reset-password/store/reset-password';
+
+const vuexLocal = new VuexPersistence({
+    storage: window.localStorage,
+    reducer: state => ({
+        security: {
+            ...state.security
+        },
+        registration: {
+            ...state.registration
+        },
+        resetPassword: {
+            ...state.resetPassword
+        }
+    })
+});
 
 export default createStore({
     state: {},
@@ -7,7 +25,9 @@ export default createStore({
     mutations: {},
     actions: {},
     modules: {
-        settings
+        security: security,
+        registration: registration,
+        resetPassword: resetPassword
     },
-    plugins: []
+    plugins: [vuexLocal.plugin]
 });

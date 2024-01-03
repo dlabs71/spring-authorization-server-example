@@ -3,41 +3,42 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+
     <groupId>ru.dlabs</groupId>
     <artifactId>spring-authorization-server-example</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1</version>
     <name>spring-authorization-server-example</name>
-    
+
     <properties>
         <java.version>17</java.version>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.source>17</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        
+
         <lombok.version>1.18.26</lombok.version>
         <security-oauth2-server.version>1.1.1</security-oauth2-server.version>
         <security-oauth2-resource-server.version>3.1.1</security-oauth2-resource-server.version>
         <springdoc.version>2.1.0</springdoc.version>
         <google.guava.version>31.1-jre</google.guava.version>
-        
+        <d-email.version>0.0.1</d-email.version>
+
         <frontend-maven-plugin.version>1.13.4</frontend-maven-plugin.version>
     </properties>
-    
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.1.1</version>
         <relativePath/>
     </parent>
-    
+
     <modules>
         <module>j-sso</module>
         <module>j-service</module>
         <module>j-swagger-ui</module>
     </modules>
-    
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -65,9 +66,14 @@
                 <artifactId>guava</artifactId>
                 <version>${google.guava.version}</version>
             </dependency>
+            <dependency>
+                <groupId>ru.dlabs71.library</groupId>
+                <artifactId>d-email</artifactId>
+                <version>${d-email.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
     <build>
         <pluginManagement>
             <plugins>
