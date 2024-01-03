@@ -69,7 +69,7 @@
             <dependency>
                 <groupId>ru.dlabs71.library</groupId>
                 <artifactId>d-email</artifactId>
-                <version>0.0.1</version>
+                <version>${d-email.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
