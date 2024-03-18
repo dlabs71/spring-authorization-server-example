@@ -83,7 +83,6 @@
         // Смотри router.js
         if (!store.getters.isAuth) {
             LoginService.getCurrentUser();
-            return;
         }
         Service.getCurrentUser().then(result => {
             userData.value = result;
