@@ -53,7 +53,7 @@
         components: {ClientOauth2Form, FormWrapper, Form},
         setup() {
             const store = useStore();
-            const router = useRouter()
+            const router = useRouter();
             let username = ref(null);
             let password = ref(null);
             let passwordType = ref("password");
