@@ -48,9 +48,14 @@
 
 <script setup>
     import Service from './service/home-service';
+    import LoginService from '../sign-view/login/service/login-service';
     import {computed, onMounted, ref} from "vue";
     import {UserModel} from "@/views/home/service/home-model";
+    import {useStore} from "vuex";
+    import {useRouter} from "vue-router";
 
+    const store = useStore();
+    const router = useRouter();
     let userData = ref(new UserModel());
 
     let fullUserName = computed(() => {
@@ -72,6 +77,12 @@
     let authorities = computed(() => userData.value.authorities);
 
     onMounted(() => {
+
+        // Необходимо, когда в SSO авторизуются через сторонний сервис.
+        // Смотри router.js
+        if (!store.getters.isAuth) {
+            LoginService.getCurrentUser();
+        }
         Service.getCurrentUser().then(result => {
             userData.value = result;
             console.log(result);

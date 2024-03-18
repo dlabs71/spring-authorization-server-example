@@ -54,9 +54,14 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     if (to.name && to.path) {
 
-        // если пользователь не авторизован и мы переходим на любую страницу кроме "login", "registration" и "reset-password",
+        // Если пользователь не авторизован и мы переходим на любую страницу кроме "login" и "registration",
         // то перенаправлять нас на страницу "login"
-        if (!store.getters.isAuth && !["login", "registration", "reset-password"].includes(to.name)) {
+        //
+        // home - нужен так как в сценарии, когда мы просто хотим зайти в SSO через строний сервис (например yandex),
+        // success handler перенаправляет нас на страницу /home. Но так как, данное приложение не загрузило ещё
+        // текущего пользователя, то оно нас просто перенаправит на страницу логина.
+        // Поэтому, обработка неавторизованной сессии в home вынесена в сам компонент home.vue.
+        if (!store.getters.isAuth && !["login", "registration", "home", "reset-password"].includes(to.name)) {
             router.replace({name: 'login'});
             return;
         }
