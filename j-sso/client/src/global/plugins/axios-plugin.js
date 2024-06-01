@@ -1,7 +1,27 @@
 import axios from "axios";
 
+
+function searchMetaContent(name) {
+    let element = document.querySelectorAll(`meta[name='${name}']`).item(0);
+    if (!element) {
+        return null;
+    }
+    return element.getAttribute('content');
+}
+
+function applyCsrfToken(requestConfig) {
+    let token = searchMetaContent('_csrf');
+    let tokenHeader = searchMetaContent('_csrf_header');
+    if (token && tokenHeader) {
+        requestConfig.headers[tokenHeader] = token;
+    }
+}
+
 function applyAxiosInterceptor(store, router) {
     axios.interceptors.request.use(config => {
+        if (['DELETE', 'POST', 'PUT'].includes(config.method.toUpperCase())) {
+            applyCsrfToken(config);
+        }
         return config;
     });
     axios.interceptors.response.use(

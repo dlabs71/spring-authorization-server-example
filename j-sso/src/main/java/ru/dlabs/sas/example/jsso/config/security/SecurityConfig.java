@@ -1,6 +1,7 @@
 package ru.dlabs.sas.example.jsso.config.security;
 
 import jakarta.annotation.PostConstruct;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +11,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -18,6 +19,10 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
+import ru.dlabs.sas.example.jsso.config.SecurityProperties;
 import ru.dlabs.sas.example.jsso.config.security.handler.CustomAuthenticationSuccessHandler;
 import ru.dlabs.sas.example.jsso.config.security.handler.CustomOauthAuthenticationSuccessHandler;
 import ru.dlabs.sas.example.jsso.service.UserEventService;
@@ -47,6 +52,7 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
     private final AuthorizationServerProperties authorizationServerProperties;
     private final UserEventService eventService;
+    private final SecurityProperties.Headers securityHeaderProperties;
 
     // handlers
     private AuthenticationSuccessHandler oAuth2successHandler;
@@ -62,7 +68,25 @@ public class SecurityConfig {
             .formLogin(LOGIN_PAGE);
 
         http.with(socialConfigurer, Customizer.withDefaults());
-        http.csrf(AbstractHttpConfigurer::disable);
+        http.csrf(configurer -> configurer
+            .csrfTokenRepository(new HttpSessionCsrfTokenRepository())
+            .csrfTokenRequestHandler(new XorCsrfTokenRequestAttributeHandler())
+        );
+
+        http.headers(customizer -> {
+            customizer.contentSecurityPolicy(
+                configurer -> configurer.policyDirectives(securityHeaderProperties.getSCPLikeString())
+            );
+            customizer.permissionsPolicy(configurer -> configurer.policy(
+                securityHeaderProperties.getPermissionPolicyLikeString()
+            ));
+            customizer.frameOptions(HeadersConfigurer.FrameOptionsConfig::deny);
+            customizer.httpStrictTransportSecurity(configurer -> configurer
+                .maxAgeInSeconds(31536000)
+                .includeSubDomains(true)
+                .preload(true)
+            );
+        });
 
         http.getSharedObject(AuthenticationManagerBuilder.class)
             .userDetailsService(userDetailService)
@@ -96,6 +120,13 @@ public class SecurityConfig {
     @Bean
     public SecurityContextLogoutHandler securityContextLogoutHandler() {
         return new SecurityContextLogoutHandler();
+    }
+
+    @Bean
+    public StrictHttpFirewall httpFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowedHttpMethods(Arrays.asList("GET", "POST", "DELETE", "OPTIONS"));
+        return firewall;
     }
 
     @PostConstruct

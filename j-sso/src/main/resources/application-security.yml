@@ -1,5 +1,36 @@
 spring:
   security:
+    headers:
+      csp:
+        - default-src 'self'
+        - script-src 'self' 'unsafe-inline' 'unsafe-eval'
+        - img-src 'self'
+        - font-src 'self' fonts.googleapis.com
+        - style-src 'self' 'unsafe-inline' fonts.googleapis.com
+      hsts:
+        max-age: 63072000
+        include-sub-domains: true
+        preload: true
+      permission-policy:
+        - picture-in-picture=()
+        - accelerometer=()
+        - autoplay=()
+        - battery=()
+        - camera=()
+        - display-capture=()
+        - geolocation=()
+        - gyroscope=()
+        - magnetometer=()
+        - microphone=()
+        - midi=()
+        - payment=()
+        - picture-in-picture=()
+        - publickey-credentials-create=()
+        - publickey-credentials-get=()
+        - screen-wake-lock=()
+        - serial=()
+        - speaker-selection=()
+        - usb=()
     oauth2:
       authorizationserver:
         issuer-url: http://localhost:7777${server.servlet.context-path}
