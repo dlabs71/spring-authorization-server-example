@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.context.SecurityContextRepository;
 import ru.dlabs.sas.example.jsso.config.security.handler.CustomAuthenticationSuccessHandler;
 import ru.dlabs.sas.example.jsso.config.security.handler.CustomOauthAuthenticationSuccessHandler;
 import ru.dlabs.sas.example.jsso.service.UserEventService;
@@ -47,6 +48,7 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
     private final AuthorizationServerProperties authorizationServerProperties;
     private final UserEventService eventService;
+    private final SecurityContextRepository securityContextRepository;
 
     // handlers
     private AuthenticationSuccessHandler oAuth2successHandler;
@@ -63,6 +65,8 @@ public class SecurityConfig {
 
         http.with(socialConfigurer, Customizer.withDefaults());
         http.csrf(AbstractHttpConfigurer::disable);
+
+        http.securityContext(customizer -> customizer.securityContextRepository(securityContextRepository));
 
         http.getSharedObject(AuthenticationManagerBuilder.class)
             .userDetailsService(userDetailService)

@@ -18,7 +18,7 @@ import ru.dlabs.sas.example.jsso.service.AdminUserService;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-09</div>
  * </p>
  *
@@ -37,9 +37,9 @@ public class AdminUserController {
     @PreAuthorize("hasAnyAuthority('GET_ADMIN_USER_DATA')")
     @Operation(description = "Поиск по администраторам SSO")
     public PageableResponseDto<AdminUserDto> searchUsers(
-            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-            @RequestParam(value = "email", required = false) String email
+        @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+        @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+        @RequestParam(value = "email", required = false) String email
     ) {
         return adminUserService.searchUsers(page, pageSize, email);
     }

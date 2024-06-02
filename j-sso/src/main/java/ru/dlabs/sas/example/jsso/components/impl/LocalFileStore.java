@@ -1,5 +1,7 @@
 package ru.dlabs.sas.example.jsso.components.impl;
 
+import ru.dlabs.sas.example.jsso.components.FileStore;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,11 +9,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.concurrent.CompletionException;
-import ru.dlabs.sas.example.jsso.components.FileStore;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-04-30</div>
  * </p>
  *

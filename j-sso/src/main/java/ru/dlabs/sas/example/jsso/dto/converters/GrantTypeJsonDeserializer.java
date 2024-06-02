@@ -10,7 +10,7 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-02</div>
  * </p>
  *
@@ -20,7 +20,8 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
 public class GrantTypeJsonDeserializer extends JsonDeserializer<AuthorizationGrantType> {
 
     @Override
-    public AuthorizationGrantType deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
+    public AuthorizationGrantType deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+        throws IOException {
         String strValue = jsonParser.getText();
         if (StringUtils.isEmpty(strValue)) {
             return null;

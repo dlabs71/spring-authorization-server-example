@@ -34,25 +34,24 @@ public class AuthorizationServerConfig {
 
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
         http.securityMatcher(endpointsMatcher)
-                .authorizeHttpRequests(authorize ->
-                        authorize
-                                .requestMatchers(PERMIT_ALL_PATTERNS).permitAll()
-                                .anyRequest().authenticated()
-                )
-                .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
+            .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(PERMIT_ALL_PATTERNS).permitAll()
+                .anyRequest().authenticated()
+            )
+            .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
 
-                .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(
-                        new LoginUrlAuthenticationEntryPoint(LOGIN_PAGE)
-                ))
-                .with(authorizationServerConfigurer, Customizer.withDefaults());
+            .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(
+                new LoginUrlAuthenticationEntryPoint(LOGIN_PAGE)
+            ))
+            .with(authorizationServerConfigurer, Customizer.withDefaults());
         return http.build();
     }
 
     @Bean
     public AuthorizationServerSettings authorizationServerSettings() {
         return AuthorizationServerSettings.builder()
-                .issuer(authorizationServerProperties.getIssuerUrl())
-                .tokenIntrospectionEndpoint(authorizationServerProperties.getIntrospectionEndpoint())
-                .build();
+            .issuer(authorizationServerProperties.getIssuerUrl())
+            .tokenIntrospectionEndpoint(authorizationServerProperties.getIntrospectionEndpoint())
+            .build();
     }
 }

@@ -8,22 +8,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
-import ru.dlabs.sas.example.jsso.exception.AuthException;
-import ru.dlabs.sas.example.jsso.type.AuthErrorCode;
-import ru.dlabs.sas.example.jsso.type.AuthProvider;
 import ru.dlabs.sas.example.jsso.dao.entity.UserEntity;
 import ru.dlabs.sas.example.jsso.dao.repository.RoleRepository;
 import ru.dlabs.sas.example.jsso.dao.repository.UserRepository;
 import ru.dlabs.sas.example.jsso.dao.type.StoreType;
+import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
 import ru.dlabs.sas.example.jsso.dto.FileStoreDto;
+import ru.dlabs.sas.example.jsso.exception.AuthException;
 import ru.dlabs.sas.example.jsso.mapper.AuthorizedUserMapper;
 import ru.dlabs.sas.example.jsso.service.AuthProviderService;
 import ru.dlabs.sas.example.jsso.service.FileStoreService;
+import ru.dlabs.sas.example.jsso.type.AuthErrorCode;
+import ru.dlabs.sas.example.jsso.type.AuthProvider;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-01</div>
  * </p>
  *
@@ -145,7 +145,10 @@ public class DefaultAuthProviderService implements AuthProviderService {
                 user.setAvatarFileId(this.createAvatar(avatarUrl));
             }
             if (userDto.getAttribute("birthday") != null) {
-                LocalDate birthdate = LocalDate.parse(userDto.getAttribute("birthday"), DateTimeFormatter.ISO_LOCAL_DATE);
+                LocalDate birthdate = LocalDate.parse(
+                    userDto.getAttribute("birthday"),
+                    DateTimeFormatter.ISO_LOCAL_DATE
+                );
                 user.setBirthday(birthdate);
             }
 

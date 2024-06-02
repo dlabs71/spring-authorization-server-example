@@ -6,7 +6,7 @@ import ru.dlabs.sas.example.jsso.dao.entity.SystemOauth2Client;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-02</div>
  * </p>
  *
@@ -14,7 +14,7 @@ import ru.dlabs.sas.example.jsso.dao.entity.SystemOauth2Client;
  * @since 1.0.0
  */
 public interface SystemOAuth2ClientRepository
-        extends JpaRepository<SystemOauth2Client, String>, JpaSpecificationExecutor<SystemOauth2Client> {
+    extends JpaRepository<SystemOauth2Client, String>, JpaSpecificationExecutor<SystemOauth2Client> {
 
     SystemOauth2Client getByClientId(String clientId);
 }

@@ -12,7 +12,7 @@ import ru.dlabs.sas.example.jsso.service.ReferenceService;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-05</div>
  * </p>
  *

@@ -99,8 +99,9 @@ const router = createRouter({
 // Если нет, то будет совершать переход на страницу входа.
 router.beforeEach((to, from, next) => {
     if (to.path === '/oauth/continue') {
-        LoginService.afterOauthLoginSuccess();
-        router.replace({name: 'home'});
+        LoginService.afterOauthLoginSuccess().then(()=>{
+            router.replace({name: 'home'});
+        });
         return;
     }
 
@@ -113,7 +114,7 @@ router.beforeEach((to, from, next) => {
         // success handler перенаправляет нас на страницу /home. Но так как, данное приложение не загрузило ещё
         // текущего пользователя, то оно нас просто перенаправит на страницу логина.
         // Поэтому, обработка неавторизованной сессии в home вынесена в сам компонент home.vue.
-        if (!store.getters.isAuth && !["login", "registration", "home", "reset-password"].includes(to.name)) {
+        if (!store.getters.isAuth && !["login", "registration", "reset-password"].includes(to.name)) {
             router.replace({name: 'login'});
             return;
         }

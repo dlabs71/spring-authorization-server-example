@@ -34,17 +34,19 @@ public class AccountController {
     }
 
     @PostMapping(
-            value = "/current",
-            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE}
+        value = "/current",
+        consumes = { MediaType.MULTIPART_FORM_DATA_VALUE },
+        produces = { MediaType.APPLICATION_JSON_VALUE }
     )
     @PreAuthorize("hasAnyAuthority('CHANGE_OWN_DATA')")
     @Operation(description = "Сохранение изменений текущего пользователя")
     public UserDto saveUser(
-            @RequestPart("dto") UserDto dto,
-            @RequestPart(value = "file", required = false) MultipartFile avatarFile
+        @RequestPart("dto") UserDto dto,
+        @RequestPart(value = "file", required = false) MultipartFile avatarFile,
+        HttpServletRequest request,
+        HttpServletResponse response
     ) {
-        return accountService.save(dto, avatarFile);
+        return accountService.save(dto, avatarFile, request, response);
     }
 
     @DeleteMapping("/current")

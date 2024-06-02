@@ -62,7 +62,7 @@ scheduled-tasks:
     cron: '@daily'
     saved-period-days: 1
   notify-delete-users:
-    cron: '*/10 * * * * *'
+    cron: '@daily'
 
 rest-clients:
   service-client-connection-timeout: 10000

@@ -14,7 +14,7 @@ import ru.dlabs.sas.example.jsso.service.UserEventService;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-11</div>
  * </p>
  *
@@ -34,12 +34,18 @@ public class SchedulerConfig {
         return new RedisLockProvider(connectionFactory);
     }
 
+    /**
+     * Задача удаления устаревших событий безопасности пользователей.
+     */
     @Scheduled(cron = "${scheduled-tasks.delete-old-events.cron}")
     @SchedulerLock(name = "deleteOldEvents_lock", lockAtMostFor = "5m", lockAtLeastFor = "5m")
     public void deleteOldEvents() {
         userEventService.deleteOldEvents();
     }
 
+    /**
+     * Задача уведомлений OAuth2 клиентов об удалении аккаунтов пользователей.
+     */
     @Scheduled(cron = "${scheduled-tasks.notify-delete-users.cron}")
     @SchedulerLock(name = "deleteUsersNotifier_lock", lockAtMostFor = "5s", lockAtLeastFor = "5s")
     public void notifyClientsAboutDeleteUser() {

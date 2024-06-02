@@ -26,6 +26,7 @@ public class AppProperties {
     @Configuration
     @ConfigurationProperties(prefix = "file-store")
     public static class FileStoreConfig {
+
         private String basePath;
     }
 
@@ -34,6 +35,7 @@ public class AppProperties {
     @Configuration
     @ConfigurationProperties(prefix = "rest-clients")
     public static class RestClientsConfig {
+
         private int serviceClientConnectionTimeout;
         private int serviceClientRequestTimeout;
     }
@@ -46,15 +48,15 @@ public class AppProperties {
 
         private List<CorsConfig> configs;
 
-        public static record CorsConfig(
-                String pattern,
-                String allowedOrigins,
-                String allowedOriginPatterns,
-                String allowedHeaders,
-                String exposedHeaders,
-                String allowedMethods,
-                Boolean allowCredentials,
-                Long maxAge
+        public record CorsConfig(
+            String pattern,
+            String allowedOrigins,
+            String allowedOriginPatterns,
+            String allowedHeaders,
+            String exposedHeaders,
+            String allowedMethods,
+            Boolean allowCredentials,
+            Long maxAge
         ) {
 
         }
@@ -77,17 +79,17 @@ public class AppProperties {
         private AuthOauthConfig authOauth;
 
         public record AuthTypesConfig(
-                Boolean authHeaderEnabled,
-                Boolean clientCredentialsEnabled,
-                Boolean authorizationCodeEnabled
+            Boolean authHeaderEnabled,
+            Boolean clientCredentialsEnabled,
+            Boolean authorizationCodeEnabled
         ) {
 
         }
 
         public record AuthOauthConfig(
-                String tokenUrl,
-                String authorizationUrl,
-                String refreshUrl
+            String tokenUrl,
+            String authorizationUrl,
+            String refreshUrl
         ) {
 
         }
@@ -100,7 +102,10 @@ public class AppProperties {
             if (authTypes.authorizationCodeEnabled()) {
                 Assert.notNull(authOauth, "Properties 'auth-oauth' must not be empty");
                 Assert.notNull(authOauth.tokenUrl(), "Properties 'auth-oauth.token-url' must not be empty");
-                Assert.notNull(authOauth.authorizationUrl(), "Properties 'auth-oauth.authorization-url' must not be empty");
+                Assert.notNull(
+                    authOauth.authorizationUrl(),
+                    "Properties 'auth-oauth.authorization-url' must not be empty"
+                );
             }
             if (authTypes.clientCredentialsEnabled()) {
                 Assert.notNull(authOauth, "Properties 'auth-oauth' must not be empty");

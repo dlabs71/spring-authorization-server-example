@@ -58,7 +58,12 @@ public class DefaultAccountService implements AccountService {
 
     @Override
     @Transactional
-    public UserDto save(UserDto dto, MultipartFile avatarFile) {
+    public UserDto save(
+        UserDto dto,
+        MultipartFile avatarFile,
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) {
         Optional<UserEntity> entityWrapper = userRepository.findById(dto.getId());
         if (entityWrapper.isEmpty()) {
             throw ServiceException.builder("Entity not found").build();
@@ -81,7 +86,7 @@ public class DefaultAccountService implements AccountService {
         entity = userRepository.save(entity);
 
         AuthorizedUser updatedAuthorizedUser = AuthorizedUserMapper.reload(SecurityUtils.getAuthUser(), entity);
-        securityService.reloadSecurityContext(updatedAuthorizedUser);
+        securityService.reloadSecurityContext(updatedAuthorizedUser, request, response);
         return UserDtoMapper.map(entity);
     }
 

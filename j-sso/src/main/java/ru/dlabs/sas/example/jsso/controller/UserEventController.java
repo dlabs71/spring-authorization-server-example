@@ -14,7 +14,7 @@ import ru.dlabs.sas.example.jsso.service.UserEventService;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-09</div>
  * </p>
  *
@@ -33,8 +33,8 @@ public class UserEventController {
     @PreAuthorize("hasAnyAuthority('GET_OWN_EVENTS')")
     @Operation(description = "Получение событий безопасности пользователя")
     public PageableResponseDto<UserEventDto> searchUserEvents(
-            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize
+        @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+        @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize
     ) {
         return userEventService.searchEvents(page, pageSize);
     }

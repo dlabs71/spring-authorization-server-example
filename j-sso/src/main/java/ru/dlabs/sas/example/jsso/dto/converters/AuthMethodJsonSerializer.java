@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-02</div>
  * </p>
  *
@@ -18,7 +18,8 @@ import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 public class AuthMethodJsonSerializer extends JsonSerializer<ClientAuthenticationMethod> {
 
     @Override
-    public void serialize(ClientAuthenticationMethod value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+    public void serialize(ClientAuthenticationMethod value, JsonGenerator gen, SerializerProvider serializers)
+        throws IOException {
         if (value == null) {
             return;
         }

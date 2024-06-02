@@ -10,7 +10,7 @@ public interface AccountService {
 
     UserDto getCurrentUser();
 
-    UserDto save(UserDto dto, MultipartFile avatarFile);
+    UserDto save(UserDto dto, MultipartFile avatarFile, HttpServletRequest request, HttpServletResponse response);
 
     void deleteCurrentUser(HttpServletRequest request, HttpServletResponse response);
 

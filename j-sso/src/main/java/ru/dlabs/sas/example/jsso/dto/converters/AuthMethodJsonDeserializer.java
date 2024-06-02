@@ -10,7 +10,7 @@ import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-02</div>
  * </p>
  *
@@ -20,7 +20,8 @@ import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 public class AuthMethodJsonDeserializer extends JsonDeserializer<ClientAuthenticationMethod> {
 
     @Override
-    public ClientAuthenticationMethod deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
+    public ClientAuthenticationMethod deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+        throws IOException {
         String strValue = jsonParser.getText();
         if (StringUtils.isEmpty(strValue)) {
             return null;

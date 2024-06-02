@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-10</div>
  * </p>
  *

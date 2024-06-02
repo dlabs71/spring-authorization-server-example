@@ -47,9 +47,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     @Override
     public void onAuthenticationSuccess(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            Authentication authentication
+        HttpServletRequest request,
+        HttpServletResponse response,
+        Authentication authentication
     ) {
         SavedRequest savedRequest = this.requestCache.getRequest(request, response);
         if (savedRequest == null) {
@@ -59,6 +59,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             this.clearAuthenticationAttributes(request);
             String targetUrl = savedRequest.getRedirectUrl();
 
+            // Таким образом понимаем когда использовать сохранённый запрос из requestCache, а когда
+            // указать переход на главную форму SSO
             if (targetUrl.startsWith(savedRequestUrlStartsWith)) {
                 response.setHeader(headerName, targetUrl);
             } else {

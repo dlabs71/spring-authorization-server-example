@@ -12,10 +12,14 @@ import org.springframework.security.oauth2.server.authorization.OAuth2Authorizat
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsent;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
+import org.springframework.security.web.context.DelegatingSecurityContextRepository;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import ru.dlabs.sas.example.jsso.dto.AuthorizationInfo;
+import ru.dlabs.sas.example.jsso.service.UserClientService;
 import ru.dlabs.sas.example.jsso.service.security.RedisOAuth2AuthorizationConsentService;
 import ru.dlabs.sas.example.jsso.service.security.RedisOAuth2AuthorizationService;
-import ru.dlabs.sas.example.jsso.service.UserClientService;
 
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
@@ -82,6 +86,14 @@ public class SecurityConfigUtilities {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
+    }
+
+    @Bean
+    public SecurityContextRepository securityContextRepository() {
+        return new DelegatingSecurityContextRepository(
+            new RequestAttributeSecurityContextRepository(),
+            new HttpSessionSecurityContextRepository()
+        );
     }
 
 }

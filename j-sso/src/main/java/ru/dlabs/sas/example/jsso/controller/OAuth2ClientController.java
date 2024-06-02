@@ -18,7 +18,7 @@ import ru.dlabs.sas.example.jsso.service.OAuth2ClientService;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-03</div>
  * </p>
  *
@@ -44,10 +44,10 @@ public class OAuth2ClientController {
     @PreAuthorize("hasAnyAuthority('GET_OAUTH_CLIENT_DATA')")
     @Operation(description = "Поиск клиентов по параметрам")
     public PageableResponseDto<OAuth2ClientDto> searchClients(
-            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-            @RequestParam(value = "clientId", required = false) String clientId,
-            @RequestParam(value = "clientName", required = false) String clientName
+        @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+        @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+        @RequestParam(value = "clientId", required = false) String clientId,
+        @RequestParam(value = "clientName", required = false) String clientName
     ) {
         return oAuth2ClientService.searchClients(page, pageSize, clientId, clientName);
     }

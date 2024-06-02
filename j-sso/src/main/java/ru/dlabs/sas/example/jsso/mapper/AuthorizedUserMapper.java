@@ -17,16 +17,16 @@ public class AuthorizedUserMapper {
     public AuthorizedUser map(UserEntity entity, AuthProvider provider) {
         List<GrantedAuthority> authorities = getUserAuthorities(entity);
         return AuthorizedUser.builder(entity.getEmail(), entity.getPasswordHash(), authorities)
-                .id(entity.getId())
-                .firstName(entity.getFirstName())
-                .lastName(entity.getLastName())
-                .middleName(entity.getMiddleName())
-                .birthday(entity.getBirthday())
-                .avatarFileId(entity.getAvatarFileId())
-                .registrationDate(entity.getCreationDate().toLocalDate())
-                .admin(entity.getAdmin())
-                .superuser(entity.getSuperuser())
-                .build();
+            .id(entity.getId())
+            .firstName(entity.getFirstName())
+            .lastName(entity.getLastName())
+            .middleName(entity.getMiddleName())
+            .birthday(entity.getBirthday())
+            .avatarFileId(entity.getAvatarFileId())
+            .registrationDate(entity.getCreationDate().toLocalDate())
+            .admin(entity.getAdmin())
+            .superuser(entity.getSuperuser())
+            .build();
     }
 
     public AuthorizedUser reload(AuthorizedUser authorizedUser, UserEntity entity) {
@@ -43,10 +43,10 @@ public class AuthorizedUserMapper {
 
     public List<GrantedAuthority> getUserAuthorities(UserEntity entity) {
         return entity.getRoles().stream()
-                .filter(RoleEntity::getActive)
-                .flatMap(role -> role.getAuthorities().stream())
-                .filter(AuthorityEntity::getActive)
-                .map(authority -> new SimpleGrantedAuthority(authority.getCode()))
-                .collect(Collectors.toList());
+            .filter(RoleEntity::getActive)
+            .flatMap(role -> role.getAuthorities().stream())
+            .filter(AuthorityEntity::getActive)
+            .map(authority -> new SimpleGrantedAuthority(authority.getCode()))
+            .collect(Collectors.toList());
     }
 }

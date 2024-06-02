@@ -12,22 +12,22 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
 import ru.dlabs.sas.example.jsso.dao.entity.UserEventEntity;
 import ru.dlabs.sas.example.jsso.dao.repository.UserEventRepository;
 import ru.dlabs.sas.example.jsso.dao.type.UserEventType;
+import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
 import ru.dlabs.sas.example.jsso.dto.PageableResponseDto;
 import ru.dlabs.sas.example.jsso.dto.UserEventDto;
 import ru.dlabs.sas.example.jsso.mapper.UserEventMapper;
+import ru.dlabs.sas.example.jsso.service.MessageService;
 import ru.dlabs.sas.example.jsso.service.UserEventService;
 import ru.dlabs.sas.example.jsso.utils.SecurityUtils;
-import ru.dlabs.sas.example.jsso.service.MessageService;
 import ua_parser.Client;
 import ua_parser.Parser;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-09</div>
  * </p>
  *
@@ -49,15 +49,18 @@ public class DefaultUserEventService implements UserEventService {
     public PageableResponseDto<UserEventDto> searchEvents(int page, int pageSize) {
         AuthorizedUser authorizedUser = SecurityUtils.getAuthUser();
         PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "creationDate"));
-        Page<UserEventEntity> entitiesPage = userEventRepository.findAllByCreatedBy(authorizedUser.getUsername(), pageRequest);
+        Page<UserEventEntity> entitiesPage = userEventRepository.findAllByCreatedBy(
+            authorizedUser.getUsername(),
+            pageRequest
+        );
         List<UserEventDto> dtoList = entitiesPage.get()
-                .map(item -> UserEventMapper.map(item, messageService))
-                .toList();
+            .map(item -> UserEventMapper.map(item, messageService))
+            .toList();
 
         return PageableResponseDto.build(
-                dtoList,
-                page < entitiesPage.getTotalPages(),
-                entitiesPage.getTotalElements()
+            dtoList,
+            page < entitiesPage.getTotalPages(),
+            entitiesPage.getTotalElements()
         );
     }
 

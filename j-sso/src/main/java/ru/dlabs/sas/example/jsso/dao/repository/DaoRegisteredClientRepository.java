@@ -43,25 +43,28 @@ public class DaoRegisteredClientRepository implements RegisteredClientRepository
     }
 
     private RegisteredClient map(SystemOauth2Client entity) {
-        return RegisteredClient.withId(entity.getId().toString())
-                .id(entity.getId())
-                .clientId(entity.getClientId())
-                .clientSecret(entity.getClientSecret())
-                .clientIdIssuedAt(entity.getCreationDate().toInstant(ZoneOffset.UTC))
-                .clientSecretExpiresAt(entity.getClientSecretExpiresAt() != null ? entity.getClientSecretExpiresAt().toInstant(ZoneOffset.UTC) : null)
-                .clientName(entity.getClientName())
-                .clientAuthenticationMethods(clientAuthenticationMethods -> clientAuthenticationMethods.addAll(entity.getClientAuthenticationMethods()))
-                .authorizationGrantTypes(authorizationGrantTypes -> authorizationGrantTypes.addAll(entity.getAuthorizationGrantTypes()))
-                .redirectUris(redirectUris -> redirectUris.addAll(entity.getRedirectUris()))
-                .scopes(scopes -> scopes.addAll(entity.getScopes()))
-                .tokenSettings(TokenSettings.builder().accessTokenFormat(OAuth2TokenFormat.REFERENCE).build())
-                .build();
+        return RegisteredClient.withId(entity.getId())
+            .id(entity.getId())
+            .clientId(entity.getClientId())
+            .clientSecret(entity.getClientSecret())
+            .clientIdIssuedAt(entity.getCreationDate().toInstant(ZoneOffset.UTC))
+            .clientSecretExpiresAt(entity.getClientSecretExpiresAt() != null ?
+                                       entity.getClientSecretExpiresAt().toInstant(ZoneOffset.UTC) : null)
+            .clientName(entity.getClientName())
+            .clientAuthenticationMethods(clientAuthenticationMethods -> clientAuthenticationMethods.addAll(entity.getClientAuthenticationMethods()))
+            .authorizationGrantTypes(authorizationGrantTypes -> authorizationGrantTypes.addAll(entity.getAuthorizationGrantTypes()))
+            .redirectUris(redirectUris -> redirectUris.addAll(entity.getRedirectUris()))
+            .scopes(scopes -> scopes.addAll(entity.getScopes()))
+            .tokenSettings(TokenSettings.builder().accessTokenFormat(OAuth2TokenFormat.REFERENCE).build())
+            .build();
     }
 
     private void map(RegisteredClient dto, SystemOauth2Client entity) {
         entity.setClientId(dto.getClientId());
         entity.setClientSecret(dto.getClientSecret());
-        entity.setClientSecretExpiresAt(dto.getClientSecretExpiresAt() != null ? LocalDateTime.ofInstant(dto.getClientSecretExpiresAt(), ZoneOffset.UTC) : null);
+        entity.setClientSecretExpiresAt(dto.getClientSecretExpiresAt() != null ?
+                                            LocalDateTime.ofInstant(dto.getClientSecretExpiresAt(), ZoneOffset.UTC) :
+                                            null);
         entity.setClientName(dto.getClientName());
         entity.setClientAuthenticationMethods(dto.getClientAuthenticationMethods());
         entity.setAuthorizationGrantTypes(dto.getAuthorizationGrantTypes());

@@ -8,7 +8,7 @@ import ru.dlabs.sas.example.jsso.dao.entity.UserEntity;
 
 @Repository
 public interface UserRepository extends
-        JpaRepository<UserEntity, UUID>, JpaSpecificationExecutor<UserEntity> {
+    JpaRepository<UserEntity, UUID>, JpaSpecificationExecutor<UserEntity> {
 
     UserEntity findByEmail(String email);
 

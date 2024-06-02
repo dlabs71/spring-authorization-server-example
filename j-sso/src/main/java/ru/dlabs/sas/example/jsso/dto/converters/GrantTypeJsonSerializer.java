@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-02</div>
  * </p>
  *
@@ -18,7 +18,11 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
 public class GrantTypeJsonSerializer extends JsonSerializer<AuthorizationGrantType> {
 
     @Override
-    public void serialize(AuthorizationGrantType value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+    public void serialize(
+        AuthorizationGrantType value,
+        JsonGenerator jsonGenerator,
+        SerializerProvider serializerProvider
+    ) throws IOException {
         if (value == null) {
             return;
         }

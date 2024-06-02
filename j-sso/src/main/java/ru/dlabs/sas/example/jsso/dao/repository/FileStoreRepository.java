@@ -7,7 +7,7 @@ import ru.dlabs.sas.example.jsso.dao.entity.FileStoreEntity;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-04-30</div>
  * </p>
  *

@@ -26,7 +26,7 @@ import ru.dlabs.sas.example.jsso.service.MessageService;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-04-30</div>
  * </p>
  *
@@ -61,7 +61,8 @@ public class DefaultFileStoreService implements FileStoreService {
             fileStore.add(entity.getBucket(), String.valueOf(entity.getId()), entity.getFileSize(), fileInputStream);
         } catch (IOException e) {
             String errorMessage = String.format("An error occurred while saving the file to storage. File name [%s]. Message: %s",
-                    entity.getFilename(), e.getMessage()
+                                                entity.getFilename(),
+                                                e.getMessage()
             );
             log.error(errorMessage, e);
             throw ServiceException.builder(messageService.getMessage("file.store.error", filename)).build();

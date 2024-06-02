@@ -24,7 +24,7 @@ import ru.dlabs.sas.example.jsso.type.SSOScope;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-16</div>
  * </p>
  *
@@ -41,51 +41,51 @@ public class IntrospectionService {
     private final MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter;
 
     public void introspectionResponse(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            Authentication authentication
+        HttpServletRequest request,
+        HttpServletResponse response,
+        Authentication authentication
     ) throws IOException {
         var introspectionAuthenticationToken = (OAuth2TokenIntrospectionAuthenticationToken) authentication;
         TokenInfoDto.TokenInfoDtoBuilder tokenInfoDtoBuilder = TokenInfoDto.builder().active(false);
         if (introspectionAuthenticationToken.getTokenClaims().isActive()) {
             OAuth2TokenIntrospection claims = introspectionAuthenticationToken.getTokenClaims();
             tokenInfoDtoBuilder.active(true)
-                    .sub(claims.getSubject())
-                    .aud(claims.getAudience())
-                    .nbf(claims.getNotBefore())
-                    .scopes(claims.getScopes())
-                    .iss(claims.getIssuer())
-                    .exp(claims.getExpiresAt())
-                    .iat(claims.getIssuedAt())
-                    .jti(claims.getId())
-                    .clientId(claims.getClientId())
-                    .tokenType(claims.getTokenType());
+                .sub(claims.getSubject())
+                .aud(claims.getAudience())
+                .nbf(claims.getNotBefore())
+                .scopes(claims.getScopes())
+                .iss(claims.getIssuer())
+                .exp(claims.getExpiresAt())
+                .iat(claims.getIssuedAt())
+                .jti(claims.getId())
+                .clientId(claims.getClientId())
+                .tokenType(claims.getTokenType());
 
             this.upgradeDtoByPrincipal(
-                    claims.getScopes(),
-                    introspectionAuthenticationToken.getToken(),
-                    tokenInfoDtoBuilder
+                claims.getScopes(),
+                introspectionAuthenticationToken.getToken(),
+                tokenInfoDtoBuilder
             );
         }
 
         ServletServerHttpResponse httpResponse = new ServletServerHttpResponse(response);
         mappingJackson2HttpMessageConverter.write(
-                tokenInfoDtoBuilder.build(),
-                null,
-                httpResponse
+            tokenInfoDtoBuilder.build(),
+            null,
+            httpResponse
         );
     }
 
     private void upgradeDtoByPrincipal(
-            List<String> clientScopes,
-            String accessTokenValue,
-            TokenInfoDto.TokenInfoDtoBuilder tokenInfoDtoBuilder
+        List<String> clientScopes,
+        String accessTokenValue,
+        TokenInfoDto.TokenInfoDtoBuilder tokenInfoDtoBuilder
     ) {
         if (clientScopes != null && !clientScopes.isEmpty()) {
             AuthorizedUser authorizedUser = this.extractAuthorizedUserByAccessToken(accessTokenValue);
             IntrospectionPrincipal introspectionPrincipal = this.buildIntrospectionPrincipal(
-                    authorizedUser,
-                    clientScopes
+                authorizedUser,
+                clientScopes
             );
             tokenInfoDtoBuilder.principal(introspectionPrincipal);
         }
@@ -93,8 +93,8 @@ public class IntrospectionService {
 
     private AuthorizedUser extractAuthorizedUserByAccessToken(String accessTokenValue) {
         OAuth2Authorization tokenAuth = oAuth2AuthorizationService.findByToken(
-                accessTokenValue,
-                OAuth2TokenType.ACCESS_TOKEN
+            accessTokenValue,
+            OAuth2TokenType.ACCESS_TOKEN
         );
         if (tokenAuth != null) {
             Authentication attributeAuth = tokenAuth.getAttribute(principalAttributeKey);
@@ -103,9 +103,9 @@ public class IntrospectionService {
                     return authorizedUser;
                 } else {
                     throw new RuntimeException(
-                            "Principal class = "
-                                    + attributeAuth.getPrincipal().getClass().getSimpleName()
-                                    + " is not supported");
+                        "Principal class = "
+                            + attributeAuth.getPrincipal().getClass().getSimpleName()
+                            + " is not supported");
                 }
             }
         }
@@ -113,8 +113,8 @@ public class IntrospectionService {
     }
 
     private IntrospectionPrincipal buildIntrospectionPrincipal(
-            AuthorizedUser authorizedUser,
-            List<String> clientScopes
+        AuthorizedUser authorizedUser,
+        List<String> clientScopes
     ) {
         if (authorizedUser == null) {
             return null;
@@ -125,23 +125,23 @@ public class IntrospectionService {
             List<String> authorities = Collections.emptyList();
             if (authorizedUser.getAuthorities() != null) {
                 authorities = authorizedUser.getAuthorities()
-                        .stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .collect(Collectors.toList());
+                    .stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList());
             }
             builder.authorities(authorities);
         }
 
         if (clientScopes.contains(SSOScope.USER_IDENTIFICATION.getDatabaseCode())) {
             builder.id(authorizedUser.getId())
-                    .email(authorizedUser.getEmail());
+                .email(authorizedUser.getEmail());
         }
 
         if (clientScopes.contains(SSOScope.USER_PROFILE_INFO.getDatabaseCode())) {
             builder.firstName(authorizedUser.getFirstName())
-                    .lastName(authorizedUser.getLastName())
-                    .middleName(authorizedUser.getMiddleName())
-                    .birthday(authorizedUser.getBirthday());
+                .lastName(authorizedUser.getLastName())
+                .middleName(authorizedUser.getMiddleName())
+                .birthday(authorizedUser.getBirthday());
         }
 
         if (clientScopes.contains(SSOScope.USER_AVATAR.getDatabaseCode())) {

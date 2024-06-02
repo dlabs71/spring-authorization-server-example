@@ -5,7 +5,7 @@ import lombok.Getter;
 /**
  * Справочник scope для системы SSO. Является отображением из таблицы sso.scopes_vw.
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-05</div>
  * </p>
  *

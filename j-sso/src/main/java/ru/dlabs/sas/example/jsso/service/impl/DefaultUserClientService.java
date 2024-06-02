@@ -14,7 +14,7 @@ import ru.dlabs.sas.example.jsso.service.UserClientService;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-12</div>
  * </p>
  *
@@ -61,10 +61,10 @@ public class DefaultUserClientService implements UserClientService {
             return Map.of();
         }
         return userClients.stream()
-                .collect(Collectors.groupingBy(
-                        UserClient::getClientId,
-                        Collectors.mapping(UserClient::getUserId, Collectors.toSet())
-                ));
+            .collect(Collectors.groupingBy(
+                UserClient::getClientId,
+                Collectors.mapping(UserClient::getUserId, Collectors.toSet())
+            ));
     }
 
     @Override

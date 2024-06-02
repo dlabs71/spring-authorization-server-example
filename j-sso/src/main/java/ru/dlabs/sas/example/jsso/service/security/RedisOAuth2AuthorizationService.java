@@ -54,7 +54,7 @@ public final class RedisOAuth2AuthorizationService implements OAuth2Authorizatio
     private final RedisTemplate<String, OAuth2Authorization> redisTemplate;
     private final RedisTemplate<String, AuthorizationInfo> redisTemplateAuthInfo;
     private final ValueOperations<String, OAuth2Authorization> authorizations;
-    private final ValueOperations<String, AuthorizationInfo> authInfoByPrincipalName;
+    private final ValueOperations<String, AuthorizationInfo> authInfoByUser;
     private final long ttl;
     private final Consumer<AuthorizationInfo> onSaveHandler;
     private final Consumer<AuthorizationInfo> onRemoveHandler;
@@ -62,8 +62,11 @@ public final class RedisOAuth2AuthorizationService implements OAuth2Authorizatio
     /**
      * Конструктор класса
      *
-     * @param redisTemplate клиент для Redis через который мы будем работать с ним
-     * @param ttlInMs       Time To Live для записи
+     * @param redisTemplate         клиент для Redis через который будут сохраняться объекты OAuth2Authorization
+     * @param redisTemplateAuthInfo клиент для Redis через который будут сохраняться объекты AuthorizationInfo
+     * @param onSaveHandler         callback метод успешного создания токена (complete)
+     * @param onRemoveHandler       callback метод успешного удаления токена
+     * @param ttlInMs               Time To Live для записи
      */
     public RedisOAuth2AuthorizationService(
         RedisTemplate<String, OAuth2Authorization> redisTemplate,
@@ -75,7 +78,7 @@ public final class RedisOAuth2AuthorizationService implements OAuth2Authorizatio
         this.redisTemplate = redisTemplate;
         this.authorizations = redisTemplate.opsForValue();
         this.redisTemplateAuthInfo = redisTemplateAuthInfo;
-        this.authInfoByPrincipalName = redisTemplateAuthInfo.opsForValue();
+        this.authInfoByUser = redisTemplateAuthInfo.opsForValue();
         this.ttl = ttlInMs;
         this.onSaveHandler = onSaveHandler;
         this.onRemoveHandler = onRemoveHandler;
@@ -97,6 +100,8 @@ public final class RedisOAuth2AuthorizationService implements OAuth2Authorizatio
                 redisTemplate.delete(initKey);
             }
             this.authorizations.set(key, authorization, this.ttl, TimeUnit.MILLISECONDS);
+
+            // оповещаем о выдаче нового токена
             this.onSaveHandler.accept(info);
         } else {
             String key = INIT_KEY_PREFIX + authorization.getId();
@@ -123,7 +128,7 @@ public final class RedisOAuth2AuthorizationService implements OAuth2Authorizatio
         boolean keyAlreadyExists = Boolean.TRUE.equals(redisTemplateAuthInfo.hasKey(key));
         AuthorizationInfo lastAuthInfo = null;
         if (keyAlreadyExists) {
-            lastAuthInfo = this.authInfoByPrincipalName.get(key);
+            lastAuthInfo = this.authInfoByUser.get(key);
         }
 
         AuthorizationInfo tokenDto = AuthorizationInfo.builder()
@@ -137,7 +142,7 @@ public final class RedisOAuth2AuthorizationService implements OAuth2Authorizatio
             .username(authorizedUser != null ? authorizedUser.getUsername() : null)
             .redirectUri(redirectUri)
             .build();
-        this.authInfoByPrincipalName.set(key, tokenDto, this.ttl, TimeUnit.MILLISECONDS);
+        this.authInfoByUser.set(key, tokenDto, this.ttl, TimeUnit.MILLISECONDS);
         return tokenDto;
     }
 
@@ -161,6 +166,8 @@ public final class RedisOAuth2AuthorizationService implements OAuth2Authorizatio
         if (isComplete(authorization)) {
             String key = COMPLETE_KEY_PREFIX + authorization.getId();
             AuthorizationInfo info = this.deleteAuthorizationInfo(authorization);
+
+            // оповещаем об удалении токена
             this.onRemoveHandler.accept(info);
             this.redisTemplate.delete(key);
         } else {
@@ -169,12 +176,15 @@ public final class RedisOAuth2AuthorizationService implements OAuth2Authorizatio
         }
     }
 
+    /**
+     * Удаление дополнительной информации об авторизации.
+     */
     private AuthorizationInfo deleteAuthorizationInfo(OAuth2Authorization authorization) {
         AuthorizedUser authorizedUser = extractPrincipal(authorization);
         String key = INFO_KEY_PREFIX
             + (authorizedUser != null ? authorizedUser.getId().toString() : authorization.getPrincipalName())
             + ":" + authorization.getId();
-        AuthorizationInfo tokenDto = this.authInfoByPrincipalName.get(key);
+        AuthorizationInfo tokenDto = this.authInfoByUser.get(key);
         this.redisTemplateAuthInfo.delete(key);
         return tokenDto;
     }
@@ -224,18 +234,24 @@ public final class RedisOAuth2AuthorizationService implements OAuth2Authorizatio
         return null;
     }
 
+    /**
+     * Поиск информации о токенах пользователя по его идентификатору.
+     */
     public List<AuthorizationInfo> findInfoByUserId(UUID userId) {
         Set<String> allKeys = redisTemplateAuthInfo.keys(INFO_KEY_PREFIX + userId + ":*");
         List<AuthorizationInfo> result = new ArrayList<>();
         if (allKeys != null) {
             for (String key : allKeys) {
-                AuthorizationInfo info = this.authInfoByPrincipalName.get(key);
+                AuthorizationInfo info = this.authInfoByUser.get(key);
                 result.add(info);
             }
         }
         return result;
     }
 
+    /**
+     * Получение Principal объекта из {@link OAuth2Authorization}
+     */
     private static AuthorizedUser extractPrincipal(OAuth2Authorization authorization) {
         AuthorizedUser authorizedUser = null;
         if (authorization.getAttributes().containsKey(principalAttributeKey)) {

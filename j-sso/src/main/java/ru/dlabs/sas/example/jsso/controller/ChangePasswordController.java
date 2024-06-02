@@ -15,7 +15,7 @@ import ru.dlabs.sas.example.jsso.service.ChangePasswordService;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-01</div>
  * </p>
  *
@@ -30,14 +30,14 @@ public class ChangePasswordController {
 
     private final ChangePasswordService changePasswordService;
 
-    @PostMapping(value = "/init", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/init", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @PreAuthorize("hasAnyAuthority('CHANGE_OWN_PASSWORD')")
     @Operation(description = "Инициализация установления нового пароля. Отсылается OTP код подтверждения")
     public void initChangePassword(@RequestPart("password") String password, HttpServletResponse response) {
         changePasswordService.init(password, response);
     }
 
-    @PostMapping(value = "/confirm", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/confirm", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @PreAuthorize("hasAnyAuthority('CHANGE_OWN_PASSWORD')")
     @Operation(description = "Подтверждение кода OTP полученного на шаге инициализации. Смена пароля пользователя")
     public void confirmChangePassword(@RequestPart("otp") String otp, HttpServletRequest request) {

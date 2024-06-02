@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 
 /**
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-12</div>
  * </p>
  *
@@ -30,8 +30,8 @@ public class HttpUtils {
 
         final HttpHeaders headers = new HttpHeaders();
         ContentDisposition contentDisposition = ContentDisposition.builder("attachment")
-                .filename(fileName, StandardCharsets.UTF_8)
-                .build();
+            .filename(fileName, StandardCharsets.UTF_8)
+            .build();
         headers.setContentType(MediaType.parseMediaType(contentType));
         headers.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
         headers.add("X-Frame-Options", "SAMEORIGIN");

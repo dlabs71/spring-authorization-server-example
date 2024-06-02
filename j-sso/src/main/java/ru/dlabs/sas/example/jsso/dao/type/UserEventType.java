@@ -3,7 +3,7 @@ package ru.dlabs.sas.example.jsso.dao.type;
 /**
  * События безопасности пользователя. Наименования указаны в Resource Bundle файле.
  * <p>
- * <div><strong>Project name:</strong> dlabs-projects</div>
+ * <div><strong>Project name:</strong> spring-authorization-server-example</div>
  * <div><strong>Creation date:</strong> 2024-05-09</div>
  * </p>
  *
