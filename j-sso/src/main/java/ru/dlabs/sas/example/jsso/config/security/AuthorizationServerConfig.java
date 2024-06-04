@@ -15,8 +15,12 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import ru.dlabs.sas.example.jsso.config.security.properties.AuthorizationServerProperties;
 import ru.dlabs.sas.example.jsso.service.security.IntrospectionService;
 
+/**
+ * Конфигурация SecurityFilterChain сервера авторизации по протоколу OAuth2.
+ */
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
 public class AuthorizationServerConfig {
@@ -35,7 +39,6 @@ public class AuthorizationServerConfig {
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
         http.securityMatcher(endpointsMatcher)
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(PERMIT_ALL_PATTERNS).permitAll()
                 .anyRequest().authenticated()
             )
             .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))

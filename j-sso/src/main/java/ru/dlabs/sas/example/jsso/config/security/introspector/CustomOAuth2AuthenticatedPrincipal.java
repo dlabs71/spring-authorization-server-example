@@ -1,4 +1,4 @@
-package ru.dlabs.sas.example.jservice.config.security.introspector;
+package ru.dlabs.sas.example.jsso.config.security.introspector;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,9 +9,18 @@ import java.util.Map;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
-import ru.dlabs.sas.example.jservice.dto.AuthorizedUser;
-import ru.dlabs.sas.example.jservice.dto.TokenInfoDto;
+import ru.dlabs.sas.example.jsso.dto.TokenInfoDto;
+import ru.dlabs.sas.example.jsso.dto.security.AuthorizedUser;
 
+/**
+ * Объект principal для Resource Server SSO.
+ * {@link AUTHORITY_PREFIX} - необходим так как в Spring Security 6 был убран класс {@link OAuth2MethodSecurityExpressionHandler},
+ * который предназначался для поддержки специальной SpEL переменной OAuth2.
+ * Теперь чтобы была возможность указать scope как ограничение авторизации на endpoint-е,
+ * необходимо добавить префикс SCOPE_ к ней и поместить её в authorities.
+ *
+ * @see <a href="https://github.com/spring-projects/spring-security/wiki/OAuth-2.0-Migration-Guide#simplified-spel">OAuth 2.0 Migration Guide</a>
+ */
 public class CustomOAuth2AuthenticatedPrincipal extends TokenInfoOAuth2ClaimAccessor
     implements OAuth2AuthenticatedPrincipal, Serializable {
 

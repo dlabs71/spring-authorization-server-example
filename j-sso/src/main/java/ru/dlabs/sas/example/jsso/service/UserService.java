@@ -2,6 +2,7 @@ package ru.dlabs.sas.example.jsso.service;
 
 import java.util.UUID;
 import ru.dlabs.sas.example.jsso.dao.entity.UserEntity;
+import ru.dlabs.sas.example.jsso.dto.FileStoreDto;
 import ru.dlabs.sas.example.jsso.dto.RegistrationDto;
 
 public interface UserService {
@@ -40,4 +41,11 @@ public interface UserService {
      * Сменить пароль у пользователя с указанным email
      */
     void changePassword(String email, String password);
+
+    /**
+     * Получение аватара пользователя
+     */
+    UserAvatar getUserAvatar(UUID userId);
+
+    record UserAvatar(FileStoreDto storeDto, byte[] avatar) { }
 }

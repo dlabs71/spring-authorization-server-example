@@ -1,6 +1,11 @@
 spring:
   security:
     oauth2:
+      resourceserver:
+        opaquetoken:
+          client-id: sso-client
+          client-secret: sso-client
+          introspection-uri: http://localhost:7777/oauth2/token-info
       authorizationserver:
         issuer-url: http://localhost:7777${server.servlet.context-path}
         introspection-endpoint: /oauth2/token-info

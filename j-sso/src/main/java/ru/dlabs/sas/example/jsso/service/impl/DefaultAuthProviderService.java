@@ -12,7 +12,7 @@ import ru.dlabs.sas.example.jsso.dao.entity.UserEntity;
 import ru.dlabs.sas.example.jsso.dao.repository.RoleRepository;
 import ru.dlabs.sas.example.jsso.dao.repository.UserRepository;
 import ru.dlabs.sas.example.jsso.dao.type.StoreType;
-import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
+import ru.dlabs.sas.example.jsso.dto.security.AuthorizedUser;
 import ru.dlabs.sas.example.jsso.dto.FileStoreDto;
 import ru.dlabs.sas.example.jsso.exception.AuthException;
 import ru.dlabs.sas.example.jsso.mapper.AuthorizedUserMapper;

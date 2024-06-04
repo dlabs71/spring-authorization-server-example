@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
-import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
+import ru.dlabs.sas.example.jsso.dto.security.AuthorizedUser;
 
 /**
  * Сервис управления Security Context.

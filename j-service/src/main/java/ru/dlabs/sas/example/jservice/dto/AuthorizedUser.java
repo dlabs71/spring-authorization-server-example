@@ -21,8 +21,6 @@ public class AuthorizedUser implements OAuth2User {
     private String lastName;
     private String middleName;
     private LocalDate birthday;
-    private String avatarUrl;
-    private String username;
     private String email;
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -43,8 +41,6 @@ public class AuthorizedUser implements OAuth2User {
                 .lastName(principal.getLastName())
                 .middleName(principal.getMiddleName())
                 .birthday(principal.getBirthday())
-                .avatarUrl(principal.getAvatarUrl())
-                .username(principal.getUsername())
                 .email(principal.getEmail())
                 .authorities(authorities)
                 .build();

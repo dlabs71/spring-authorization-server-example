@@ -1,4 +1,4 @@
-package ru.dlabs.sas.example.jsso.dto;
+package ru.dlabs.sas.example.jsso.dto.security;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

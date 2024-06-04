@@ -7,7 +7,6 @@ export class AdminUserModel {
     @JsonField("lastName") @TypeString lastName;
     @JsonField("middleName") @TypeString middleName;
     @JsonField("birthday") @TypeDate() birthday;
-    @JsonField("avatarFileId") @TypeString avatarFileId;
     @JsonField("registrationDate") @TypeString registrationDate;
     @JsonField("authProviders") @TypeArr(DATA_TYPE.STRING) authProviders;
     @JsonField("superuser") @TypeBool superuser;

@@ -20,8 +20,6 @@ public class IntrospectionPrincipal {
     private String lastName;
     private String middleName;
     private LocalDate birthday;
-    private String avatarUrl;
-    private String username;
     private String email;
     private List<String> authorities;
 }

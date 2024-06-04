@@ -8,7 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import ru.dlabs.sas.example.jsso.dao.entity.AuthorityEntity;
 import ru.dlabs.sas.example.jsso.dao.entity.RoleEntity;
 import ru.dlabs.sas.example.jsso.dao.entity.UserEntity;
-import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
+import ru.dlabs.sas.example.jsso.dto.security.AuthorizedUser;
 import ru.dlabs.sas.example.jsso.type.AuthProvider;
 
 @UtilityClass

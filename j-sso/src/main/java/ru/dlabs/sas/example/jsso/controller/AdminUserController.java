@@ -58,10 +58,10 @@ public class AdminUserController {
         adminUserService.dismissAdmin(userId);
     }
 
-    @GetMapping(value = "/avatar/{avatarFileId}")
+    @GetMapping(value = "/avatar/{userId}")
     @PreAuthorize("hasAnyAuthority('GET_ADMIN_USER_DATA')")
     @Operation(description = "Получить аватарку пользователя-администратора")
-    public ResponseEntity<byte[]> downloadAdminAvatar(@PathVariable UUID avatarFileId) {
-        return adminUserService.getAvatar(avatarFileId);
+    public ResponseEntity<byte[]> downloadAdminAvatar(@PathVariable UUID userId) {
+        return adminUserService.getAvatar(userId);
     }
 }

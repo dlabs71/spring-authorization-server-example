@@ -44,10 +44,7 @@
     const title = computed(() => `${props.dto.lastName} ${props.dto.firstName} ${props.dto.middleName || ""}`.trim());
     const subtitle = computed(() => props.dto.email);
     const avatarUrl = computed(() => {
-        if (!props.dto.avatarFileId) {
-            return null;
-        }
-        return Service.getAvatarUrl(props.dto.avatarFileId);
+        return Service.getAvatarUrl(props.dto.id);
     });
 
     function dismiss() {

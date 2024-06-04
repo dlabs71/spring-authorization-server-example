@@ -9,7 +9,7 @@ import org.springframework.session.Session;
 import org.springframework.session.SessionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
-import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
+import ru.dlabs.sas.example.jsso.dto.security.AuthorizedUser;
 
 /**
  * Сервис управления Security Context. Пример того же SecurityService,

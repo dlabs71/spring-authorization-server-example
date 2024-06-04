@@ -1,4 +1,4 @@
-package ru.dlabs.sas.example.jsso.dto;
+package ru.dlabs.sas.example.jsso.dto.security;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -21,7 +21,6 @@ public class AuthorizedUserDto {
     private String lastName;
     private String middleName;
     private LocalDate birthday;
-    private UUID avatarFileId;
     private String username;
     private String email;
     private List<String> authorities;
@@ -48,7 +47,6 @@ public class AuthorizedUserDto {
             .lastName(authorizedUser.getLastName())
             .middleName(authorizedUser.getMiddleName())
             .birthday(authorizedUser.getBirthday())
-            .avatarFileId(authorizedUser.getAvatarFileId())
             .username(authorizedUser.getUsername())
             .email(authorizedUser.getEmail())
             .authorities(authorities)

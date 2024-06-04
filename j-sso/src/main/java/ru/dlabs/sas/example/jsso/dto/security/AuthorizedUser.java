@@ -1,12 +1,16 @@
-package ru.dlabs.sas.example.jsso.dto;
+package ru.dlabs.sas.example.jsso.dto.security;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
@@ -68,6 +72,30 @@ public class AuthorizedUser extends User implements OAuth2User {
             accountNonLocked,
             authorities
         );
+    }
+
+    public static AuthorizedUser build(IntrospectionPrincipal principal) {
+        if (principal == null) {
+            return null;
+        }
+        List<GrantedAuthority> authorities = Collections.emptyList();
+        if (principal.getAuthorities() != null) {
+            authorities = principal.getAuthorities()
+                .stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+        }
+        return AuthorizedUser.builder(
+                principal.getEmail(),
+                null,
+                authorities
+            )
+            .id(principal.getId())
+            .firstName(principal.getFirstName())
+            .lastName(principal.getLastName())
+            .middleName(principal.getMiddleName())
+            .birthday(principal.getBirthday())
+            .build();
     }
 
     public String getEmail() {

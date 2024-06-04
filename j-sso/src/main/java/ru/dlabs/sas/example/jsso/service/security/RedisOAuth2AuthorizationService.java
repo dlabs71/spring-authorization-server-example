@@ -27,8 +27,8 @@ import org.springframework.security.oauth2.server.authorization.OAuth2Authorizat
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.util.Assert;
-import ru.dlabs.sas.example.jsso.dto.AuthorizationInfo;
-import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
+import ru.dlabs.sas.example.jsso.dto.security.AuthorizationInfo;
+import ru.dlabs.sas.example.jsso.dto.security.AuthorizedUser;
 
 @Slf4j
 public final class RedisOAuth2AuthorizationService implements OAuth2AuthorizationService {

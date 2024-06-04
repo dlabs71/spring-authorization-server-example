@@ -3,7 +3,7 @@ package ru.dlabs.sas.example.jsso.utils;
 import lombok.experimental.UtilityClass;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
+import ru.dlabs.sas.example.jsso.dto.security.AuthorizedUser;
 import ru.dlabs.sas.example.jsso.exception.ServiceException;
 
 @UtilityClass

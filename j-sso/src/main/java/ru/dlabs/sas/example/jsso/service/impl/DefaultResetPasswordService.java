@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.dlabs.sas.example.jsso.components.ConfirmationStore;
 import ru.dlabs.sas.example.jsso.components.OTPStore;
-import ru.dlabs.sas.example.jsso.config.security.AuthorizationServerProperties;
+import ru.dlabs.sas.example.jsso.config.security.properties.AuthorizationServerProperties;
 import ru.dlabs.sas.example.jsso.dao.entity.UserEntity;
 import ru.dlabs.sas.example.jsso.exception.InformationException;
 import ru.dlabs.sas.example.jsso.exception.ResetPasswordException;

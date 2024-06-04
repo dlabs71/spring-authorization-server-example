@@ -29,7 +29,6 @@ public class UserDtoMapper {
             .lastName(entity.getLastName())
             .middleName(entity.getMiddleName())
             .birthday(entity.getBirthday())
-            .avatarFileId(entity.getAvatarFileId())
             .registrationDate(entity.getCreationDate().toLocalDate())
             .superuser(Boolean.TRUE.equals(entity.getSuperuser()))
             .build();

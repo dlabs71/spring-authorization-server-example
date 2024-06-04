@@ -21,7 +21,6 @@ public class AdminUserDto {
     private String lastName;
     private String middleName;
     private LocalDate birthday;
-    private UUID avatarFileId;
     private LocalDate registrationDate;
     private boolean superuser;
 }

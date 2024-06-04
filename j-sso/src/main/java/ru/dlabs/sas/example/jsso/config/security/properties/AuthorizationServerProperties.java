@@ -1,4 +1,4 @@
-package ru.dlabs.sas.example.jsso.config.security;
+package ru.dlabs.sas.example.jsso.config.security.properties;
 
 import lombok.Getter;
 import lombok.Setter;

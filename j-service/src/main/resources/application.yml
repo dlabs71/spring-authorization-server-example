@@ -37,6 +37,6 @@ spring:
     oauth2:
       resourceserver:
         opaquetoken:
-          client-id: test-client
-          client-secret: test-client
+          client-id: j-service-client
+          client-secret: j-service-client
           introspection-uri: http://localhost:7777/oauth2/token-info

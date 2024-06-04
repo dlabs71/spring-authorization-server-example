@@ -21,10 +21,15 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.security.web.context.SecurityContextRepository;
 import ru.dlabs.sas.example.jsso.config.security.handler.CustomAuthenticationSuccessHandler;
 import ru.dlabs.sas.example.jsso.config.security.handler.CustomOauthAuthenticationSuccessHandler;
+import ru.dlabs.sas.example.jsso.config.security.properties.AuthorizationServerProperties;
 import ru.dlabs.sas.example.jsso.service.UserEventService;
 import ru.dlabs.sas.example.jsso.service.impl.CustomOAuth2UserService;
 import ru.dlabs.sas.example.jsso.service.impl.CustomUserDetailsService;
 
+/**
+ * Конфигурация SecurityFilterChain web приложения SSO.
+ * WEB приложение SSO включает в себя управление данными пользователя и админка.
+ */
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
@@ -72,10 +77,9 @@ public class SecurityConfig {
             .userDetailsService(userDetailService)
             .passwordEncoder(passwordEncoder);
 
-        http.authorizeHttpRequests(authorize ->
-                                       authorize
-                                           .requestMatchers(PERMIT_ALL_PATTERNS).permitAll()
-                                           .anyRequest().authenticated()
+        http.authorizeHttpRequests(authorize -> authorize
+            .requestMatchers(PERMIT_ALL_PATTERNS).permitAll()
+            .anyRequest().authenticated()
         );
 
         http.exceptionHandling(configurer -> {

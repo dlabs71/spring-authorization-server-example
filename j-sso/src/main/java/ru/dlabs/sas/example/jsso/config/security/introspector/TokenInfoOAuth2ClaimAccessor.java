@@ -1,11 +1,11 @@
-package ru.dlabs.sas.example.jservice.config.security.introspector;
+package ru.dlabs.sas.example.jsso.config.security.introspector;
 
 import java.net.URL;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import org.springframework.security.oauth2.core.OAuth2TokenIntrospectionClaimAccessor;
-import ru.dlabs.sas.example.jservice.dto.TokenInfoDto;
+import ru.dlabs.sas.example.jsso.dto.TokenInfoDto;
 
 public abstract class TokenInfoOAuth2ClaimAccessor implements OAuth2TokenIntrospectionClaimAccessor {
 

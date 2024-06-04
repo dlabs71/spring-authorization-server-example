@@ -17,8 +17,8 @@ import org.springframework.security.oauth2.server.authorization.OAuth2TokenIntro
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2TokenIntrospectionAuthenticationToken;
 import org.springframework.stereotype.Service;
-import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
-import ru.dlabs.sas.example.jsso.dto.IntrospectionPrincipal;
+import ru.dlabs.sas.example.jsso.dto.security.AuthorizedUser;
+import ru.dlabs.sas.example.jsso.dto.security.IntrospectionPrincipal;
 import ru.dlabs.sas.example.jsso.dto.TokenInfoDto;
 import ru.dlabs.sas.example.jsso.type.SSOScope;
 
@@ -45,7 +45,17 @@ public class IntrospectionService {
         HttpServletResponse response,
         Authentication authentication
     ) throws IOException {
-        var introspectionAuthenticationToken = (OAuth2TokenIntrospectionAuthenticationToken) authentication;
+        TokenInfoDto tokenInfoDto = this.createTokenDto((OAuth2TokenIntrospectionAuthenticationToken) authentication);
+
+        ServletServerHttpResponse httpResponse = new ServletServerHttpResponse(response);
+        mappingJackson2HttpMessageConverter.write(
+            tokenInfoDto,
+            null,
+            httpResponse
+        );
+    }
+
+    public TokenInfoDto createTokenDto(OAuth2TokenIntrospectionAuthenticationToken introspectionAuthenticationToken) {
         TokenInfoDto.TokenInfoDtoBuilder tokenInfoDtoBuilder = TokenInfoDto.builder().active(false);
         if (introspectionAuthenticationToken.getTokenClaims().isActive()) {
             OAuth2TokenIntrospection claims = introspectionAuthenticationToken.getTokenClaims();
@@ -67,13 +77,7 @@ public class IntrospectionService {
                 tokenInfoDtoBuilder
             );
         }
-
-        ServletServerHttpResponse httpResponse = new ServletServerHttpResponse(response);
-        mappingJackson2HttpMessageConverter.write(
-            tokenInfoDtoBuilder.build(),
-            null,
-            httpResponse
-        );
+        return tokenInfoDtoBuilder.build();
     }
 
     private void upgradeDtoByPrincipal(
@@ -142,10 +146,6 @@ public class IntrospectionService {
                 .lastName(authorizedUser.getLastName())
                 .middleName(authorizedUser.getMiddleName())
                 .birthday(authorizedUser.getBirthday());
-        }
-
-        if (clientScopes.contains(SSOScope.USER_AVATAR.getDatabaseCode())) {
-            builder.avatarFileId(authorizedUser.getAvatarFileId());
         }
 
         return builder.build();

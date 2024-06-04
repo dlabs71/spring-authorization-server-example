@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.dlabs.sas.example.jsso.dao.entity.UserEventEntity;
 import ru.dlabs.sas.example.jsso.dao.repository.UserEventRepository;
 import ru.dlabs.sas.example.jsso.dao.type.UserEventType;
-import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
+import ru.dlabs.sas.example.jsso.dto.security.AuthorizedUser;
 import ru.dlabs.sas.example.jsso.dto.PageableResponseDto;
 import ru.dlabs.sas.example.jsso.dto.UserEventDto;
 import ru.dlabs.sas.example.jsso.mapper.UserEventMapper;

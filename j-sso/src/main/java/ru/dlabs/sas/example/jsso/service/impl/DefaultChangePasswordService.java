@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import ru.dlabs.sas.example.jsso.components.ConfirmationStore;
 import ru.dlabs.sas.example.jsso.components.OTPStore;
-import ru.dlabs.sas.example.jsso.dto.AuthorizedUser;
+import ru.dlabs.sas.example.jsso.dto.security.AuthorizedUser;
 import ru.dlabs.sas.example.jsso.exception.ChangePasswordException;
 import ru.dlabs.sas.example.jsso.exception.InformationException;
 import ru.dlabs.sas.example.jsso.service.ChangePasswordService;

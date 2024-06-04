@@ -1,4 +1,4 @@
-package ru.dlabs.sas.example.jservice.config.security.introspector;
+package ru.dlabs.sas.example.jsso.config.security.introspector;
 
 import java.net.URI;
 import java.util.Collections;
@@ -19,7 +19,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
-import ru.dlabs.sas.example.jservice.dto.TokenInfoDto;
+import ru.dlabs.sas.example.jsso.dto.TokenInfoDto;
 
 @Slf4j
 public class CustomSpringTokenIntrospection implements OpaqueTokenIntrospector {

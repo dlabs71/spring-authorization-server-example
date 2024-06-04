@@ -16,11 +16,15 @@ import org.springframework.security.web.context.DelegatingSecurityContextReposit
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
-import ru.dlabs.sas.example.jsso.dto.AuthorizationInfo;
+import ru.dlabs.sas.example.jsso.config.security.properties.AuthorizationServerProperties;
+import ru.dlabs.sas.example.jsso.dto.security.AuthorizationInfo;
 import ru.dlabs.sas.example.jsso.service.UserClientService;
 import ru.dlabs.sas.example.jsso.service.security.RedisOAuth2AuthorizationConsentService;
 import ru.dlabs.sas.example.jsso.service.security.RedisOAuth2AuthorizationService;
 
+/**
+ * Тут объявлены дополнительные бины для конфигурации Security.
+ */
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
 public class SecurityConfigUtilities {
