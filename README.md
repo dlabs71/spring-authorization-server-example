@@ -12,6 +12,28 @@
 своём опыте.
 
 ### Часть 1: [Строим свой SSO сервер используя Spring Authorization Server](https://habr.com/ru/articles/737548/)
+
 ### Часть 2: [Строим свой SSO. PostgreSQL и ролевая модель](https://habr.com/ru/articles/746698/)
+
 ### Часть 3: [Строим свой SSO. Часть 3: Redis, Swagger, Vue.js](https://habr.com/ru/articles/748584/)
+
 ### Часть 4: [Строим свой SSO. Часть 4: Vue.js, Регистрация, Сброс пароля](https://habr.com/ru/articles/784552/)
+
+## Структура репозитория
+
+1. [j-sso](./j-sso/README.md) - SSO сервис, разработка которого рассматривается в статьях.
+2. [j-service](./j-service/README.md) - пример OAuth2 ресурс сервера, который работает в паре с `j-sso`
+3. [j-swagger-ui](./j-swagger-ui/README.md) - пример сервиса предоставляющего swagger-ui.
+   Смотри [`Раздел 3.2 статьи`](https://habr.com/ru/articles/748584/)
+4. [test-client](./test-client/README.md) - простой Vue.JS OAuth2 клиент. Используется в качестве приложения для
+   демонстрации авторизации через `j-sso`
+
+## Версии и используемые инструменты
+
+Для работы приложения и ведения разработки вам потребуется:
+
+1. Java 17
+2. Node 16
+3. Maven 3
+
+Остальные версии используемых библиотек смотрите в [pom.xml](pom.xml).

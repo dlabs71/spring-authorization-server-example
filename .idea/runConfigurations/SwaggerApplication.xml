@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SwaggerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ENABLE_JMX_AGENT" value="false" />
+    <option name="ENABLE_LAUNCH_OPTIMIZATION" value="false" />
+    <module name="j-swagger-ui" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="ru.dlabs.sas.example.jswagger.SwaggerApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

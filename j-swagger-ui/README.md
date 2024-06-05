@@ -1,0 +1,16 @@
+# Приложение предоставляющее интерфейс swagger
+
+Данное приложение является простейшим Spring Boot приложением с подключенной
+библиотекой `springdoc-openapi-starter-webmvc-ui`. Построение и настройка данного приложения разбирались
+в [этой статье (Раздел 3.2)](https://habr.com/ru/articles/748584/).
+
+## Сборка и запуск
+
+Сборка осуществляется следующей командой
+
+```shell
+mvn clean install -DskipTests
+```
+
+Для запуска можете использовать собранный jar архив или использовать подготовленную конфигурацию запуска для IntelliJ
+IDEA [SwaggerApplication.xml](../.idea/runConfigurations/SwaggerApplication.xml).

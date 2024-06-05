@@ -57,7 +57,7 @@ public class DefaultChangePasswordService implements ChangePasswordService {
         emailSender.sendHtmlTemplated(
             authorizedUser.getEmail(),
             messageService.getMessage("email.subject.init.reset.password"),
-            "classpath:mail-templates/reset-password-confirmed.html",
+            "classpath:mail-templates/reset-password-from-account.html",
             ImmutableMap.<String, Object>builder()
                 .put("firstName", authorizedUser.getFirstName())
                 .put("otp", generationResult.otp())

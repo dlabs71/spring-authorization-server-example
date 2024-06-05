@@ -6,7 +6,7 @@ module.exports = defineConfig({
     publicPath: process.env.VUE_APP_NODE_ENV !== "development" ? context + "/static" : "/",
 
     devServer: {
-        port: 8080,
+        port: 8181,
         client: {
             overlay: false
         }
