@@ -14,3 +14,9 @@ mvn clean install -DskipTests
 
 Для запуска можете использовать собранный jar архив или использовать подготовленную конфигурацию запуска для IntelliJ
 IDEA [SwaggerApplication.xml](../.idea/runConfigurations/SwaggerApplication.xml).
+
+## Environment variables для запуска приложения
+
+| Наименование          | Значение по умолчанию | Описание                  |
+|-----------------------|-----------------------|---------------------------|
+| JSWAGGER_ANSI_ENABLED | ALWAYS                | Включение подсветки логов | 

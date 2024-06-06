@@ -24,6 +24,9 @@ springdoc:
 spring:
   application:
     name: j-service
+  output:
+    ansi:
+      enabled: ${JSERVICE_ANSI_ENABLED:ALWAYS}
   mvc:
     cors:
       configs:
@@ -39,4 +42,4 @@ spring:
         opaquetoken:
           client-id: j-service-client
           client-secret: j-service-client
-          introspection-uri: http://localhost:7777/oauth2/token-info
+          introspection-uri: ${JSERVICE_SSO_URL:http://localhost:7777}/oauth2/token-info

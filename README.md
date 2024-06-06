@@ -37,3 +37,36 @@
 3. Maven 3
 
 Остальные версии используемых библиотек смотрите в [pom.xml](pom.xml).
+
+## Сборка всех сервисов
+
+Для сборки всех сервисов выполните команду:
+
+```shell
+clean install -DskipTests -P dev,client-build-and-copy
+```
+
+## Запуск в среде разработки
+
+В каждом сервисе, в файле README описано как собрать и запустить приложение. Также для запуска доступны готовые
+конфигурации для IntelliJ IDEA. Они находятся тут [runConfigurations](.idea/runConfigurations).
+
+Также для запуска доступна подготовленная конфигурация docker compose ([docker-compose.yml](docker-compose.yml)).
+
+Чтобы запустить сразу все сервисы и наслаждаться изучением их работы используйте подготовленные конфигурации IDEA:
+
+- Шаг 0. Указать корректные значения environment variables для j-sso. (Ищи в
+  файле [docker-compose.yml](docker-compose.yml) выражение `<set_value>`)
+- Шаг 1. Запустить БД. Используйте конфигурацию [run_database.xml](.idea/runConfigurations/run_database.xml).
+- Шаг 2. Накатить схему БД для j-sso. Перейдите в модуль j-sso и выполните следующую команду:
+  ```shell
+     mvn liquibase:update -Dliquibase.searchPath=./
+   ```
+- Шаг 3. Собрать и запустить все сервисы. Используйте конфигурацию
+  запуска [run_all_services.xml](.idea/runConfigurations/run_all_services.xml). Она сделает сборку всего приложения и
+  запустит все сервисы.
+
+При запуске сервисов в docker контейнерах используйте подготовленные конфигурации для запуска отладчика:
+
+- [Remote_debug_j_service.xml](.idea/runConfigurations/Remote_debug_j_service.xml)
+- [Remote_debug_j_sso.xml](.idea/runConfigurations/Remote_debug_j_sso.xml)

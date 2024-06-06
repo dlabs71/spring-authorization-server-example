@@ -9,7 +9,7 @@ import java.util.Map;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
-import ru.dlabs.sas.example.jsso.dto.TokenInfoDto;
+import ru.dlabs.sas.example.jsso.dto.security.TokenInfoDto;
 import ru.dlabs.sas.example.jsso.dto.security.AuthorizedUser;
 
 /**

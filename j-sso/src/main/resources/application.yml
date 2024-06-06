@@ -7,12 +7,15 @@ server:
 
 logging:
   level:
-    root: DEBUG
+    root: INFO
 #    org.springframework.security.web.FilterChainProxy: DEBUG
 
 spring:
   application:
     name: j-sso
+  output:
+    ansi:
+      enabled: ${JSSO_ANSI_ENABLED:ALWAYS}
   mvc:
     static-path-pattern: /static/**
     cors:

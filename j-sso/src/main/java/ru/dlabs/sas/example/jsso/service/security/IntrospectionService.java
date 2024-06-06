@@ -19,7 +19,7 @@ import org.springframework.security.oauth2.server.authorization.authentication.O
 import org.springframework.stereotype.Service;
 import ru.dlabs.sas.example.jsso.dto.security.AuthorizedUser;
 import ru.dlabs.sas.example.jsso.dto.security.IntrospectionPrincipal;
-import ru.dlabs.sas.example.jsso.dto.TokenInfoDto;
+import ru.dlabs.sas.example.jsso.dto.security.TokenInfoDto;
 import ru.dlabs.sas.example.jsso.type.SSOScope;
 
 /**

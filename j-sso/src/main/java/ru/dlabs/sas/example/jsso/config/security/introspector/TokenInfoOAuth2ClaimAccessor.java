@@ -5,7 +5,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import org.springframework.security.oauth2.core.OAuth2TokenIntrospectionClaimAccessor;
-import ru.dlabs.sas.example.jsso.dto.TokenInfoDto;
+import ru.dlabs.sas.example.jsso.dto.security.TokenInfoDto;
 
 public abstract class TokenInfoOAuth2ClaimAccessor implements OAuth2TokenIntrospectionClaimAccessor {
 

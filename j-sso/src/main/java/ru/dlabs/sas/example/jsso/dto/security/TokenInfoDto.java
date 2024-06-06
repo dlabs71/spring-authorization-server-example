@@ -1,4 +1,4 @@
-package ru.dlabs.sas.example.jsso.dto;
+package ru.dlabs.sas.example.jsso.dto.security;
 
 import java.net.URL;
 import java.time.Instant;
@@ -6,7 +6,6 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import ru.dlabs.sas.example.jsso.dto.security.IntrospectionPrincipal;
 
 @Getter
 @Setter

@@ -33,7 +33,8 @@ mvn clean install -DskipTests -P dev,client-build-and-copy
 ## Раскат БД
 
 Для запуска БД в среде разработки используйте `docker-compose.yml`. В нём определён сервис `j-postgres`. В проекте
-добавлена готовая конфигурация запуска для IntelliJ IDEA. См. в `[run_db.xml](../.idea/runConfigurations/run_db.xml)`.
+добавлена готовая конфигурация запуска для IntelliJ IDEA. См.
+в `[run_database.xml](../.idea/runConfigurations/run_database.xml)`.
 
 Раскат схемы БД выполняется строго из модуля `j-sso` следующей командой:
 
@@ -68,3 +69,13 @@ mvn liquibase:update -Dliquibase.searchPath=./
 | JSSO_YANDEX_CLIENT_SECRET |                       | Параметр client_secret для сервиса Yandex |
 | JSSO_SMTP_EMAIL           |                       | Email адрес служебного почтового сервиса  |
 | JSSO_SMTP_EMAIL_PASSWORD  |                       | Пароль для служебного почтового ящика     |
+| JSSO_REDIS_DB             | 0                     | Номер БД Redis                            |
+| JSSO_REDIS_HOST           | localhost             | Хост подключения к Redis                  |
+| JSSO_REDIS_PORT           | 6379                  | Порт подключения к Redis                  |
+| JSSO_REDIS_PASSWORD       | qwerty12345678        | Пароль подключения к Redis                |
+| JSSO_PG_HOST              | localhost             | Хост подключения к Postgresql             |
+| JSSO_PG_PORT              | 5435                  | Порт подключения к Postgresql             |
+| JSSO_PG_DB                | j-sso                 | Имя подключения к Postgresql              |
+| JSSO_PG_USER              | user                  | Имя пользователя подключения к Postgresql |
+| JSSO_PG_PASSWORD          | user                  | Пароль подключения к Postgresql           |
+| JSSO_ANSI_ENABLED         | ALWAYS                | Включение подсветки логов                 |

@@ -17,3 +17,10 @@ mvn clean install -DskipTests
 
 Для запуска можете использовать собранный jar архив или использовать подготовленную конфигурацию запуска для IntelliJ
 IDEA [ResourceApplication.xml](../.idea/runConfigurations/ResourceApplication.xml).
+
+## Environment variables для запуска приложения
+
+| Наименование          | Значение по умолчанию | Описание                  |
+|-----------------------|-----------------------|---------------------------|
+| JSERVICE_ANSI_ENABLED | ALWAYS                | Включение подсветки логов |
+| JSERVICE_SSO_URL      | http://localhost:7777 | URL подключения к j-sso   |   

@@ -13,6 +13,7 @@ import ru.dlabs.sas.example.jsso.dao.repository.RoleRepository;
 import ru.dlabs.sas.example.jsso.dao.repository.UserRepository;
 import ru.dlabs.sas.example.jsso.dto.FileStoreDto;
 import ru.dlabs.sas.example.jsso.dto.RegistrationDto;
+import ru.dlabs.sas.example.jsso.exception.InformationException;
 import ru.dlabs.sas.example.jsso.exception.RegistrationException;
 import ru.dlabs.sas.example.jsso.exception.ServiceException;
 import ru.dlabs.sas.example.jsso.service.FileStoreService;
@@ -154,7 +155,7 @@ public class DefaultUserService implements UserService {
         try {
             byte[] avatar = fileStoreService.download(avatarFileId);
             return new UserAvatar(fileStoreDto, avatar);
-        } catch (IOException e) {
+        } catch (IOException | InformationException | ServiceException e) {
             log.error(e.getMessage(), e);
             throw ServiceException.builder("$avatar.not.found").build();
         }

@@ -19,7 +19,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
-import ru.dlabs.sas.example.jsso.dto.TokenInfoDto;
+import ru.dlabs.sas.example.jsso.dto.security.TokenInfoDto;
 
 @Slf4j
 public class CustomSpringTokenIntrospection implements OpaqueTokenIntrospector {

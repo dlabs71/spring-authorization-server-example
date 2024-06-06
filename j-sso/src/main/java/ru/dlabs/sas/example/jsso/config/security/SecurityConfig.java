@@ -45,7 +45,9 @@ public class SecurityConfig {
         "/static/**",
         "/client/**",
         "/registration/**",
-        "/reset-password/**"
+        "/reset-password/**",
+        "/",
+        "/v3/api-docs"
     };
 
     private final CustomOAuth2UserService customOAuth2UserService;

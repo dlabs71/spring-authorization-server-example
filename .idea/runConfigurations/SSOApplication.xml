@@ -1,20 +1,23 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="SSOApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <option name="ACTIVE_PROFILES" value="production" />
-    <envs>
-      <env name="JSSO_SMTP_EMAIL" value="укажи значение" />
-      <env name="JSSO_SMTP_EMAIL_PASSWORD" value="укажи значение" />
-      <env name="JSSO_GITHUB_CLIENT_ID" value="укажи значение" />
-      <env name="JSSO_GITHUB_CLIENT_SECRET" value="укажи значение" />
-      <env name="JSSO_GOOGLE_CLIENT_ID" value="укажи значение" />
-      <env name="JSSO_GOOGLE_CLIENT_SECRET" value="укажи значение" />
-      <env name="JSSO_YANDEX_CLIENT_ID" value="укажи значение" />
-      <env name="JSSO_YANDEX_CLIENT_SECRET" value="укажи значение" />
-    </envs>
-    <module name="j-sso" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="ru.dlabs.sas.example.jsso.SSOApplication" />
-    <method v="2">
-      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/j-sso/pom.xml" goal="clean install -DskipTests -P dev,client-build-and-copy" />
-    </method>
-  </configuration>
+    <configuration default="false" name="SSOApplication" type="SpringBootApplicationConfigurationType"
+                   factoryName="Spring Boot">
+        <option name="ACTIVE_PROFILES" value="production"/>
+        <envs>
+            <env name="JSSO_SMTP_EMAIL" value="test1@d-labs.ru"/>
+            <env name="JSSO_SMTP_EMAIL_PASSWORD" value="workout71ru"/>
+            <env name="JSSO_GITHUB_CLIENT_ID" value="a2bae79c6a48abe36325"/>
+            <env name="JSSO_GITHUB_CLIENT_SECRET" value="dd19ff02d3c283ba2621fda929a10a9356d5907f"/>
+            <env name="JSSO_GOOGLE_CLIENT_ID"
+                 value="608360869000-uldbg7l09a14ilafb9ufllhtkrql8t7q.apps.googleusercontent.com"/>
+            <env name="JSSO_GOOGLE_CLIENT_SECRET" value="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"/>
+            <env name="JSSO_YANDEX_CLIENT_ID" value="6e790d4f87fd449eb10c4a4a3aaee022"/>
+            <env name="JSSO_YANDEX_CLIENT_SECRET" value="c0f27fea18a540c2a1960fe26b6e812b"/>
+        </envs>
+        <module name="j-sso"/>
+        <option name="SPRING_BOOT_MAIN_CLASS" value="ru.dlabs.sas.example.jsso.SSOApplication"/>
+        <method v="2">
+            <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/j-sso/pom.xml"
+                    goal="clean install -DskipTests -P dev,client-build-and-copy"/>
+        </method>
+    </configuration>
 </component>
