@@ -79,3 +79,4 @@ mvn liquibase:update -Dliquibase.searchPath=./
 | JSSO_PG_USER              | user                  | Имя пользователя подключения к Postgresql |
 | JSSO_PG_PASSWORD          | user                  | Пароль подключения к Postgresql           |
 | JSSO_ANSI_ENABLED         | ALWAYS                | Включение подсветки логов                 |
+| JSSO_PATH_STORAGE         | ~/j-sso-file-store    | Путь до файлового хранилища               |

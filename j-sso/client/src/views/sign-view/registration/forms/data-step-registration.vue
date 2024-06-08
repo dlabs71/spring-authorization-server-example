@@ -57,7 +57,7 @@
 </script>
 
 <script setup>
-    import {computed, defineEmits, watch} from 'vue';
+    import {computed, defineEmits, ref, watch} from 'vue';
     import {useStore} from "vuex";
     import {STEPS} from "@/views/sign-view/registration/forms/constants";
 
@@ -65,13 +65,13 @@
     const emit = defineEmits(['next']);
 
     // data
-    const dataForm = {
+    const dataForm = ref({
         email: null,
         secondName: null,
         firstName: null,
         middleName: null,
         birthday: null
-    }
+    });
     const schema = {
         email: "required|email",
         secondName: "required",
@@ -87,11 +87,11 @@
     watch(() => isShowed.value, (value) => {
         if (value) {
             if (!!storedRegistrationData.value) {
-                dataForm.email = storedRegistrationData.value.email;
-                dataForm.secondName = storedRegistrationData.value.secondName;
-                dataForm.firstName = storedRegistrationData.value.firstName;
-                dataForm.middleName = storedRegistrationData.value.middleName;
-                dataForm.birthday = storedRegistrationData.value.birthday;
+                dataForm.value.email = storedRegistrationData.value.email;
+                dataForm.value.secondName = storedRegistrationData.value.secondName;
+                dataForm.value.firstName = storedRegistrationData.value.firstName;
+                dataForm.value.middleName = storedRegistrationData.value.middleName;
+                dataForm.value.birthday = storedRegistrationData.value.birthday;
             }
         }
     });
@@ -107,31 +107,31 @@
 
 
 <style lang="scss" scoped>
-.step-form {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    .v-text-field {
+    .step-form {
         width: 100%;
-    }
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        left: 0;
 
-    .submit-btn {
-        width: 260px;
-        color: white;
-        font-weight: bold;
+        .v-text-field {
+            width: 100%;
+        }
 
-        background: linear-gradient(-45deg, #f91b4c, #fa8844);
-        background-size: 400% 400%;
-        animation: blink 3s ease infinite;
+        .submit-btn {
+            width: 260px;
+            color: white;
+            font-weight: bold;
 
-        .v-btn__content {
-            margin-left: 18px;
+            background: linear-gradient(-45deg, #f91b4c, #fa8844);
+            background-size: 400% 400%;
+            animation: blink 3s ease infinite;
+
+            .v-btn__content {
+                margin-left: 18px;
+            }
         }
     }
-}
 </style>

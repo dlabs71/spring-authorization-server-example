@@ -51,6 +51,9 @@ services:
       JSSO_PG_DB: j-sso
       JSSO_PG_USER: user
       JSSO_PG_PASSWORD: user
+      JSSO_PATH_STORAGE: /j-file-storage
+    volumes:
+      - ./docker/j-sso/file-storage:/j-file-storage
     depends_on:
       - j-postgres
       - j-redis

@@ -1,14 +1,12 @@
 import {configure, defineRule} from 'vee-validate';
-import * as rules from '@vee-validate/rules';
+import {all} from '@vee-validate/rules';
 import {localize, setLocale} from '@vee-validate/i18n';
 import ru from '@vee-validate/i18n/dist/locale/ru.json';
 
 export default {
     install(Vue, opts) {
-        Object.keys(rules).forEach(rule => {
-            if (rule !== 'default') {
-                defineRule(rule, rules[rule]);
-            }
+        Object.keys(all).forEach(rule => {
+            defineRule(rule, all[rule]);
         });
 
         defineRule('confirmed', (value, [target], ctx) => {

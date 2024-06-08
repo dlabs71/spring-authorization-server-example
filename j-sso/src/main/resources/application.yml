@@ -21,9 +21,9 @@ spring:
     cors:
       configs:
         - pattern: /**
-          allowed-origins: "http://127.0.0.1:8080,http://localhost:8080,http://localhost:7778,http://localhost:7979"
+          allowed-origins: "http://127.0.0.1:8080,http://localhost:8080,http://localhost:7778,http://localhost:7979,http://localhost:8181"
           allowed-headers: "*"
-          exposed-headers: "*"
+          exposed-headers: ${spring.security.oauth2.authorizationserver.custom-handler-header-name}
           allowed-methods: "*"
           allow-credentials: true
   web:
@@ -58,7 +58,7 @@ otp-store:
   cookie-max-age: 180
 
 file-store:
-  base-path: ~/j-sso-file-store
+  base-path: ${JSSO_PATH_STORAGE:~/j-sso-file-store}
 
 scheduled-tasks:
   delete-old-events:
