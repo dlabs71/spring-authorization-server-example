@@ -37,7 +37,7 @@ spring:
         - pattern: /**
           allowed-origins: "http://127.0.0.1:8080,http://localhost:8080,http://localhost:7778"
           allowed-headers: "*"
-          exposed-headers: "*"
+          exposed-headers: ${spring.security.oauth2.authorizationserver.custom-handler-header-name}
           allowed-methods: "*"
           allow-credentials: true
   web:
