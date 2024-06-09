@@ -98,7 +98,7 @@
 
     // methods
     let submit = () => {
-        emit('next', dataForm);
+        emit('next', dataForm.value);
     };
 
     // computed

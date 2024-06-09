@@ -70,3 +70,17 @@ clean install -DskipTests -P dev,client-build-and-copy
 
 - [Remote_debug_j_service.xml](.idea/runConfigurations/Remote_debug_j_service.xml)
 - [Remote_debug_j_sso.xml](.idea/runConfigurations/Remote_debug_j_sso.xml)
+
+## Скриншоты
+
+#### Личный кабинет пользователя (администратора).
+
+![img](./readme-images/example_login.gif)
+
+#### Регистрация пользователя
+
+![img](./readme-images/example_registration.gif)
+
+#### Вход с использованием j-sso (test-client)
+
+![img](./readme-images/example_test_client.gif)
