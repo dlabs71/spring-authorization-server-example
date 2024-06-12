@@ -52,6 +52,7 @@ services:
       JSSO_PG_USER: user
       JSSO_PG_PASSWORD: user
       JSSO_PATH_STORAGE: /j-file-storage
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
     volumes:
       - ./docker/j-sso/file-storage:/j-file-storage
     depends_on:
@@ -97,6 +98,20 @@ services:
       context: ./test-client
     ports:
       - 8080:8080
+    networks:
+      - j-network
+
+  csrf-example:
+    container_name: csrf-example
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    build:
+      context: docker/csrf-example
+    ports:
+      - 9090:8080
     networks:
       - j-network
 

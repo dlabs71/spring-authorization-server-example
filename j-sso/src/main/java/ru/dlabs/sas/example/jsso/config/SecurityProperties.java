@@ -14,7 +14,7 @@ public class SecurityProperties {
     @Configuration
     @ConfigurationProperties(prefix = "spring.security.headers")
     public static class Headers {
-        private List<String> scp;
+        private List<String> csp;
         private HSTS hsts;
         private List<String> permissionPolicy;
 
@@ -26,16 +26,16 @@ public class SecurityProperties {
             private Boolean preload;
         }
 
-        public String getSCPLikeString() {
-            if (this.scp != null) {
-                return String.join("; ", this.scp);
+        public String getCSPLikeString() {
+            if (this.csp != null) {
+                return String.join("; ", this.csp);
             }
             return null;
         }
 
         public String getPermissionPolicyLikeString() {
-            if (this.scp != null) {
-                return String.join(", ", this.scp);
+            if (this.csp != null) {
+                return String.join(", ", this.csp);
             }
             return null;
         }

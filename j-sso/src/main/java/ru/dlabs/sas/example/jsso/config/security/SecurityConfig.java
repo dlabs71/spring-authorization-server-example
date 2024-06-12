@@ -1,7 +1,13 @@
 package ru.dlabs.sas.example.jsso.config.security;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.owasp.encoder.Encode;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -10,7 +16,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -23,6 +28,7 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 import ru.dlabs.sas.example.jsso.config.SecurityProperties;
+import ru.dlabs.sas.example.jsso.config.filter.XSSFilter;
 import ru.dlabs.sas.example.jsso.config.security.handler.CustomAuthenticationSuccessHandler;
 import ru.dlabs.sas.example.jsso.config.security.handler.CustomOauthAuthenticationSuccessHandler;
 import ru.dlabs.sas.example.jsso.config.security.properties.AuthorizationServerProperties;
@@ -30,6 +36,7 @@ import ru.dlabs.sas.example.jsso.service.UserEventService;
 import ru.dlabs.sas.example.jsso.service.impl.CustomOAuth2UserService;
 import ru.dlabs.sas.example.jsso.service.impl.CustomUserDetailsService;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -85,17 +92,17 @@ public class SecurityConfig {
 
         http.headers(customizer -> {
             customizer.contentSecurityPolicy(
-                    configurer -> configurer.policyDirectives(securityHeaderProperties.getSCPLikeString())
+                    configurer -> configurer.policyDirectives(securityHeaderProperties.getCSPLikeString())
             );
             customizer.permissionsPolicy(configurer -> configurer.policy(
                     securityHeaderProperties.getPermissionPolicyLikeString()
             ));
-            customizer.frameOptions(HeadersConfigurer.FrameOptionsConfig::deny);
-            customizer.httpStrictTransportSecurity(configurer -> configurer
-                    .maxAgeInSeconds(31536000)
-                    .includeSubDomains(true)
-                    .preload(true)
-            );
+//            customizer.frameOptions(HeadersConfigurer.FrameOptionsConfig::deny);
+//            customizer.httpStrictTransportSecurity(configurer -> configurer
+//                    .maxAgeInSeconds(31536000)
+//                    .includeSubDomains(true)
+//                    .preload(true)
+//            );
         });
 
         http.securityContext(customizer -> customizer.securityContextRepository(securityContextRepository));
@@ -155,5 +162,25 @@ public class SecurityConfig {
         );
 
         this.failureHandler = new SimpleUrlAuthenticationFailureHandler();
+    }
+
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer objectMapperBuilder() {
+        return builder -> builder.deserializerByType(String.class, new JsonDeserializer<String>() {
+            @Override
+            public String deserialize(JsonParser p, DeserializationContext ctxt)
+                    throws IOException {
+                String origin = p.getValueAsString();
+                return Encode.forHtmlContent(origin);
+            }
+        });
+    }
+
+    @Bean
+    public FilterRegistrationBean<XSSFilter> xssFilter() {
+        XSSFilter xssFilter = new XSSFilter();
+        FilterRegistrationBean<XSSFilter> registrationBean = new FilterRegistrationBean<>(xssFilter);
+        registrationBean.addUrlPatterns("/*");
+        return registrationBean;
     }
 }

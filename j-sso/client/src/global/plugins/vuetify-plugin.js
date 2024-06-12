@@ -25,6 +25,7 @@ export default {
                 }
             },
             theme: {
+                cspNonce: 'dQw4w9WgXcQ',
                 defaultTheme: 'appTheme',
                 themes: {
                     appTheme: {
