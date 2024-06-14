@@ -25,7 +25,6 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
-import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 import ru.dlabs.sas.example.jsso.config.SecurityProperties;
 import ru.dlabs.sas.example.jsso.config.filter.XSSFilter;
@@ -87,7 +86,7 @@ public class SecurityConfig {
         http.with(socialConfigurer, Customizer.withDefaults());
         http.csrf(configurer -> configurer
                 .csrfTokenRepository(new HttpSessionCsrfTokenRepository())
-                .csrfTokenRequestHandler(new XorCsrfTokenRequestAttributeHandler())
+                .csrfTokenRequestHandler(new CustomCsrfTokenRequestHandler())
         );
 
         http.headers(customizer -> {
