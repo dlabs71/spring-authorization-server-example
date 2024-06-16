@@ -10,6 +10,7 @@
             <option value="j-service" />
             <option value="j-swagger-ui" />
             <option value="test-client" />
+            <option value="csrf-example" />
           </list>
         </option>
         <option name="sourceFilePath" value="docker-compose.yml" />
