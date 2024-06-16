@@ -1,27 +1,11 @@
 import axios from "axios";
 
-
-function searchMetaContent(name) {
-    let element = document.querySelectorAll(`meta[name='${name}']`).item(0);
-    if (!element) {
-        return null;
-    }
-    return element.getAttribute('content');
-}
-
-function applyCsrfToken(requestConfig) {
+function applyCsrfTokenFromMetaTag(requestConfig) {
     let token = searchMetaContent('_csrf');
     let tokenHeader = searchMetaContent('_csrf_header');
     if (token && tokenHeader) {
         requestConfig.headers[tokenHeader] = token;
     }
-}
-
-function getCookie(name) {
-    let matches = document.cookie.match(new RegExp(
-        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
-    return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
 function applyCsrfTokenFromCookie(requestConfig) {
@@ -99,6 +83,20 @@ function applyAxiosInterceptor(store, router) {
         });
 }
 
+function searchMetaContent(name) {
+    let element = document.querySelectorAll(`meta[name='${name}']`).item(0);
+    if (!element) {
+        return null;
+    }
+    return element.getAttribute('content');
+}
+
+function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}
 
 export default {
     install(Vue, options) {

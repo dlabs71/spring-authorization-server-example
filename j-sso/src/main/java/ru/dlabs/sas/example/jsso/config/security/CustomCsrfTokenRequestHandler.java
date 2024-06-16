@@ -22,11 +22,17 @@ public class CustomCsrfTokenRequestHandler implements CsrfTokenRequestHandler {
 
     private final XorCsrfTokenRequestAttributeHandler delegate = new XorCsrfTokenRequestAttributeHandler();
 
+    private static final String COOKIE_NAME = "XSRF-TOKEN";
+
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, Supplier<CsrfToken> csrfToken) {
         this.delegate.handle(request, response, csrfToken);
+
+        // получаем обновлённый токен
         CsrfToken token = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-        Cookie cookie = new Cookie("XSRF-TOKEN", token.getToken());
+
+        // устанавливаем его в куки ответа
+        Cookie cookie = new Cookie(COOKIE_NAME, token.getToken());
         cookie.setPath("/");
         cookie.setAttribute("SameSite", "Lax");
         response.addCookie(cookie);
