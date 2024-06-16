@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -93,15 +94,24 @@ public class SecurityConfig {
             customizer.contentSecurityPolicy(
                     configurer -> configurer.policyDirectives(securityHeaderProperties.getCSPLikeString())
             );
+
+            // Настройка заголовка X-Frame-Options
+            customizer.frameOptions(HeadersConfigurer.FrameOptionsConfig::deny);
+
+            // Настройка заголовка Strict-Transport-Security
+            customizer.httpStrictTransportSecurity(configurer -> configurer
+                    // указываем какое количество времени использовать HTTPS сразу
+                    .maxAgeInSeconds(securityHeaderProperties.getHsts().getMaxAge())
+                    // применять ли те же правила для поддоменов
+                    .includeSubDomains(securityHeaderProperties.getHsts().getIncludeSubDomains())
+                    // использовать ли предварительную загрузку (https://hstspreload.org/)
+                    .preload(securityHeaderProperties.getHsts().getPreload())
+            );
+
+            // Настройка заголовка Permissions-Policy
             customizer.permissionsPolicy(configurer -> configurer.policy(
                     securityHeaderProperties.getPermissionPolicyLikeString()
             ));
-//            customizer.frameOptions(HeadersConfigurer.FrameOptionsConfig::deny);
-//            customizer.httpStrictTransportSecurity(configurer -> configurer
-//                    .maxAgeInSeconds(31536000)
-//                    .includeSubDomains(true)
-//                    .preload(true)
-//            );
         });
 
         http.securityContext(customizer -> customizer.securityContextRepository(securityContextRepository));

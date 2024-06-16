@@ -7,6 +7,7 @@ spring:
         - img-src 'self'
         - font-src 'self' fonts.gstatic.com
         - style-src 'self' fonts.googleapis.com 'unsafe-inline'
+        - frame-ancestors 'self'
       hsts:
         max-age: 63072000
         include-sub-domains: true
@@ -90,3 +91,4 @@ spring:
         - img-src 'self'
         - font-src 'self' fonts.gstatic.com
         - style-src 'self' fonts.googleapis.com 'nonce-dQw4w9WgXcQ' 'sha256-VBcDFo4Ltbcy2NNfi2Jeyo6IXzMKysUIvWc1d1FGhgY='
+        - frame-ancestors 'self'
