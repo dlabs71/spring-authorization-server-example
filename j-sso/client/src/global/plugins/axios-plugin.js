@@ -1,15 +1,7 @@
 import axios from "axios";
 
 
-function searchMetaContent(name) {
-    let element = document.querySelectorAll(`meta[name='${name}']`).item(0);
-    if (!element) {
-        return null;
-    }
-    return element.getAttribute('content');
-}
-
-function applyCsrfToken(requestConfig) {
+function applyCsrfTokenFromMetaTag(requestConfig) {
     let token = searchMetaContent('_csrf');
     let tokenHeader = searchMetaContent('_csrf_header');
     if (token && tokenHeader) {
@@ -17,24 +9,10 @@ function applyCsrfToken(requestConfig) {
     }
 }
 
-function getCookie(name) {
-    let matches = document.cookie.match(new RegExp(
-        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
-    return matches ? decodeURIComponent(matches[1]) : undefined;
-}
-
-function applyCsrfTokenFromCookie(requestConfig) {
-    let token = getCookie("XSRF-TOKEN");
-    if (token) {
-        requestConfig.headers["X-CSRF-TOKEN"] = token;
-    }
-}
-
 function applyAxiosInterceptor(store, router) {
     axios.interceptors.request.use(config => {
         if (['DELETE', 'POST', 'PUT'].includes(config.method.toUpperCase())) {
-            applyCsrfTokenFromCookie(config);
+            applyCsrfTokenFromMetaTag(config);
         }
         return config;
     });
@@ -97,6 +75,14 @@ function applyAxiosInterceptor(store, router) {
             }
             return Promise.reject(response);
         });
+}
+
+function searchMetaContent(name) {
+    let element = document.querySelectorAll(`meta[name='${name}']`).item(0);
+    if (!element) {
+        return null;
+    }
+    return element.getAttribute('content');
 }
 
 

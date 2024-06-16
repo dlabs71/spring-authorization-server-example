@@ -20,11 +20,20 @@ export class LoginAPI {
         formData.append("username", username);
         formData.append("password", password);
 
+        // тут делается запрос с отправлением CSRF токена из meta тегов
         return axios.post(LoginAPI.__LOGIN_URL, formData)
             .then(result => {
+                // после получения ответа, токен на сервере уже сменился,
+                // но это не мешает нам сделать парочку GET запросов,
+                // так как на них токен не проверяется
+
                 if (result.headers.has(LoginAPI.__LOCATION_HEADER)) {
                     this.resetSessionStore();
+
+                    // делаем GET запрос
                     this.getCurrentUser().then(() => {
+
+                        // Перезагружаем страницу. Соответственно, получив в meta тегах обновлённый токен
                         window.location = result.headers.get(LoginAPI.__LOCATION_HEADER);
                     });
                 }
@@ -62,6 +71,9 @@ export class LoginAPI {
     afterLogout() {
         this.resetSessionStore();
         router.replace({name: 'login'});
+
+        // добавим обновление страницы, так как CSRF токен сменился
+        window.location.reload();
     }
 }
 

@@ -24,6 +24,7 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 import ru.dlabs.sas.example.jsso.config.SecurityProperties;
@@ -86,7 +87,7 @@ public class SecurityConfig {
         http.with(socialConfigurer, Customizer.withDefaults());
         http.csrf(configurer -> configurer
                 .csrfTokenRepository(new HttpSessionCsrfTokenRepository())
-                .csrfTokenRequestHandler(new CustomCsrfTokenRequestHandler())
+                .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
         );
 
         http.headers(customizer -> {
@@ -96,12 +97,6 @@ public class SecurityConfig {
             customizer.permissionsPolicy(configurer -> configurer.policy(
                     securityHeaderProperties.getPermissionPolicyLikeString()
             ));
-//            customizer.frameOptions(HeadersConfigurer.FrameOptionsConfig::deny);
-//            customizer.httpStrictTransportSecurity(configurer -> configurer
-//                    .maxAgeInSeconds(31536000)
-//                    .includeSubDomains(true)
-//                    .preload(true)
-//            );
         });
 
         http.securityContext(customizer -> customizer.securityContextRepository(securityContextRepository));
