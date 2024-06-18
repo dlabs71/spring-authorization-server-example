@@ -47,3 +47,8 @@ VALUES ('j-service-client', '$2a$10$VUGAIiHoa1y8fuk/gjwVr.n5Rp4oP7PELX8Egpgk5.jQ
         '2072-01-01 00:00:00.000000',
         'Клиент приложения j-service', '{client_secret_basic}', '{client_credentials}',
         '{}', '{}', null, 'system', '2024-06-02 17:40:03.678306', 'system', '2024-06-02 17:40:03.678306', 0);
+
+--changeSet daivanov:system-oauth2-clients-v2-data-06
+UPDATE sso.system_oauth2_clients_v2
+SET authorization_grant_types = '{refresh_token,client_credentials,authorization_code,password}'
+WHERE client_id = 'test-client';

@@ -38,6 +38,7 @@ public class OAuth2PasswordAuthenticationConverter implements AuthenticationConv
     public Authentication convert(HttpServletRequest request) {
         MultiValueMap<String, String> parameters = this.getFormParameters(request);
 
+        // проверяем параметр grant_type
         String grantType = parameters.getFirst(OAuth2ParameterNames.GRANT_TYPE);
         if (!AuthorizationGrantType.PASSWORD.getValue().equals(grantType)) {
             return null;
@@ -45,16 +46,19 @@ public class OAuth2PasswordAuthenticationConverter implements AuthenticationConv
 
         Authentication clientPrincipal = SecurityContextHolder.getContext().getAuthentication();
 
+        // получаем параметр username из запроса
         String username = parameters.getFirst(USERNAME_PARAM);
         if (!StringUtils.hasText(username) || parameters.get(USERNAME_PARAM).size() != 1) {
             this.throwError(OAuth2ErrorCodes.INVALID_REQUEST, USERNAME_PARAM, ACCESS_TOKEN_REQUEST_ERROR_URI);
         }
 
+        // получаем параметр password из запроса
         String password = parameters.getFirst(PASSWORD_PARAM);
         if (!StringUtils.hasText(password) || parameters.get(PASSWORD_PARAM).size() != 1) {
             this.throwError(OAuth2ErrorCodes.INVALID_REQUEST, PASSWORD_PARAM, ACCESS_TOKEN_REQUEST_ERROR_URI);
         }
 
+        // получаем параметр scope из запроса
         String scope = parameters.getFirst(OAuth2ParameterNames.SCOPE);
         if (StringUtils.hasText(scope) && parameters.get(OAuth2ParameterNames.SCOPE).size() != 1) {
             this.throwError(
@@ -68,6 +72,7 @@ public class OAuth2PasswordAuthenticationConverter implements AuthenticationConv
             requestedScopes = new HashSet<>(Arrays.asList(StringUtils.delimitedListToStringArray(scope, " ")));
         }
 
+        // дополнительные параметры, если такие существуют
         Map<String, Object> additionalParameters = new HashMap<>();
         parameters.forEach((key, value) -> {
             if (!key.equals(OAuth2ParameterNames.GRANT_TYPE) &&

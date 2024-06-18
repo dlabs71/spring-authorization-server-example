@@ -43,6 +43,8 @@ public class AuthorizationServerConfig {
         authorizationServerConfigurer.tokenIntrospectionEndpoint((config) -> {
             config.introspectionResponseHandler(introspectionService::introspectionResponse);
         });
+
+        // настроим OAuth2TokenEndpointConfigurer. Добавим поддержку password grant type
         authorizationServerConfigurer.tokenEndpoint(customizer -> {
             customizer.accessTokenRequestConverter(new OAuth2PasswordAuthenticationConverter());
             customizer.authenticationProvider(new OAuth2PasswordTokenAuthenticationProvider(
