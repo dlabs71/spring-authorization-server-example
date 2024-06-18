@@ -12,6 +12,11 @@
             LOGIN (client credentials)
         </button>
     </div>
+    <div style="margin-top: 20px">
+        <button @click="loginPassword">
+            LOGIN (password grant type). Login: admin@example.com
+        </button>
+    </div>
 </template>
 
 <script>
@@ -25,6 +30,11 @@
             },
             loginClient() {
                 return LoginService.loginClient().then(() => {
+                    this.$router.replace({name: "home"});
+                })
+            },
+            loginPassword() {
+                return LoginService.loginPassword().then(() => {
                     this.$router.replace({name: "home"});
                 })
             }

@@ -42,6 +42,26 @@ export default {
         });
     },
 
+    loginPassword() {
+        let payload = new FormData()
+        payload.append('grant_type', 'password');
+        payload.append('username', "admin@example.com");
+        payload.append('password', "admin@example.com");
+        payload.append('scope', 'SSO.USER_IDENTIFICATION SSO.USER_PROFILE_INFO SSO.USER_AVATAR SSO.USER_AUTHORITIES');
+
+        return axios.post('/oauth2/token', payload, {
+                headers: {
+                    'Content-type': 'application/url-form-encoded',
+                    'Authorization': authHeaderValue
+                }
+            }
+        ).then(response => {
+            console.log("Result getting tokens (client credentials): " + response.data)
+            window.sessionStorage.setItem(ACCESS_TOKEN_KEY, response.data[ACCESS_TOKEN_KEY]);
+            window.sessionStorage.setItem(REFRESH_TOKEN_KEY, response.data[REFRESH_TOKEN_KEY]);
+        });
+    },
+
     refreshToken() {
         let payload = new FormData()
         payload.append('grant_type', 'refresh_token')
