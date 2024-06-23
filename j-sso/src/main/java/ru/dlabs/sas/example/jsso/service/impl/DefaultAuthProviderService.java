@@ -165,6 +165,7 @@ public class DefaultAuthProviderService implements AuthProviderService {
         if (email == null) {
             throw new AuthException(AuthErrorCode.EMAIL_IS_EMPTY);
         }
+        email = email.trim().toLowerCase();
         UserEntity user = this.userRepository.findByEmail(email);
         if (user == null) {
             user = new UserEntity();

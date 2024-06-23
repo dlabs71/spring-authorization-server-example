@@ -1,12 +1,9 @@
 package ru.dlabs.sas.example.jsso.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+
 import java.time.LocalDate;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Setter
@@ -28,4 +25,11 @@ public class RegistrationDto {
 
     @JsonProperty(required = true)
     private String password;
+
+    public String getEmail() {
+        if (email == null) {
+            return null;
+        }
+        return email.trim().toLowerCase();
+    }
 }
