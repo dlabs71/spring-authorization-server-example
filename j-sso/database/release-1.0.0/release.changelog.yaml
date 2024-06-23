@@ -74,6 +74,10 @@ databaseChangeLog:
       file: data/scopes-data.sql
       relativeToChangelogFile: true
       contextFilter: prod
+  - include:
+      file: data/users.sql
+      relativeToChangelogFile: true
+      contextFilter: prod
   
   # Data dev
   - include:
