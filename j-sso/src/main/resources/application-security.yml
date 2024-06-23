@@ -87,6 +87,6 @@ spring:
       csp:
         - default-src 'self'
         - script-src 'self'
-        - img-src 'self'
+        - "img-src 'self' data:"
         - font-src 'self' fonts.gstatic.com
         - style-src 'self' fonts.googleapis.com 'nonce-dQw4w9WgXcQ' 'sha256-VBcDFo4Ltbcy2NNfi2Jeyo6IXzMKysUIvWc1d1FGhgY='
