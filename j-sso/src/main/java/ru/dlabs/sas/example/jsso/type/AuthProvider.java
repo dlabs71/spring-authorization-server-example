@@ -13,11 +13,11 @@ public enum AuthProvider {
         this.providerName = providerName;
     }
 
-    public static AuthProvider fingByName(String providerName) {
+    public static AuthProvider findByName(String providerName) {
         return Stream.of(values())
-                .filter(item -> item.getProviderName().equals(providerName))
-                .findFirst()
-                .orElse(null);
+            .filter(item -> item.getProviderName().equals(providerName))
+            .findFirst()
+            .orElse(null);
     }
 
     public String getProviderName() {

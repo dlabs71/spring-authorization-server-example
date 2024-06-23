@@ -5,7 +5,11 @@ const state = {
 
 const getters = {
     getAuthUser: state => state.user,
-    isAuth: state => !!state.user
+    getAuthUserEmail: state => !!state.user && state.user.email,
+    isAuth: state => !!state.user,
+    getAuthorities: state => state.authorities,
+    isAdmin: state => !!state.user && state.user.admin,
+    isSuperuser: state => !!state.user && state.user.superuser
 }
 
 const mutations = {

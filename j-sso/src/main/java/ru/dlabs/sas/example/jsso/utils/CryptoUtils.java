@@ -14,6 +14,9 @@ import ru.dlabs.sas.example.jsso.exception.CryptoException;
 @UtilityClass
 public class CryptoUtils {
 
+    /**
+     * Сформировать криптографический ключ на основе пароля.
+     */
     public byte[] pbkdf(String password, byte[] salt, int derivedKeyLength, int iterations) {
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iterations, derivedKeyLength);
         SecretKeyFactory keyFactory;
@@ -30,6 +33,9 @@ public class CryptoUtils {
         }
     }
 
+    /**
+     * Получить hash указанной строки.
+     */
     public String hash(String input) {
         MessageDigest md;
         try {

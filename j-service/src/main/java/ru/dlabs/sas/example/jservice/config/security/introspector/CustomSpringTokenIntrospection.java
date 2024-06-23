@@ -1,5 +1,7 @@
 package ru.dlabs.sas.example.jservice.config.security.introspector;
 
+import java.net.URI;
+import java.util.Collections;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpHeaders;
@@ -19,16 +21,18 @@ import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 import ru.dlabs.sas.example.jservice.dto.TokenInfoDto;
 
-import java.net.URI;
-import java.util.Collections;
-
 @Slf4j
 public class CustomSpringTokenIntrospection implements OpaqueTokenIntrospector {
 
     private final RestOperations restOperations;
     private Converter<String, RequestEntity<?>> requestEntityConverter;
 
-    public CustomSpringTokenIntrospection(String introspectionUri, String clientId, String clientSecret, MappingJackson2HttpMessageConverter jackson2HttpMessageConverter) {
+    public CustomSpringTokenIntrospection(
+        String introspectionUri,
+        String clientId,
+        String clientSecret,
+        MappingJackson2HttpMessageConverter jackson2HttpMessageConverter
+    ) {
         Assert.notNull(introspectionUri, "introspectionUri cannot be null");
         Assert.notNull(clientId, "clientId cannot be null");
         Assert.notNull(clientSecret, "clientSecret cannot be null");

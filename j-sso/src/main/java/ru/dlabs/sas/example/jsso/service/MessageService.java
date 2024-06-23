@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 @Slf4j
 @Service
@@ -45,5 +46,15 @@ public class MessageService {
      */
     public String getMessage(String code, Object... args) {
         return messageSource.getMessage(code, args, russian);
+    }
+
+    /**
+     * Получить сообщение используя Enum.
+     * Код сообщения в таком случае, это имя enum класса (вместе с пакетом) и имя самого enum разделённые точкой.
+     */
+    public String getMessage(Enum e) {
+        Assert.notNull(e, "Error convert enum value to message. Enum value is null.");
+        String className = e.getClass().getName();
+        return getMessage(className + "." + e);
     }
 }

@@ -11,6 +11,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
+import ru.dlabs.sas.example.jsso.dao.type.UserEventType;
+import ru.dlabs.sas.example.jsso.service.UserEventService;
 
 /**
  * Создаём аналог класса {@linkplain org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler}.
@@ -23,11 +25,22 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 @RequiredArgsConstructor
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-    /** URL до главной страницы SSO **/
+    /**
+     * URL до главной страницы SSO
+     **/
     private final String locationUrl;
 
-    /** Имя заголовка, в котором будет передан URL для перенаправления **/
+    /**
+     * Имя заголовка, в котором будет передан URL для перенаправления
+     **/
     private final String headerName;
+
+    /**
+     * Указан путь запроса для которого вместо перенаправления будет указывание специального заголовка.
+     */
+    private final String savedRequestUrlStartsWith;
+
+    private final UserEventService eventService;
 
 
     private final RequestCache requestCache = new HttpSessionRequestCache();
@@ -45,8 +58,18 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             this.requestCache.removeRequest(request, response);
             this.clearAuthenticationAttributes(request);
             String targetUrl = savedRequest.getRedirectUrl();
-            response.setHeader(headerName, targetUrl);
+
+            // Таким образом понимаем когда использовать сохранённый запрос из requestCache, а когда
+            // указать переход на главную форму SSO
+            if (targetUrl.startsWith(savedRequestUrlStartsWith)) {
+                response.setHeader(headerName, targetUrl);
+            } else {
+                response.setHeader(headerName, locationUrl);
+            }
         }
+
+        String clientId = HandlerUtils.getClientId(savedRequest);
+        eventService.createEvent(UserEventType.USER_LOGIN, clientId, request);
     }
 
     /**

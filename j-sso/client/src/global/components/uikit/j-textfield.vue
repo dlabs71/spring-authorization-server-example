@@ -1,11 +1,8 @@
 <template>
     <v-text-field
-        v-model="value"
-        :append-inner-icon="appendInnerIcon"
+        v-model="model"
         :error-messages="errors"
         :label="label"
-        :type="type"
-        v-bind="$attrs"
         variant="outlined"
         @blur="handleBlur"
     />
@@ -14,34 +11,36 @@
 <script>
     export default {
         name: 'j-text-field',
-        inheritAttrs: false
+        inheritAttrs: true
     }
 </script>
 
 <script setup>
-    import {defineProps, toRef} from 'vue';
+    import {defineProps, toRef, watch, defineModel, onMounted} from 'vue';
     import {useField} from 'vee-validate';
 
     const props = defineProps({
         name: {
             type: String,
-            requird: true,
-        },
-        type: {
-            type: String,
-            requird: true,
+            required: true,
         },
         label: {
             type: String,
             required: true,
-        },
-        appendInnerIcon: {
-            type: String
         }
     });
 
-    const {value, handleBlur, errors} = useField(toRef(props, 'name'), undefined, {
-        label: toRef(props, 'label')
+    const model = defineModel();
+    const {value, handleBlur, errors} = useField(
+        toRef(props, 'name'),
+        undefined,
+        {
+            label: toRef(props, 'label')
+        }
+    );
+
+    watch(() => model.value, () => {
+        value.value = model.value;
     });
 </script>
 

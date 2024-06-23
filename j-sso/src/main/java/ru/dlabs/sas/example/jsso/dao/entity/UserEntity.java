@@ -40,10 +40,14 @@ public class UserEntity extends VersionedBusinessEntity<UUID> {
     private String middleName;
     @Column(name = "birthday")
     private LocalDate birthday;
-    @Column(name = "avatar_url")
-    private String avatarUrl;
+    @Column(name = "avatar_file_id")
+    private UUID avatarFileId;
     @Column(name = "active", nullable = false)
     private Boolean active;
+    @Column(name = "admin", nullable = false)
+    private Boolean admin;
+    @Column(name = "superuser", nullable = false)
+    private Boolean superuser;
 
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(schema = "sso", name = "user_roles",

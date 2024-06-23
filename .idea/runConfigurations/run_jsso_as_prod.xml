@@ -1,0 +1,29 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="run jsso as prod" type="docker-deploy" factoryName="docker-compose.yml" server-name="Docker">
+    <deployment type="docker-compose.yml">
+      <settings>
+        <option name="envFilePath" value="" />
+        <option name="envVars">
+          <list>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_PROFILES_ACTIVE" />
+              <option name="value" value="prod" />
+            </DockerEnvVarImpl>
+          </list>
+        </option>
+        <option name="commandLineOptions" value="--build" />
+        <option name="services">
+          <list>
+            <option value="j-sso" />
+            <option value="csrf-example" />
+            <option value="test-client" />
+          </list>
+        </option>
+        <option name="sourceFilePath" value="docker-compose.yml" />
+      </settings>
+    </deployment>
+    <method v="2">
+      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="clean install -DskipTests -P prod,client-only-copy" />
+    </method>
+  </configuration>
+</component>

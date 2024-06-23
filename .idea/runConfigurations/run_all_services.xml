@@ -1,0 +1,23 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="run all services" type="docker-deploy" factoryName="docker-compose.yml" server-name="Docker">
+    <deployment type="docker-compose.yml">
+      <settings>
+        <option name="envFilePath" value="" />
+        <option name="commandLineOptions" value="--build" />
+        <option name="services">
+          <list>
+            <option value="j-sso" />
+            <option value="j-service" />
+            <option value="j-swagger-ui" />
+            <option value="test-client" />
+            <option value="csrf-example" />
+          </list>
+        </option>
+        <option name="sourceFilePath" value="docker-compose.yml" />
+      </settings>
+    </deployment>
+    <method v="2">
+      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="clean install -DskipTests -P dev,client-build-and-copy" />
+    </method>
+  </configuration>
+</component>

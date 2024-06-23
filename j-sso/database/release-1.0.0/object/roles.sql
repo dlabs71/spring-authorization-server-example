@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset daivanov:roles-1
+--changeset daivanov:roles-1.1
 CREATE TABLE IF NOT EXISTS sso.roles
 (
     role_id               UUID                        NOT NULL default uuid_generate_v4(),
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS sso.roles
 );
 
 COMMENT ON TABLE sso.roles IS 'Справочник ролей';
-COMMENT ON COLUMN sso.roles.role_code IS 'Уникальный идентификатор роли';
+COMMENT ON COLUMN sso.roles.role_id IS 'Уникальный идентификатор роли';
 COMMENT ON COLUMN sso.roles.role_code IS 'Код роли';
 COMMENT ON COLUMN sso.roles.role_description IS 'Описание роли';
 COMMENT ON COLUMN sso.roles.system_code IS 'Код системы, к которой принадлежит привилегия';
@@ -32,3 +32,9 @@ COMMENT ON column sso.roles.object_version_number IS 'Номер версии з
 
 --changeset daivanov:roles-2
 CREATE UNIQUE INDEX idx_roles_u1 ON sso.roles (role_code, system_code);
+
+--changeset daivanov:roles-3
+ALTER TABLE sso.roles
+    DROP CONSTRAINT roles_pk;
+ALTER TABLE sso.roles
+    ADD CONSTRAINT roles_pk PRIMARY KEY (role_id);

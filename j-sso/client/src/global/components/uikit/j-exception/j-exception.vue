@@ -1,8 +1,8 @@
 <template>
     <v-dialog
-        v-model="switchOn"
         transition="dialog-bottom-transition"
         width="800px"
+        v-model="switchOn"
     >
         <v-card>
             <v-toolbar
@@ -11,12 +11,12 @@
             ></v-toolbar>
             <v-card-text>
                 <div class="text-h5 pa-3">{{ description }}</div>
-                <div v-if="showStacktraceBlock" class="stacktrace-block">
+                <div class="stacktrace-block" v-if="showStacktraceBlock">
                     <p class="opender" @click="toggleStacktrace">
                         <v-icon>{{ stacktraceArrowIcon }}</v-icon>
                         Открыть детальное описание ошибки
                     </p>
-                    <div v-if="stacktraceExpanded" class="stacktrace">
+                    <div class="stacktrace" v-if="stacktraceExpanded">
                         <p v-for="item in stacktrace">{{ item }}</p>
                     </div>
                 </div>
@@ -102,7 +102,7 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 @import '@/assets/scss/index.scss';
 
 .stacktrace-block {

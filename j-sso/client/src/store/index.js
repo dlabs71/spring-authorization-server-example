@@ -3,6 +3,7 @@ import VuexPersistence from 'vuex-persist'
 import security from './modules/security';
 import registration from '../views/sign-view/registration/store/registration';
 import resetPassword from '@/views/sign-view/reset-password/store/reset-password';
+import reference from './modules/reference';
 
 const vuexLocal = new VuexPersistence({
     storage: window.localStorage,
@@ -15,6 +16,9 @@ const vuexLocal = new VuexPersistence({
         },
         resetPassword: {
             ...state.resetPassword
+        },
+        reference: {
+            ...state.reference
         }
     })
 });
@@ -27,7 +31,8 @@ export default createStore({
     modules: {
         security: security,
         registration: registration,
-        resetPassword: resetPassword
+        resetPassword: resetPassword,
+        reference: reference
     },
     plugins: [vuexLocal.plugin]
 });

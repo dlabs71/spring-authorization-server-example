@@ -2,40 +2,26 @@ server:
   port: 7777
   error:
     include-stacktrace: always
+  servlet:
+    context-path:
 
 logging:
   level:
-    root: DEBUG
-    org.springframework.security.web.FilterChainProxy: TRACE
-    org.springframework.security: TRACE
-    logging.level.org.hibernate.SQL: INFO
-    com.zaxxer.hikari: ERROR
-    org.postgresql: ERROR
-
-springdoc:
-  auth-types:
-    auth-header-enabled: true
-    client-credentials-enabled: true
-    authorization-code-enabled: true
-  auth-oauth:
-    token-url: http://localhost:7777/oauth2/token
-    authorization_url: http://localhost:7777/oauth2/authorize
-    refresh-url: http://localhost:7777/oauth2/token
-  swagger-ui:
-    enabled: false
-  api-docs:
-    enabled: true
-    path: /v3/api-docs
+    root: INFO
+#    org.springframework.security.web.FilterChainProxy: DEBUG
 
 spring:
   application:
     name: j-sso
+  output:
+    ansi:
+      enabled: ${JSSO_ANSI_ENABLED:ALWAYS}
   mvc:
     static-path-pattern: /static/**
     cors:
       configs:
         - pattern: /**
-          allowed-origins: "http://127.0.0.1:8080,http://localhost:8080,http://localhost:7778"
+          allowed-origins: "http://127.0.0.1:8080,http://localhost:8080,http://localhost:7778,http://localhost:7979,http://localhost:8181,http://localhost:9090"
           allowed-headers: "*"
           exposed-headers: ${spring.security.oauth2.authorizationserver.custom-handler-header-name}
           allowed-methods: "*"
@@ -49,78 +35,14 @@ spring:
       flush-mode: on_save         # Указываем, когда изменения сеанса записываются в хранилище (immediate или on_save)
       namespace: j-sso:session    # Пространство имен для ключей, используемых для хранения сессий.
       save-mode: on_set_attribute # Определяет в какой момент происходит сохранение изменений сессии (on_set_attribute, on_get_attribute, always)
-  data:
-    redis: # Настраиваем подключение к Redis
-      client-type: lettuce        # Указываем тип клиента Redis (jedis или lettuce)
-      database: 0                 # Указываем номер БД Redis
-      host: localhost             # Хост подключения
-      port: 6379                  # Порт подключения
-      password: qwerty12345678    # Пароль подключения
-      lettuce: # Настраиваем пул подключений клиента lettuce
-        pool:
-          max-active: 16          # Максимальное количество подключений в пуле
-          max-idle: 8             # Минимальное количество "idle" подключений в пуле
-  liquibase:
-    enabled: false  # Указать true, если необходимо сделать накат скриптов БД при запуске приложения
-    change-log: classpath:database/db.changelog.yaml
-    contexts: prod, dev
-  datasource:
-    url: "jdbc:postgresql://localhost:5435/j-sso"
-    username: "user"
-    password: "user"
-    driver-class-name: "org.postgresql.Driver"
-    hikari:
-      connection-timeout: 30000
-      connection-test-query: select 1
-      maximum-pool-size: 10
-      minimum-idle: 10
-      initialization-fail-timeout: 1
-      leak-detection-threshold: 0
-      pool-name: "HikariPool-j-sso"
-      register-mbeans: true
-  jpa:
-    show-sql: false
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    open-in-view: false
-  security:
-    oauth2:
-      authorizationserver:
-        issuer-url: http://localhost:7777
-        introspection-endpoint: /oauth2/token-info
-        authentication-success-url: http://localhost:7777/client/home # было http://localhost:7777/home
-        custom-handler-header-name: J-Sso-Next-Location
-        reset-password-endpoint: /client/auth/reset-password
-        authorization-ttl: 720000
-        authorization-consent-ttl: 720000
-      client:
-        registration:
-          github:
-            clientId: ${JSSO_GITHUB_CLIENT_ID}
-            clientSecret: ${JSSO_GITHUB_CLIENT_SECRET}
-
-          google:
-            clientId: ${JSSO_GOOGLE_CLIENT_ID}
-            clientSecret: ${JSSO_GOOGLE_CLIENT_SECRET}
-            # Добавил эти scopes чтобы использовать именно OAuth2.
-            # Иначе по умолчанию добавляется scope = openid и тогда взаимодействие идёт по протоколу OpenID Connect
-            scope:
-              - email
-              - profile
-
-          yandex:
-            provider: yandex
-            clientId: ${JSSO_YANDEX_CLIENT_ID}
-            clientSecret: ${JSSO_YANDEX_CLIENT_SECRET}
-            redirect-uri: http://localhost:7777/login/oauth2/code/yandex
-            authorizationGrantType: authorization_code
-            clientName: Yandex
-
-        provider:
-          yandex:
-            authorization-uri: https://oauth.yandex.ru/authorize
-            token-uri: https://oauth.yandex.ru/token
-            user-name-attribute: default_email
-            userInfoUri: https://login.yandex.ru/info
+  config:
+    import:
+      - application-data.yml
+      - application-security.yml
+  task:
+    scheduling:
+      pool:
+        size: 2
 
 yandex-avatar-url: https://avatars.yandex.net/get-yapic/{avatarId}/islands-retina-50
 
@@ -131,22 +53,20 @@ d-email:
   port: 587
 
 otp-store:
-  cookie-name: dl-sso-temporary-session
+  cookie-name: j-sso-temporary-session
   cookie-domain: localhost
   cookie-max-age: 180
 
----
-spring:
-  config:
-    activate:
-      on-profile: production
-  liquibase:
-    contexts: prod
+file-store:
+  base-path: ${JSSO_PATH_STORAGE:~/j-sso-file-store}
 
----
-spring:
-  config:
-    activate:
-      on-profile: development
-  liquibase:
-    contexts: prod, dev
+scheduled-tasks:
+  delete-old-events:
+    cron: '@daily'
+    saved-period-days: 1
+  notify-delete-users:
+    cron: '@daily'
+
+rest-clients:
+  service-client-connection-timeout: 10000
+  service-client-request-timeout: 30000

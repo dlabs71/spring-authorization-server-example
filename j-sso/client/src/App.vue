@@ -9,15 +9,15 @@
 </template>
 
 <script>
-
-export default {
-    name: 'App',
-
-    data: () => ({
-        //
-    }),
-    mounted() {
-        //
-    },
-}
+    export default {
+        name: 'App'
+    }
 </script>
+
+<style lang="scss">
+    .v-main {
+        .vue-notification-group {
+            margin-top: 5px;
+        }
+    }
+</style>

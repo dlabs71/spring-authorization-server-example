@@ -17,11 +17,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <lombok.version>1.18.26</lombok.version>
-        <security-oauth2-server.version>1.1.1</security-oauth2-server.version>
+        <security-oauth2-server.version>1.2.4</security-oauth2-server.version>
         <security-oauth2-resource-server.version>3.1.1</security-oauth2-resource-server.version>
         <springdoc.version>2.1.0</springdoc.version>
         <google.guava.version>31.1-jre</google.guava.version>
         <d-email.version>0.0.1</d-email.version>
+        <hypersistence-utils.version>3.7.5</hypersistence-utils.version>
+        <useragent-parser.version>1.6.1</useragent-parser.version>
+        <schedlock.version>5.13.0</schedlock.version>
+        <httpclient5.version>5.3.1</httpclient5.version>
+        <commons.io.version>2.11.0</commons.io.version>
 
         <frontend-maven-plugin.version>1.13.4</frontend-maven-plugin.version>
     </properties>
@@ -29,7 +34,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.1</version>
+        <version>3.2.5</version>
         <relativePath/>
     </parent>
 
@@ -70,6 +75,36 @@
                 <groupId>ru.dlabs71.library</groupId>
                 <artifactId>d-email</artifactId>
                 <version>${d-email.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hypersistence</groupId>
+                <artifactId>hypersistence-utils-hibernate-63</artifactId>
+                <version>${hypersistence-utils.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.ua-parser</groupId>
+                <artifactId>uap-java</artifactId>
+                <version>${useragent-parser.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.javacrumbs.shedlock</groupId>
+                <artifactId>shedlock-spring</artifactId>
+                <version>${schedlock.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.javacrumbs.shedlock</groupId>
+                <artifactId>shedlock-provider-redis-spring</artifactId>
+                <version>${schedlock.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>${httpclient5.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

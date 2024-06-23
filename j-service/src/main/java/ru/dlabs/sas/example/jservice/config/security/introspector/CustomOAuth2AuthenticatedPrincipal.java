@@ -1,22 +1,26 @@
 package ru.dlabs.sas.example.jservice.config.security.introspector;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import ru.dlabs.sas.example.jservice.dto.AuthorizedUser;
 import ru.dlabs.sas.example.jservice.dto.TokenInfoDto;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+public class CustomOAuth2AuthenticatedPrincipal extends TokenInfoOAuth2ClaimAccessor
+    implements OAuth2AuthenticatedPrincipal, Serializable {
 
-public class CustomOAuth2AuthenticatedPrincipal extends TokenInfoOAuth2ClaimAccessor implements OAuth2AuthenticatedPrincipal, Serializable {
+    private static final String AUTHORITY_PREFIX = "SCOPE_";
 
     private final AuthorizedUser delegate;
     private final TokenInfoDto tokenInfo;
 
     public CustomOAuth2AuthenticatedPrincipal(TokenInfoDto tokenInfo) {
-        // tokenInfo.getPrincipal() - может быть пустым, например, когда access токен получен путем grant_type=client_credentials
         this.delegate = AuthorizedUser.build(tokenInfo.getPrincipal());
         this.tokenInfo = tokenInfo;
     }
@@ -26,10 +30,19 @@ public class CustomOAuth2AuthenticatedPrincipal extends TokenInfoOAuth2ClaimAcce
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.delegate == null) {
-            return Collections.emptyList();
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        if (this.delegate != null) {
+            authorities.addAll(delegate.getAuthorities());
         }
-        return this.delegate.getAuthorities();
+        if (this.tokenInfo != null && this.tokenInfo.getScopes() != null) {
+            authorities.addAll(
+                this.tokenInfo.getScopes()
+                    .stream()
+                    .map(item -> new SimpleGrantedAuthority(AUTHORITY_PREFIX + item))
+                    .toList()
+            );
+        }
+        return authorities;
     }
 
     /**

@@ -1,4 +1,5 @@
 @use 'vuetify/settings' with (
     $utilities: false,
     $button-height: 40px,
+    $color-pack: false,
 );

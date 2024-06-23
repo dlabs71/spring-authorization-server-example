@@ -18,7 +18,7 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .j-section-divider {
     display: flex;
     align-items: center;

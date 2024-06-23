@@ -4,21 +4,21 @@
         <Form :validation-schema="schema" as="form" @submit="login">
             <div class="manual-enter">
                 <j-text-field
-                    v-model="username"
                     append-inner-icon="mail"
-                    class="mb-3"
                     label="E-mail"
                     name="email"
                     type="email"
+                    class="mb-3"
+                    v-model="username"
                 />
                 <j-text-field
-                    v-model="password"
                     :append-inner-icon="cPasswordIcon"
                     :type="passwordType"
-                    class="mb-3"
                     label="Пароль"
                     name="password"
                     @click:appendInner="togglePasswordVisible"
+                    class="mb-3"
+                    v-model="password"
                 />
                 <v-btn class="login-btn" type="submit">
                     Войти

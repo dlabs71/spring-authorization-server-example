@@ -24,6 +24,98 @@ services:
     networks:
       - j-network
 
+  j-sso:
+    container_name: j-sso
+    build:
+      context: ./j-sso
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - '7777:7777'
+      - '8777:8000'
+    environment:
+      JSSO_SMTP_EMAIL: <set_value>
+      JSSO_SMTP_EMAIL_PASSWORD: <set_value>
+      JSSO_GITHUB_CLIENT_ID: <set_value>
+      JSSO_GITHUB_CLIENT_SECRET: <set_value>
+      JSSO_GOOGLE_CLIENT_ID: <set_value>
+      JSSO_GOOGLE_CLIENT_SECRET: <set_value>
+      JSSO_YANDEX_CLIENT_ID: <set_value>
+      JSSO_YANDEX_CLIENT_SECRET: <set_value>
+      JSSO_REDIS_DB: 0
+      JSSO_REDIS_HOST: j-redis
+      JSSO_REDIS_PORT: 6379
+      JSSO_REDIS_PASSWORD: qwerty12345678
+      JSSO_PG_HOST: j-postgres
+      JSSO_PG_PORT: 5432
+      JSSO_PG_DB: j-sso
+      JSSO_PG_USER: user
+      JSSO_PG_PASSWORD: user
+      JSSO_PATH_STORAGE: /j-file-storage
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+    volumes:
+      - ./docker/j-sso/file-storage:/j-file-storage
+    depends_on:
+      - j-postgres
+      - j-redis
+    networks:
+      - j-network
+
+  j-service:
+    container_name: j-service
+    build:
+      context: ./j-service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - '9001:9001'
+      - '9777:8000'
+    environment:
+      JSERVICE_SSO_URL: http://j-sso:7777
+    networks:
+      - j-network
+
+  j-swagger-ui:
+    container_name: j-swagger-ui
+    build:
+      context: ./j-swagger-ui
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - '7778:7778'
+      - '6777:8000'
+    networks:
+      - j-network
+
+  test-client:
+    container_name: test-client
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    build:
+      context: ./test-client
+    ports:
+      - 8080:8080
+    networks:
+      - j-network
+
+  csrf-example:
+    container_name: csrf-example
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    build:
+      context: docker/csrf-example
+    ports:
+      - 9090:8080
+    networks:
+      - j-network
+
+
 networks:
   j-network:
     ipam:

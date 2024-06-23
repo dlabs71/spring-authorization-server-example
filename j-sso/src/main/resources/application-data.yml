@@ -1,0 +1,50 @@
+spring:
+  data:
+    redis:
+      client-type: lettuce
+      database: ${JSSO_REDIS_DB:0}
+      host: ${JSSO_REDIS_HOST:localhost}
+      port: ${JSSO_REDIS_PORT:6379}
+      password: ${JSSO_REDIS_PASSWORD:qwerty12345678}
+      lettuce:
+        pool:
+          max-active: 16
+          max-idle: 8
+  liquibase:
+    enabled: false
+    change-log: classpath:database/db.changelog.yaml
+    contexts: prod, dev
+  datasource:
+    url: jdbc:postgresql://${JSSO_PG_HOST:localhost}:${JSSO_PG_PORT:5435}/${JSSO_PG_DB:j-sso}
+    username: ${JSSO_PG_USER:user}
+    password: ${JSSO_PG_PASSWORD:user}
+    driver-class-name: "org.postgresql.Driver"
+    hikari:
+      connection-timeout: 30000
+      connection-test-query: select 1
+      maximum-pool-size: 10
+      minimum-idle: 10
+      initialization-fail-timeout: 1
+      leak-detection-threshold: 0
+      pool-name: "HikariPool-j-sso"
+      register-mbeans: true
+  jpa:
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: production
+  liquibase:
+    contexts: prod
+
+---
+spring:
+  config:
+    activate:
+      on-profile: development
+  liquibase:
+    contexts: prod, dev

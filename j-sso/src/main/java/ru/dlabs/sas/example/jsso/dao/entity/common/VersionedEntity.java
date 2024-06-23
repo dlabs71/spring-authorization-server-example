@@ -3,10 +3,9 @@ package ru.dlabs.sas.example.jsso.dao.entity.common;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
+import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serializable;
 
 @Getter
 @Setter

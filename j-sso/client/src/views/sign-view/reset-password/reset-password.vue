@@ -137,7 +137,6 @@
                 confirmStepForm.value.resetState();
                 setStep(STEPS.ERROR_CHANGE);
             });
-            return;
         }
     };
 

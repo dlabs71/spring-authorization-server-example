@@ -1,36 +1,30 @@
 package ru.dlabs.sas.example.jsso.dao.entity;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import ru.dlabs.sas.example.jsso.dao.entity.common.VersionedBusinessEntity;
 
 @Getter
 @Setter
 @Entity
-@Accessors(chain = true)
-@Table(schema = "sso", name = "system_oauth2_clients")
-@SequenceGenerator(schema = "sso", name = "system_oauth2_clients_s", sequenceName = "sso.system_oauth2_clients_s", allocationSize = 1)
-public class SystemOauth2Client {
+@Table(schema = "sso", name = "system_oauth2_clients_v2")
+public class SystemOauth2Client extends VersionedBusinessEntity<String> {
 
     @Id
-    @Column(name = "system_client_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "system_oauth2_clients_s")
-    private Long id;
-
     @Column(name = "client_id", nullable = false)
     private String clientId;
-
-    @Column(name = "client_id_issued_at", nullable = false)
-    private LocalDateTime clientIdIssueAt;
 
     @Column(name = "client_secret")
     private String clientSecret;
@@ -41,64 +35,120 @@ public class SystemOauth2Client {
     @Column(name = "client_name", nullable = false)
     private String clientName;
 
-    @Column(name = "client_authentication_methods", nullable = false)
-    private String clientAuthenticationMethods;
+    @Column(name = "client_authentication_methods", nullable = false, columnDefinition = "text[]")
+    private String[] clientAuthenticationMethods;
 
-    @Column(name = "authorization_grant_types", nullable = false)
-    private String authorizationGrantTypes;
+    @Column(name = "authorization_grant_types", nullable = false, columnDefinition = "text[]")
+    private String[] authorizationGrantTypes;
 
-    @Column(name = "redirect_uris")
-    private String redirectUris;
+    @Column(name = "redirect_uris", columnDefinition = "text[]")
+    private String[] redirectUris;
 
-    @Column(name = "scopes", nullable = false)
-    private String scopes;
+    @Column(name = "scopes", nullable = false, columnDefinition = "text[]")
+    private String[] scopes;
 
-    @Column(name = "client_settings", nullable = false)
-    private String clientSettings;
-
-    @Column(name = "token_settings", nullable = false)
-    private String tokenSettings;
+    @Column(name = "delete_notify_uris", columnDefinition = "text[]")
+    private String[] deleteNotifyUris;
 
     public SystemOauth2Client() {
     }
 
-    @Transient
-    public Set<ClientAuthenticationMethod> clientAuthenticationMethods() {
+    @Override
+    public String getId() {
+        return this.getClientId();
+    }
+
+    @Override
+    public void setId(String id) {
+        this.setClientId(id);
+    }
+
+    public Set<ClientAuthenticationMethod> getClientAuthenticationMethods() {
         if (this.clientAuthenticationMethods == null) {
             return Collections.emptySet();
         }
-        return Arrays.stream(this.clientAuthenticationMethods.split(","))
-                .map(item -> new ClientAuthenticationMethod(item.trim()))
-                .collect(Collectors.toSet());
+        return Arrays.stream(this.clientAuthenticationMethods)
+            .map(item -> new ClientAuthenticationMethod(item.trim()))
+            .collect(Collectors.toSet());
     }
 
-    @Transient
-    public Set<AuthorizationGrantType> authorizationGrantTypes() {
+    public Set<AuthorizationGrantType> getAuthorizationGrantTypes() {
         if (this.authorizationGrantTypes == null) {
             return Collections.emptySet();
         }
-        return Arrays.stream(this.authorizationGrantTypes.split(","))
-                .map(item -> new AuthorizationGrantType(item.trim()))
-                .collect(Collectors.toSet());
+        return Arrays.stream(this.authorizationGrantTypes)
+            .map(item -> new AuthorizationGrantType(item.trim()))
+            .collect(Collectors.toSet());
     }
 
-    @Transient
-    public Set<String> redirectUris() {
+    public Set<String> getRedirectUris() {
         if (this.redirectUris == null) {
             return Collections.emptySet();
         }
-        return Arrays.stream(this.redirectUris.split(","))
-                .map(String::trim)
-                .collect(Collectors.toSet());
+        return Arrays.stream(this.redirectUris)
+            .map(String::trim)
+            .collect(Collectors.toSet());
     }
 
-    @Transient
-    public Set<String> scopes() {
+    public Set<String> getScopes() {
         if (this.scopes == null) {
             return Collections.emptySet();
         }
-        return Arrays.stream(this.scopes.split(","))
-                .map(String::trim)
-                .collect(Collectors.toSet());
+        return Arrays.stream(this.scopes)
+            .map(String::trim)
+            .collect(Collectors.toSet());
+    }
+
+    public Set<String> getDeleteNotifyUris() {
+        if (this.deleteNotifyUris == null) {
+            return Collections.emptySet();
+        }
+        return Arrays.stream(this.deleteNotifyUris)
+            .map(String::trim)
+            .collect(Collectors.toSet());
+    }
+
+    public void setClientAuthenticationMethods(Collection<ClientAuthenticationMethod> authMethods) {
+        if (authMethods == null || authMethods.isEmpty()) {
+            this.clientAuthenticationMethods = null;
+        } else {
+            this.clientAuthenticationMethods = authMethods.stream()
+                .map(ClientAuthenticationMethod::getValue)
+                .toArray(String[]::new);
+        }
+    }
+
+    public void setAuthorizationGrantTypes(Collection<AuthorizationGrantType> grantTyps) {
+        if (grantTyps == null || grantTyps.isEmpty()) {
+            this.authorizationGrantTypes = null;
+        } else {
+            this.authorizationGrantTypes = grantTyps.stream()
+                .map(AuthorizationGrantType::getValue)
+                .toArray(String[]::new);
+        }
+    }
+
+    public void setRedirectUris(Collection<String> redirectUris) {
+        if (redirectUris == null || redirectUris.isEmpty()) {
+            this.redirectUris = null;
+        } else {
+            this.redirectUris = redirectUris.toArray(String[]::new);
+        }
+    }
+
+    public void setScopes(Collection<String> scopes) {
+        if (scopes == null || scopes.isEmpty()) {
+            this.scopes = null;
+        } else {
+            this.scopes = scopes.toArray(String[]::new);
+        }
+    }
+
+    public void setDeleteNotifyUris(Collection<String> deleteNotifyUris) {
+        if (deleteNotifyUris == null || deleteNotifyUris.isEmpty()) {
+            this.deleteNotifyUris = null;
+        } else {
+            this.deleteNotifyUris = deleteNotifyUris.toArray(String[]::new);
+        }
     }
 }

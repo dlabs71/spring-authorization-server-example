@@ -11,6 +11,9 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
+/**
+ * Конфигурация аутентификации пользователя через сторонние сервисы (Yandex, Google, Github).
+ */
 @Setter
 @Accessors(chain = true, fluent = true)
 public class SocialConfigurer extends AbstractHttpConfigurer<SocialConfigurer, HttpSecurity> {

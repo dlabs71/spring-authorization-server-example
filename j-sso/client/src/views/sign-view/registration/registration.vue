@@ -147,7 +147,7 @@
                 .catch(() => {
                     confirmStepFormRef.value.resetState();
                 });
-            return;
+
         }
     };
 </script>

@@ -1,7 +1,25 @@
 import axios from "axios";
 
+function applyCsrfTokenFromMetaTag(requestConfig) {
+    let token = searchMetaContent('_csrf');
+    let tokenHeader = searchMetaContent('_csrf_header');
+    if (token && tokenHeader) {
+        requestConfig.headers[tokenHeader] = token;
+    }
+}
+
+function applyCsrfTokenFromCookie(requestConfig) {
+    let token = getCookie("XSRF-TOKEN");
+    if (token) {
+        requestConfig.headers["X-CSRF-TOKEN"] = token;
+    }
+}
+
 function applyAxiosInterceptor(store, router) {
     axios.interceptors.request.use(config => {
+        if (['DELETE', 'POST', 'PUT'].includes(config.method.toUpperCase())) {
+            applyCsrfTokenFromCookie(config);
+        }
         return config;
     });
     axios.interceptors.response.use(
@@ -10,55 +28,39 @@ function applyAxiosInterceptor(store, router) {
         },
         (data) => {
             let response = data.response;
-
-            // если нет вообще сети
             if ("ERR_NETWORK" === data.code) {
                 let payload = {
                     level: "ERROR",
                     description: "Сервис не доступен. Проверьте подключение к сети Интернет или повторите действие позднее",
                     stacktrace: []
                 };
-
-                // отображим через j-exception
                 store.dispatch('setException', payload);
                 return Promise.reject(response);
             }
 
             let exception = response.data;
-
-            // если указано что ошибка для отображения через уведомления
             if (exception.informative) {
                 let payload = {
                     level: exception.level,
                     message: exception.message,
                 }
-
-                // отобразим через всплывающие уведомления
                 store.dispatch('setNotification', payload);
                 return Promise.reject(response);
             }
 
-            // если мы не авторизованы
             if (response.status === 401) {
-
-                // просто перейдём на страницу входа
                 router.replace({name: "login"});
                 return Promise.reject(response);
             }
-
-            // если у нас нет прав доступа
             if (response.status === 403) {
                 let payload = {
                     level: "ERROR",
                     message: "Отказано в доступе",
                 }
-
-                // отобразим через всплывающие уведомления
                 store.dispatch('setNotification', payload);
                 return Promise.reject(response);
             }
 
-            // если просто возникла 500-ая ошибка на сервере
             if (!!exception.message || !!exception.stacktrace) {
                 let payload = {
                     level: "ERROR",
@@ -75,13 +77,26 @@ function applyAxiosInterceptor(store, router) {
                     payload.stacktrace = exception.stacktrace;
                 }
 
-                // отобразим через j-exception
                 store.dispatch('setException', payload);
             }
             return Promise.reject(response);
         });
 }
 
+function searchMetaContent(name) {
+    let element = document.querySelectorAll(`meta[name='${name}']`).item(0);
+    if (!element) {
+        return null;
+    }
+    return element.getAttribute('content');
+}
+
+function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}
 
 export default {
     install(Vue, options) {

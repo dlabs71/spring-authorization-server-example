@@ -1,0 +1,94 @@
+spring:
+  security:
+    headers:
+      csp:
+        - default-src 'self'
+        - script-src 'self' 'unsafe-inline' 'unsafe-eval'
+        - "img-src 'self' data:"
+        - font-src 'self' fonts.gstatic.com
+        - style-src 'self' fonts.googleapis.com 'unsafe-inline'
+        - frame-ancestors 'self'
+      hsts:
+        max-age: 63072000
+        include-sub-domains: true
+        preload: true
+      permission-policy:
+        - picture-in-picture=()
+        - accelerometer=()
+        - autoplay=()
+        - battery=()
+        - camera=()
+        - display-capture=()
+        - geolocation=()
+        - gyroscope=()
+        - magnetometer=()
+        - microphone=()
+        - midi=()
+        - payment=()
+        - picture-in-picture=()
+        - publickey-credentials-create=()
+        - publickey-credentials-get=()
+        - screen-wake-lock=()
+        - serial=()
+        - speaker-selection=()
+        - usb=()
+    oauth2:
+      resourceserver:
+        opaquetoken:
+          client-id: sso-client
+          client-secret: sso-client
+          introspection-uri: http://localhost:7777/oauth2/token-info
+      authorizationserver:
+        issuer-url: http://localhost:7777${server.servlet.context-path}
+        introspection-endpoint: /oauth2/token-info
+        reset-password-endpoint: /client/auth/reset-password
+        authentication-success-url: http://localhost:7777${server.servlet.context-path}/client/oauth/continue
+        saved-request-url-starts-with: http://localhost:7777${server.servlet.context-path}/oauth2/authorize
+        custom-handler-header-name: J-Sso-Next-Location
+        authorization-ttl: 10800000
+        authorization-consent-ttl: 10800000
+      client:
+        registration:
+          github:
+            clientId: ${JSSO_GITHUB_CLIENT_ID}
+            clientSecret: ${JSSO_GITHUB_CLIENT_SECRET}
+            redirect-uri: http://localhost:7777${server.servlet.context-path}/login/oauth2/code/github
+
+          google:
+            clientId: ${JSSO_GOOGLE_CLIENT_ID}
+            clientSecret: ${JSSO_GOOGLE_CLIENT_SECRET}
+            redirect-uri: http://localhost:7777${server.servlet.context-path}/login/oauth2/code/google
+            scope:
+              - email
+              - profile
+
+          yandex:
+            provider: yandex
+            clientId: ${JSSO_YANDEX_CLIENT_ID}
+            clientSecret: ${JSSO_YANDEX_CLIENT_SECRET}
+            redirect-uri: http://localhost:7777${server.servlet.context-path}/login/oauth2/code/yandex
+            authorizationGrantType: authorization_code
+            clientName: Yandex
+
+        provider:
+          yandex:
+            authorization-uri: https://oauth.yandex.ru/authorize
+            token-uri: https://oauth.yandex.ru/token
+            user-name-attribute: default_email
+            userInfoUri: https://login.yandex.ru/info
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  security:
+    headers:
+      csp:
+        - default-src 'self'
+        - script-src 'self'
+        - "img-src 'self' data:"
+        - font-src 'self' fonts.gstatic.com
+        - style-src 'self' fonts.googleapis.com 'nonce-dQw4w9WgXcQ' 'sha256-VBcDFo4Ltbcy2NNfi2Jeyo6IXzMKysUIvWc1d1FGhgY='
+        - frame-ancestors 'self'

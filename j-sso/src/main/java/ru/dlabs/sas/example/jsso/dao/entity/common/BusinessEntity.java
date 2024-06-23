@@ -4,15 +4,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.TimeZone;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.TimeZone;
 
 @Getter
 @Setter

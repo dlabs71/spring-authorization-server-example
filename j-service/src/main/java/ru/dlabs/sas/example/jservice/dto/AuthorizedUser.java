@@ -1,13 +1,20 @@
 package ru.dlabs.sas.example.jservice.dto;
 
-import lombok.*;
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-
-import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -21,8 +28,6 @@ public class AuthorizedUser implements OAuth2User {
     private String lastName;
     private String middleName;
     private LocalDate birthday;
-    private String avatarUrl;
-    private String username;
     private String email;
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -33,21 +38,19 @@ public class AuthorizedUser implements OAuth2User {
         List<GrantedAuthority> authorities = Collections.emptyList();
         if (principal.getAuthorities() != null) {
             authorities = principal.getAuthorities()
-                    .stream()
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList());
+                .stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
         }
         return AuthorizedUser.builder()
-                .id(principal.getId())
-                .firstName(principal.getFirstName())
-                .lastName(principal.getLastName())
-                .middleName(principal.getMiddleName())
-                .birthday(principal.getBirthday())
-                .avatarUrl(principal.getAvatarUrl())
-                .username(principal.getUsername())
-                .email(principal.getEmail())
-                .authorities(authorities)
-                .build();
+            .id(principal.getId())
+            .firstName(principal.getFirstName())
+            .lastName(principal.getLastName())
+            .middleName(principal.getMiddleName())
+            .birthday(principal.getBirthday())
+            .email(principal.getEmail())
+            .authorities(authorities)
+            .build();
     }
 
 
@@ -63,6 +66,6 @@ public class AuthorizedUser implements OAuth2User {
 
     @Override
     public String getName() {
-        return this.username;
+        return this.email;
     }
 }

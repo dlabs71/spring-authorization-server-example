@@ -1,5 +1,6 @@
 package ru.dlabs.sas.example.jsso.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,33 +13,25 @@ import ru.dlabs.sas.example.jsso.service.ResetPasswordService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/reset-password")
+@Tag(name = "Контроллер функции 'Забыли пароль'")
 public class ResetPasswordController {
 
     private final ResetPasswordService resetPasswordService;
 
-    /**
-     * Инициализация смены пароля. Пользователь указываем для какого email нам нужно сменить пароль.
-     * Если пароль не найден, то будет выброшено исключение.
-     * Если пароль найден, то будет отправлено сообщение с OTP
-     */
     @PostMapping("/init")
+    @Tag(name = "Этап инициализации сброса пароля. Отправка OTP кода подтверждения email")
     public void initResetPassword(@RequestPart("email") String email, HttpServletResponse response) {
         resetPasswordService.initial(email, response);
     }
 
-    /**
-     * Подтверждение email. Пользователь присылает OTP код отправленный ему на email в первом endpoint-е.
-     * Если подтверждение успешно прошло, то пользователю высылается сообщение со ссылкой на форму смены пароля.
-     */
     @PostMapping("/confirm")
+    @Tag(name = "Этап подтверждения OTP кода, полученного на этапе инициализации")
     public void confirm(@RequestPart("otp") String otp, HttpServletRequest request) {
         resetPasswordService.confirmEmail(otp, request);
     }
 
-    /**
-     * Смена пароля пользователя. В заголовках должен быть указан 'reset-password-session'
-     */
     @PostMapping("/set")
+    @Tag(name = "Получение нового пароля и установление его для пользователя")
     public void setPassword(@RequestPart("password") String password, HttpServletRequest request) {
         resetPasswordService.setNewPassword(password, request);
     }

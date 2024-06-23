@@ -1,0 +1,54 @@
+.scroll-box {
+    overflow-y: auto;
+}
+
+.only-y {
+    overflow-x: hidden;
+}
+
+.scroll-box::-webkit-scrollbar {
+    width: 7px;
+}
+
+.scroll-box::-webkit-scrollbar-track {
+    -webkit-box-shadow: none;
+    background-color: transparent;
+}
+
+.scroll-box::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: none;
+    background-color: rgba(94, 94, 94, 0.25);
+    cursor: grab;
+}
+
+.scroll-box-dark::-webkit-scrollbar {
+    width: 7px;
+    height: 5px;
+}
+
+.scroll-box-dark::-webkit-scrollbar-track {
+    -webkit-box-shadow: none;
+    background-color: transparent;
+}
+
+.scroll-box-dark::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: none;
+    background-color: rgba(94, 94, 94, 0.80);
+    cursor: grab;
+}
+
+.centerContentScroll {
+
+}
+
+.centerContentScroll:after {
+    content: '';
+    margin: auto
+}
+
+.centerContentScroll:before {
+    content: '';
+    margin: auto
+}

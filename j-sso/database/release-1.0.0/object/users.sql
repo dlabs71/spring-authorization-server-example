@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS sso.users
     email                 VARCHAR(100)                NOT NULL,
     password_hash         VARCHAR(500),
     first_name            varchar(100)                NOT NULL,
-    last_name           varchar(100)                NOT NULL,
+    last_name             varchar(100)                NOT NULL,
     middle_name           varchar(100),
     birthday              date,
     avatar_url            varchar(255),
@@ -39,3 +39,24 @@ COMMENT ON column sso.users.object_version_number IS 'Номер версии з
 
 --changeset daivanov:users-2
 CREATE UNIQUE INDEX IF NOT EXISTS idx_user_u1 ON sso.users (email);
+
+--changeset daivanov:users-3
+ALTER TABLE sso.users
+    ADD COLUMN avatar_file_id uuid;
+
+--changeset daivanov:users-4
+ALTER TABLE sso.users
+    DROP COLUMN avatar_url;
+
+--changeset daivanov:users-5
+ALTER TABLE sso.users
+    ADD COLUMN admin BOOLEAN NOT NULL DEFAULT FALSE;
+
+--changeset daivanov:users-6
+COMMENT ON column sso.users.avatar_file_id IS 'ID файла в файловом хранилище для аватарки';
+COMMENT ON column sso.users.admin IS 'Является ли пользователь админом';
+
+--changeset daivanov:users-7
+ALTER TABLE sso.users
+    ADD COLUMN superuser BOOLEAN NOT NULL DEFAULT FALSE;
+COMMENT ON column sso.users.superuser IS 'Является ли пользователь суперпользователем (нельзя удалить)';

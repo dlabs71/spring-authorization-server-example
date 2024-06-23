@@ -1,5 +1,6 @@
 package ru.dlabs.sas.example.jsso.components;
 
+
 import ru.dlabs.sas.example.jsso.dto.RegistrationDto;
 
 public interface RegistrationStore {

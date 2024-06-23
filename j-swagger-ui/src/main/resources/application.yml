@@ -12,6 +12,9 @@ logging:
 spring:
   application:
     name: j-swagger-ui
+  output:
+    ansi:
+      enabled: ${JSWAGGER_ANSI_ENABLED:ALWAYS}
 
 springdoc:
   swagger-ui:
@@ -31,5 +34,6 @@ springdoc:
     oauth:
       client-id: swagger-client
       client-secret: swagger-client
+      scopes: SSO.USER_PROFILE_INFO,SSO.USER_AVATAR,SSO.USER_IDENTIFICATION,SSO.USER_AUTHORITIES
   api-docs:
     enabled: true

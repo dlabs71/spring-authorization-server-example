@@ -1,7 +1,7 @@
 import AxiosPlugin from './axios-plugin'
 import vuetify from "./vuetify-plugin.js";
 import veeValidate from './vee-validate';
-import Notifications from '@kyvg/vue3-notification'
+import Notifications from '@kyvg/vue3-notification';
 
 export default {
     install(Vue, opts) {

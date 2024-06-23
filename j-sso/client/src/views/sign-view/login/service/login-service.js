@@ -1,10 +1,12 @@
 import axios from 'axios';
 import store from '@/store/index.js';
+import router from '@/router/index';
 
 export class LoginAPI {
     static __LOGIN_URL = "/login";
     static __USER_DATA_URL = '/security-session/user';
     static __LOCATION_HEADER = process.env.VUE_APP_SSO_LOCATION_HEADER;
+    static __LOGOUT = "/logout";
 
     /**
      * Вход черед логин/пароль.
@@ -21,6 +23,7 @@ export class LoginAPI {
         return axios.post(LoginAPI.__LOGIN_URL, formData)
             .then(result => {
                 if (result.headers.has(LoginAPI.__LOCATION_HEADER)) {
+                    this.resetSessionStore();
                     this.getCurrentUser().then(() => {
                         window.location = result.headers.get(LoginAPI.__LOCATION_HEADER);
                     });
@@ -34,10 +37,31 @@ export class LoginAPI {
      */
     getCurrentUser() {
         return axios.get(LoginAPI.__USER_DATA_URL).then(result => {
-            console.log(result.data);
             store.dispatch('setAuthUser', result.data);
             return result.data;
         });
+    }
+
+    logout() {
+        return axios.post(LoginAPI.__LOGOUT).then((response) => {
+            this.afterLogout();
+            return response;
+        });
+    }
+
+    afterOauthLoginSuccess() {
+        this.resetSessionStore();
+        return this.getCurrentUser()
+    }
+
+    resetSessionStore() {
+        store.dispatch('resetAuth');
+        store.dispatch('clearAll');
+    }
+
+    afterLogout() {
+        this.resetSessionStore();
+        router.replace({name: 'login'});
     }
 }
 
