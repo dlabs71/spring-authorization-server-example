@@ -4,7 +4,7 @@ spring:
       csp:
         - default-src 'self'
         - script-src 'self' 'unsafe-inline' 'unsafe-eval'
-        - img-src 'self'
+        - "img-src 'self' data:"
         - font-src 'self' fonts.gstatic.com
         - style-src 'self' fonts.googleapis.com 'unsafe-inline'
         - frame-ancestors 'self'
