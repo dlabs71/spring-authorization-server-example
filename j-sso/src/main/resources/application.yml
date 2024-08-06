@@ -35,6 +35,7 @@ spring:
       flush-mode: on_save         # Указываем, когда изменения сеанса записываются в хранилище (immediate или on_save)
       namespace: j-sso:session    # Пространство имен для ключей, используемых для хранения сессий.
       save-mode: on_set_attribute # Определяет в какой момент происходит сохранение изменений сессии (on_set_attribute, on_get_attribute, always)
+      repository-type: indexed
   config:
     import:
       - application-data.yml
